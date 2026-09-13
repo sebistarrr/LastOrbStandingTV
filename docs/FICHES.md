@@ -42,19 +42,19 @@ les recale en une commande.
 | ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2741 |
 | 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3075 |
 | ☄ COMÈTE — `comet` (rien qui frappe : son corps est l'arme) | 3276 |
-| La norme passe à 200 PV, le Golem à 400 (historique) | 3661 |
-| Neon Shadow supprimé, la norme redescend à 100 PV | 3716 |
-| Les dégâts de tous les combattants, divisés par deux | 3784 |
-| Rééquilibrage confiné au Golem et au Ronin | 3894 |
-| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3981 |
-| Le son de chacun | 4031 |
-| **Équilibrage du roster** — c'est ici que vivent les chiffres | 4149 |
-| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 4159 |
-| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4189 |
-| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4220 |
-| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4265 |
-| Règles communes (moteur) | 4359 |
-| Comment les mesures ont été prises | 4383 |
+| La norme passe à 200 PV, le Golem à 400 (historique) | 3712 |
+| Neon Shadow supprimé, la norme redescend à 100 PV | 3767 |
+| Les dégâts de tous les combattants, divisés par deux | 3835 |
+| Rééquilibrage confiné au Golem et au Ronin | 3945 |
+| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 4032 |
+| Le son de chacun | 4082 |
+| **Équilibrage du roster** — c'est ici que vivent les chiffres | 4200 |
+| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 4210 |
+| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4240 |
+| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4271 |
+| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4316 |
+| Règles communes (moteur) | 4410 |
+| Comment les mesures ont été prises | 4434 |
 
 ## Comment lire une valeur
 
@@ -3320,7 +3320,8 @@ ce qui la rend difficile à équilibrer.
 | Géométrie de la ceinture | l'entourage s'étend à **404 px** du centre là où la sphère en fait 286, soit **1,413 × le rayon du corps** → `reach` **48,03** à 34 de rayon, et l'invariant tient au centième comme pour le Shinobi : `handle.length + largeur dessinée = −48,03 + 96,06 = 48,03 = reach`. Base prise **12 px en deçà** de la sphère pour qu'elle chevauche la bille — sans ce recouvrement, une couture circulaire se verrait tourner (leçon de la couronne du Soleil) | déduit |
 | Échelle du sprite | `scale = 96,056 / 17 = 5,650348` : `drawSpriteLeft` dimensionne par la **hauteur** de la carte texte puis applique le rapport d'aspect du PNG — carré ici, donc 1. Piège déjà payé trois fois (lance de l'Hoplite, arme du Golem, couronne du Soleil) | déduit |
 | ⚠ Ce que ça n'a **pas** coûté | **la matrice est identique au caractère près**, et c'est la différence avec le Soleil : sa couronne ne blesse pas non plus mais elle a une **vraie hitbox**, donc `resolveMelee` y pose un verrou, applique un recul propre et décolle les corps *hors* de `Match.damage` — sa géométrie reste du gameplay. Ici il n'y a aucune touche possible, donc `reach` et `spin` ne servent qu'au dessin | mesuré |
-| **Choc cinétique** | sa mécanique de base et sa seule source de dégâts : au contact, `kinetic.damage × f.state.rush`, verrou de **1,15 s**, recul de 240 porté **dans son sens de marche**, et un contrecoup de 130 sur elle-même | calé |
+| **Choc cinétique** | sa mécanique de base et sa seule source de dégâts : au contact, `kinetic.damage × f.state.rush`, recul de 240 porté **dans son sens de marche**, et un contrecoup de 130 sur elle-même | calé |
+| **Un choc par contact** | le double compte est interdit par un **réarmement à la séparation** (`f.state.ramArmed`), pas par une horloge. `kinetic.cooldown` n'est plus qu'un **plancher de 0,12 s** contre un contact qui grésille. Écrit d'abord comme un verrou de 1,15 s, il avalait **27 à 44 % des contacts neufs** — voir « Le verrou de touche qui n'était pas un verrou » | mesuré |
 | Marge de contact | **8 px explicites**, et c'est un piège déjà payé : un test `distance <= r1 + r2` est **toujours faux et ne crie pas**, `resolveBodies` séparant les corps à chaque pas. La Marée de la première LUNE a infligé **0 PV sur 24 duels** pour cette exacte raison | déduit |
 | **Rebond** | **demandé.** Chaque mur touché ajoute **+0,12** d'élan, plafonné à **1,7**. Ni horloge ni jauge : une règle permanente de plus sur la même ressource, qui transforme son temps mort — traverser l'arène — en accumulation. `Fighter.wall` était déjà posé à chaque pas pour la seule mise en scène ; le lire ne change rien pour les neuf autres | calé |
 | L'étage des plafonds | chaque source d'élan a le sien, et ils s'étagent : rampe **1,5** < murs **1,7** < Coup de fouet **1,9** < Rentrée **2,3**. Un mur va donc plus loin que le temps seul, jamais aussi loin qu'un pouvoir | déduit |
@@ -3530,6 +3531,56 @@ vient de monter.
 tout ce que la ressource porte, pas seulement ce qu'on visait. Avant d'en poser
 un, se demander ce que la ressource fait *d'autre*.
 
+### Le verrou de touche qui n'était pas un verrou
+
+**Signalé** : « il y a un bug, quand la Comète touche un ennemi dans un très
+petit laps de temps, elle ne fait pas de dégât ». C'en était un, et il était
+**dans le commentaire autant que dans le code**.
+
+Son choc cinétique portait un `kinetic.cooldown` de 1,15 s, écrit sur le modèle
+du `meleeCd` que le moteur pose pour les autres, avec cette justification :
+*« sans ce compteur, un contact qui dure trois images ferait trois coups »*.
+
+**Le compte a dit autre chose.** En découpant les contacts en **épisodes** — une
+suite de pas consécutifs où un ennemi est dans la fenêtre de choc :
+
+| | Golem | Ronin | Pistolero |
+| --- | --- | --- | --- |
+| épisodes de contact | 256 | 231 | 131 |
+| → un choc part | 63 % | 56 % | 73 % |
+| → **rien ne part** | **37 %** | **44 %** | **27 %** |
+| durée moyenne d'un contact | 0,017 s | 0,016 s | 0,023 s |
+
+Deux choses que la relecture ne pouvait pas donner :
+
+- **un contact dure 2 à 3 images.** Un plancher de 0,05 s aurait suffi au
+  travail annoncé ; 1,15 s est vingt fois trop ;
+- **un tiers à près de la moitié des contacts *distincts* ne produisaient
+  rien**, avalés par le verrou d'un contact *précédent*. Les épisodes perdus
+  arrivaient de **0,03 s à 1,15 s** après le coup précédent — de vrais contacts
+  neufs. À l'écran : elle percute, et il ne se passe rien.
+
+**La bonne forme n'est pas une horloge, c'est un réarmement.**
+`f.state.ramArmed` retombe au choc et ne se relève **qu'à la séparation** : il
+interdit le double compte exactement, sans supposer une durée. L'horloge ne
+reste que comme **plancher** (0,12 s) contre un contact qui grésille — la mesure
+a vu des épisodes se rouvrir 0,03 s après le précédent, ce qui est la même
+collision vue deux fois. Après correction, **93 à 98 %** des épisodes
+produisent un choc.
+
+**Ce que la correction a coûté, parce qu'une correction de garde-fou est un
+rééquilibrage.** Elle est passée de 57 à **79 %** de victoires contre les six.
+Le dégât de choc a repris la différence — balayage à 16 puis 20 duels par
+paire : 2,0 → 70 %, 1,8 → 63 %, **1,6 → 60 %**, 1,5 → 49 %. À 1,6 elle retrouve
+exactement sa place au relevé des sept (59 %, contre 57 % avant le correctif).
+
+**Et une leçon de méthode, plus large que ce personnage** : cette valeur avait
+été « calée au banc » **trois fois** (0,9 → 1,15 → 1,9 → 1,15) sans que personne
+ne remarque qu'elle réglait la mauvaise chose. Un balayage qui rend une courbe
+propre ne prouve pas que le paramètre fait ce que son commentaire annonce — il
+prouve seulement qu'il déplace quelque chose. L'inscription est dans
+`docs/PIEGES.md`, section « Équilibrer ».
+
 ### Le pilotage passe en linéaire — et le verrou revient d'où il venait
 
 **Demandé** : « je veux que le déplacement de Comet soit linéaire et non visé ».
@@ -3580,20 +3631,20 @@ d'équilibrage — elle reste à 12/27 à la matrice, au milieu du roster. C'est
 mesure de **production contre une cible qui dérive**, et une comète qui ne vise
 pas en produit peu par définition.
 
-### Le banc final — 8 graines × les deux camps
+### Le banc final — 10 graines × les deux camps
 
-`speed: 1050`, `seek: 0`, `kinetic.damage: 2.5`, `kinetic.cooldown: 1.15`, éclat 3, salve 10 s **gratuite** :
+`speed: 1050`, `seek: 0`, `kinetic.damage: 1.6`, plancher 0,12 s, éclat 3, salve 10 s **gratuite** :
 
 | Adversaire | Victoires | Durée moyenne |
 | --- | --- | --- |
-| Ronin | **16/16** | 28,4 s |
-| Hoplite | 15/16 | 35,7 s |
-| Druide | 11/16 | 33,4 s |
-| Shinobi | 11/16 | 32,6 s |
-| Pistolero | 2/16 | 30,5 s |
-| Golem | **0/16** | 35,5 s |
-| **Total contre les six** | **55/96 — 57 %** | |
-| Mannequin | 16/16 | 36,5 s → **2,7 PV/s** |
+| Ronin | **20/20** | 26,4 s |
+| Hoplite | **20/20** | 34,3 s |
+| Shinobi | 15/20 | 33,1 s |
+| Druide | 15/20 | 32,6 s |
+| Pistolero | 2/20 | 30,7 s |
+| Golem | **0/20** | 33,3 s |
+| **Total contre les six** | **72/120 — 60 %** | |
+| Mannequin | 16/16 | 33,2 s → **3,0 PV/s** |
 | Soleil | 0/16 | — |
 | LUNE | 0/16 | — |
 
@@ -3605,14 +3656,14 @@ même, la façon de l'obtenir non.)*
 la section précédente, ligne par ligne : le total est revenu à sa place, la
 forme non.)*
 
-**Sa ligne est structurellement dispersée, et c'est le personnage.** De 0/16 à
-16/16 selon l'adversaire, là où les six autres se tiennent dans une fourchette
+**Sa ligne est structurellement dispersée, et c'est le personnage.** De 0/20 à
+20/20 selon l'adversaire, là où les six autres se tiennent dans une fourchette
 bien plus serrée. La raison tient en une phrase : **elle doit venir au contact
 pour exister**. Contre un tireur qui recule (Pistolero), elle passe son duel à
 traverser l'arène ; contre un duelliste qui vient à elle (Ronin), elle ne rate
 rien.
 
-**Le Golem à 0/16 est le cas extrême**, et il est structurel plutôt que mal
+**Le Golem à 0/20 est le cas extrême**, et il est structurel plutôt que mal
 calé : son dégât ne s'adapte pas à la barre d'en face, or le Golem en a le
 double (200 PV) et punit la proximité de deux façons (onde sismique, éclats).
 Il lui faudrait environ **soixante-six chocs réussis** pour l'abattre. À ne pas
@@ -4164,16 +4215,16 @@ Sur les **27 duels hors miroir** de chacun (`tools/matrix-reference.txt`) :
 | --- | --- | --- |
 | **Lune** | 27/27 | boss — hors barème |
 | **Soleil** | 23/27 | boss — hors barème |
+| Druide | 16/27 | |
 | Pistolero | 15/27 | |
-| Druide | 15/27 | |
 | Shinobi | 14/27 | |
 | Golem | 13/27 | |
 | Hoplite | 12/27 | |
 | **Comète** | 11/27 | |
-| Ronin | 5/27 | |
+| Ronin | 4/27 | |
 | Mannequin | 0/27 | c'est sa définition |
 
-Écart **5 à 15** entre les sept qui se jugent entre eux, connu et non corrigé.
+Écart **4 à 16** entre les sept qui se jugent entre eux, connu et non corrigé.
 Les deux boss et le Mannequin sont hors barème : leur ligne est une
 **spécification**, pas un défaut.
 
@@ -4230,7 +4281,7 @@ réelle** de l'adversaire. 100 PV ÷ la durée moyenne des trois graines :
 | Shinobi | 3,1 | 34,9 · 28,8 · 32,8 |
 | Hoplite | 3,0 | 31,0 · 37,6 · 31,7 |
 | Soleil | 3,0 | 23,7 · 33,2 · 43,8 |
-| Comète | 3,0 | 39,5 · 27,7 · 32,9 |
+| Comète | 3,1 | 38,9 · 32,9 · 26,4 |
 | Druide | 2,8 | 35,8 · 37,7 · 35,3 |
 | Pistolero | 2,5 | 37,3 · 39,2 · 43,3 |
 | Golem | 1,8 | 62,0 · 46,5 · 55,0 |

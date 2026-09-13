@@ -441,38 +441,30 @@ export const COMET = fiche({
      * ensemble l'avaient portée à **79 %**, et c'est son contact qu'il fallait
      * reprendre, pas eux (voir `cooldown` juste en dessous).
      */
-    damage: 2.5,
+    damage: 1.6,
     /**
-     * **Son verrou de touche, et il joue le rôle de `melee.cooldown`.**
+     * **Un plancher anti-double-compte, et plus une cadence — c'est une
+     * correction de bug.**
      *
-     * `resolveMelee` ne tourne jamais pour elle (géométrie vide), donc le
-     * moteur ne pose **aucun** verrou : sans ce compteur, un contact qui dure
-     * trois images ferait trois coups. C'est la même leçon que la couronne à
-     * huit branches du Soleil — le garde-fou se pose **une fois pour toutes**,
-     * avant la recherche de cible, pas par cible.
+     * Il a valu 0,9 puis 1,15 puis 1,9 puis 1,15 s, écrit comme le `meleeCd`
+     * que le moteur pose pour les autres : `resolveMelee` ne tournant jamais
+     * pour elle, il fallait bien empêcher qu'un contact de plusieurs images
+     * fasse plusieurs coups.
      *
-     * **Le second levier, mesuré contre le premier.** À dégât égal, le verrou
-     * déplace autant que le dégât : quand elle n'avait que le Coup de fouet,
-     * 0,9 s → 63 %, 1,05 → 56 %, 1,15 → 51 %. Les deux sont donc balayés
-     * séparément puis remesurés ensemble (*deux leviers qui marchent ne
-     * s'additionnent pas*).
+     * **La mesure a montré qu'il faisait autre chose.** Un contact dure **2 à
+     * 3 images** (0,017 s en moyenne, relevé sur 24 duels) : un plancher de
+     * 0,05 s aurait suffi à ce travail-là. En revanche le verrou **avalait 27 à
+     * 44 % des contacts suivants** — des contacts *neufs*, parfois plus d'une
+     * seconde après le précédent. À l'écran, la Comète percutait son adversaire
+     * et il ne se passait rien.
      *
-     * **Il est monté à 1,9 s puis revenu ici, et l'aller-retour est instructif.**
-     * La Fragmentation et le Rebond l'avaient portée de 51 % à **79 %** ; il
-     * fallait reprendre trente points, et les reprendre sur les nouveaux outils
-     * ne rendait presque rien (éclat à 1 et rebond rogné : 79 → 70 %) parce
-     * qu'ils n'ajoutent pas du **dégât** mais de l'**accès**. Le verrou allongé
-     * à 1,9 s l'avait ramenée à 46 %.
-     *
-     * Puis son pilotage est passé en **linéaire** (`seek: 0`), et elle est
-     * tombée à 28 % : un personnage qui ne vise plus n'a plus besoin d'être
-     * bridé au contact. Balayage, 16 duels par paire : verrou 1,4 s → 32 %,
-     * **1,15 s → 45 %**, 0,9 s → 43 % — ça **plafonne** en dessous, parce que
-     * sans visée les contacts sont trop rares pour qu'un verrou plus court
-     * serve. La valeur d'origine est donc redevenue la bonne, pour une raison
-     * qui n'a rien à voir avec celle du premier jour.
+     * Le double compte est désormais interdit par `f.state.ramArmed`, qui ne se
+     * relève qu'à la **séparation** (voir le module). Cette valeur n'est plus
+     * qu'un plancher contre un contact qui **grésille** : la mesure a vu des
+     * épisodes se rouvrir 0,03 s après le précédent, ce qui est la même
+     * collision vue deux fois. 0,12 s couvre ce cas et rien d'autre.
      */
-    cooldown: 1.15,
+    cooldown: 0.12,
     /**
      * **La marge, et c'est un piège déjà payé par LUNE.**
      *
@@ -647,9 +639,14 @@ export const COMET = fiche({
    * **Quatre secondes et demie où la boucle n'a plus de coût.**
    *
    * Son élan est **tenu** au-dessus de tout ce qu'elle peut atteindre seule
-   * (2,3, soit 2 415 px/s), son verrou de touche tombe de 1,15 s à 0,4, et
-   * surtout **ses chocs ne lui coûtent plus rien** : `rush.spend` ne s'applique
-   * pas. C'est exactement l'ultime qu'appelle un personnage bâti sur une
+   * (2,3, soit 2 415 px/s) et surtout **ses chocs ne lui coûtent plus rien** :
+   * `rush.spend` ne s'applique pas.
+   *
+   * **Elle ne raccourcit plus le verrou**, et c'est une clé retirée : depuis
+   * que le double compte est interdit par la séparation et non par une horloge,
+   * le plancher de 0,12 s ne bride personne — le raccourcir pendant l'ultime
+   * n'aurait rien changé, et une clé que plus personne ne lit ne crie pas
+   * (invariant 9). C'est exactement l'ultime qu'appelle un personnage bâti sur une
    * ressource — il ne lui donne pas une attaque de plus, il lui **retire sa
    * contrainte**.
    *
@@ -675,8 +672,6 @@ export const COMET = fiche({
     duration: 4.5,
     /** L'élan tenu pendant toute la manœuvre. Calé. */
     rush: 2.3,
-    /** Verrou de touche pendant la Rentrée : 0,4 s au lieu de 0,9. */
-    cooldown: 0.4,
     /** Secousse de caméra à **chaque** choc de la Rentrée — petite (le Séisme
      *  du Golem vaut 16) parce qu'elle se répète une dizaine de fois. */
     shake: 6,

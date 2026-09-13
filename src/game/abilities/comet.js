@@ -59,10 +59,18 @@ export const cometAbilities = {
      *  au-delà quand le Coup de fouet ou la Rentrée le poussent. Lu par le HUD
      *  autant que par le moteur, à travers `f.boostFactor`. */
     f.state.rush = 1;
-    /** Verrou de touche, le rôle que `melee.cooldown` joue pour les autres.
-     *  Elle n'a pas d'arme, donc le moteur n'en pose aucun : sans ce compteur,
-     *  un contact qui dure trois images ferait trois coups. */
+    /** **Plancher** anti-double-compte, pas une cadence — voir `tryRam`. */
     f.state.hitCd = 0;
+    /**
+     * **Armée tant qu'elle n'a pas encore frappé le contact en cours.**
+     *
+     * C'est ce drapeau, et non le verrou, qui empêche un même contact de compter
+     * deux fois : il retombe au choc et ne se relève que **quand plus personne
+     * n'est dans la fenêtre**. Un contact qui dure (mesuré : 2 à 3 images) ne
+     * produit donc qu'un choc, et un contact **neuf** en produit un autre, même
+     * une fraction de seconde plus tard.
+     */
+    f.state.ramArmed = true;
     /** Horloge de la Fragmentation, et la portée d'horloge que la jauge du
      *  troisième créneau doit couvrir. `first` est plus court que `cooldown`,
      *  donc les deux ne se confondent pas : sans `specSpan`, la première jauge
@@ -142,7 +150,7 @@ export const cometAbilities = {
 
     /* ---------- le choc cinétique ---------------------------------------- */
     f.state.hitCd = Math.max(0, f.state.hitCd - dt);
-    if (f.state.hitCd <= 0 && f.onStage) this.tryRam(f, game);
+    if (f.onStage) this.tryRam(f, game);
   },
 
   /**
@@ -166,7 +174,25 @@ export const cometAbilities = {
   /* ------------------------------------------------------------------ */
 
   /**
-   * Un choc, et **un seul par verrou** : on sort au premier ennemi trouvé.
+   * Un choc, et **un seul par contact** : on sort au premier ennemi trouvé.
+   *
+   * **Le garde-fou est le réarmement, pas une horloge — et c'est une
+   * correction.** Il a d'abord été écrit comme un verrou de 1,15 s, sur le
+   * modèle du `meleeCd` que le moteur pose pour les autres. Mesuré ensuite :
+   * un contact dure **2 à 3 images** (0,017 s en moyenne), donc le verrou
+   * n'empêchait rien qu'un plancher de 0,05 s n'aurait empêché — en revanche il
+   * **avalait 27 à 44 % des contacts suivants**, qui étaient de vrais contacts
+   * neufs, parfois plus d'une seconde après le précédent. Un joueur voyait la
+   * Comète percuter son adversaire et **rien ne se passait**.
+   *
+   * Deux pièces désormais, et elles ne font pas le même travail :
+   *  • `f.state.ramArmed` retombe au choc et ne se relève **qu'à la
+   *    séparation** — c'est lui qui interdit de compter deux fois le même
+   *    contact, et il le fait exactement, sans horloge ;
+   *  • `kinetic.cooldown` n'est plus qu'un **plancher** (0,12 s) contre un
+   *    contact qui grésille : la mesure a vu des épisodes se rouvrir **0,03 s**
+   *    après le précédent, ce qui est la même collision vue deux fois, pas deux
+   *    coups.
    *
    * Le dégât suit l'élan (`kinetic.damage × rush`) et part **dans son sens de
    * marche** — un corps lancé pousse devant lui, il n'écarte pas. Elle-même
@@ -185,12 +211,25 @@ export const cometAbilities = {
     const ult = f.el.ultimate;
     const enRentree = f.ult.active > 0;
 
+    let cible = null;
     for (const g of game.fighters) {
       if (g === f || g.team === f.team || !g.onStage) continue;
       // de bord à bord **plus une marge explicite** : `resolveBodies` sépare
       // les corps à chaque pas, donc un test au contact strict est toujours faux
       if (Math.hypot(g.x - f.x, g.y - f.y) > f.radius + g.radius + k.margin) continue;
+      cible = g;
+      break;
+    }
 
+    // personne au contact : elle se réarme, et le prochain contact comptera
+    if (!cible) {
+      f.state.ramArmed = true;
+      return;
+    }
+    if (!f.state.ramArmed || f.state.hitCd > 0) return;
+
+    {
+      const g = cible;
       const nx = Math.cos(f.heading);
       const ny = Math.sin(f.heading);
       game.damage(g, k.damage * f.state.rush, f, {
@@ -201,13 +240,13 @@ export const cometAbilities = {
         knockback: k.knockback,
       });
 
-      f.state.hitCd = enRentree ? ult.cooldown : k.cooldown;
+      f.state.hitCd = k.cooldown;
+      f.state.ramArmed = false;
       f.push(-nx, -ny, k.selfKick);
       // la Rentrée retire la contrainte : c'est tout ce qu'elle fait, et c'est
       // assez — l'élan tenu au maximum ne se dépense plus
       if (enRentree) game.shake(ult.shake, 0.2);
       else f.state.rush = Math.max(1, f.state.rush - f.el.rush.spend);
-      return;
     }
   },
 
@@ -289,7 +328,6 @@ export const cometAbilities = {
     f.ult.ready = false;
     f.ghosting = 0;
     f.state.rush = Math.min(f.state.rush, f.el.rush.max);
-    f.state.hitCd = Math.min(f.state.hitCd, f.el.kinetic.cooldown);
   },
 
   /* ------------------------------------------------------------------ */

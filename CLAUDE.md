@@ -127,9 +127,9 @@ survivant**. Un commentaire qui cite un élément disparu parle d'une
 ### L'équilibrage en cinq lignes
 
 **Relevé courant** (`tools/matrix-reference.txt`), 27 duels hors miroir chacun :
-**Lune 27**, **Soleil 23**, Pistolero 15, Druide 15, Shinobi 14, Golem 13,
-Hoplite 12, Comète 11, Ronin 5, Mannequin 0 (c'est sa définition). Écart **5 à
-15** entre les sept du milieu, connu et non corrigé.
+**Lune 27**, **Soleil 23**, Druide 16, Pistolero 15, Shinobi 14, Golem 13,
+Hoplite 12, Comète 11, Ronin 4, Mannequin 0 (c'est sa définition). Écart **4 à
+16** entre les sept du milieu, connu et non corrigé.
 
 - **Le sommet n'est plus partagé, et c'est assumé : LUNE est au-dessus** (50/50
   contre le Soleil, 140/140 contre les sept autres du banc de l'époque, et
@@ -470,6 +470,10 @@ est dans `docs/PIEGES.md`, sous le même intitulé.
   (`opts.kind`) avant de balayer.
 - La source du dégât dit *quoi* regarder, pas *quelle poignée tourner*.
 - **Deux leviers qui marchent ne s'additionnent pas** : un, remesurer, puis l'autre.
+- **Un verrou de touche calé en secondes fait de la cadence, pas de
+  l'anti-double-compte** : un contact dure 2 à 3 images, le reste avale des
+  coups neufs. La bonne forme est un **réarmement à la séparation**, l'horloge
+  n'étant qu'un plancher.
 - **Le levier d'un combattant faible est parfois chez un autre.**
 - **Une grosse barre de vie décide de la *forme* des affrontements** ; la forme,
   elle, ne se règle pas sur la fiche.

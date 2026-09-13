@@ -20,12 +20,12 @@ relevé, puis les pièges eux-mêmes.
 | **Pièges déjà rencontrés** | 142 |
 | &nbsp;&nbsp;· Mesurer | 144 |
 | &nbsp;&nbsp;· Équilibrer | 179 |
-| &nbsp;&nbsp;· Déterminisme et ordre d'exécution | 469 |
-| &nbsp;&nbsp;· Éditer les données | 508 |
-| &nbsp;&nbsp;· Interface et rendu | 637 |
-| &nbsp;&nbsp;· Le son | 840 |
-| &nbsp;&nbsp;· Refactoriser | 1353 |
-| **Le détail des sections condensées de `CLAUDE.md`** | 1394 |
+| &nbsp;&nbsp;· Déterminisme et ordre d'exécution | 503 |
+| &nbsp;&nbsp;· Éditer les données | 542 |
+| &nbsp;&nbsp;· Interface et rendu | 671 |
+| &nbsp;&nbsp;· Le son | 874 |
+| &nbsp;&nbsp;· Refactoriser | 1387 |
+| **Le détail des sections condensées de `CLAUDE.md`** | 1428 |
 | &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1396 |
 | &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1439 |
 | &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1482 |
@@ -465,6 +465,40 @@ dans `docs/FICHES.md`. Ce qui suit vaut pour tout le dépôt.
   retourne le personnage » — et raison pour laquelle sa barre de vie est passée
   de 460 à **280** : *on ne porte pas la barre d'une forteresse quand on ne
   s'expose jamais.*
+
+- **Un verrou de touche calé en secondes fait de la *cadence*, pas de
+  l'anti-double-compte — et il avale des coups sans rien dire.** Le choc
+  cinétique de la Comète portait un `kinetic.cooldown` de 1,15 s, écrit comme le
+  `meleeCd` que le moteur pose pour les autres, avec cette justification dans la
+  fiche : *« sans ce compteur, un contact qui dure trois images ferait trois
+  coups »*. Le joueur, lui, voyait la Comète percuter son adversaire et **rien ne
+  se passer**.
+
+  Le compte a tranché, et il dit deux choses que la lecture ne pouvait pas
+  donner. D'abord **un contact dure 2 à 3 images** (0,017 s en moyenne sur
+  24 duels) : un plancher de 0,05 s aurait suffi au travail annoncé, 1,15 s est
+  vingt fois trop. Ensuite, en découpant les contacts en **épisodes distincts**
+  — une suite de pas consécutifs où un ennemi est dans la fenêtre —, **27 à 44 %
+  des épisodes ne produisaient aucun choc** parce que le verrou d'un épisode
+  *précédent* tournait encore. Les épisodes perdus arrivaient de 0,03 s à 1,15 s
+  après le coup précédent : c'étaient de vrais contacts neufs, pas des rebonds
+  du même.
+
+  **La bonne forme n'est pas une horloge, c'est un réarmement** : un drapeau qui
+  retombe au coup et ne se relève **qu'à la séparation**. Il interdit le double
+  compte exactement, sans supposer une durée ; l'horloge ne reste que comme
+  **plancher** contre un contact qui grésille (la mesure a vu des épisodes se
+  rouvrir 0,03 s après le précédent, ce qui est la même collision vue deux fois).
+  Après correction : **93 à 98 %** des épisodes produisent un choc.
+
+  Deux corollaires qui coûtent cher à retrouver :
+  - **la valeur du verrou avait été « calée au banc » trois fois** (0,9 → 1,15 →
+    1,9 → 1,15) sans que personne ne remarque qu'elle réglait la mauvaise
+    chose. Un balayage qui donne une courbe propre ne prouve pas que le
+    paramètre fait ce que son commentaire annonce ;
+  - **la correction a rendu 22 points de victoires** (57 → 79 % contre les six),
+    qu'il a fallu reprendre sur le dégât (2,5 → 1,6). Corriger un garde-fou trop
+    large *est* un rééquilibrage, et il se mesure comme tel.
 
 ### Déterminisme et ordre d'exécution
 
