@@ -54,7 +54,6 @@ bonne (`offset` / `limit`). Les numéros dérivent ; `grep -n '^#\+ '` les recal
 | Pouvoirs d'un combattant | `src/game/abilities/<id>.js` |
 | Pouvoir **spécial** greffé (3<sup>e</sup> créneau) | bloc `special` de la fiche + `f.state.spec` dans le module |
 | Mise en scène (rubans, fuseaux, nappes, ondes, nombres) | `src/render/flair.js` + `look.flair` de chaque fiche |
-| **Traitement d'un corps uni** (modelé + une marque) | `src/render/motifs.js` + `look.motif` — décoratif, sans aléa ni horloge |
 | **Son** : synthèse des bruitages et annonceur | `src/render/audio.js` |
 | **Recettes de bruitage** (aucun fichier audio) | `src/data/sound.js` + `sound` de chaque fiche |
 | Écrans DOM | `src/ui/select.js`, `src/ui/result.js`, `index.html`, `styles/style.css` |
@@ -554,14 +553,6 @@ est dans `docs/PIEGES.md`, sous le même intitulé.
 - **Un corps peut être un sprite** (`look.sprite` + `spriteScale`,
   `spriteFlash`) : dimensionné sur son **disque plein**, jamais cerné, et le
   flash se **pose par-dessus** au lieu de remplacer la couleur.
-- **Un corps uni se *traite*, il ne se remplace pas par un dessin** : le
-  contraste avec les trois corps-sprites (Soleil, Lune, Comète) est ce qui les
-  fait lire comme des objets à part. `look.motif` : un modelé et **une** marque,
-  sautés pendant le flash et sous une teinte, où le corps doit rester un aplat.
-- **Un corps sombre ne se creuse pas, il se glace** : deux réglages séparés
-  (`gloss`, `shade`), jamais un curseur unique.
-- **`save()`/`restore()` ne sauvegarde pas le chemin courant** : un dessin
-  intercalé avant un `stroke()` oblige à retracer le contour.
 - **Un chiffre de PV posé sur un dessin demande un contour** (`look.hpStroke`) :
   aucun aplat ne tient sur un dessin ; sur un corps uni, une encre suffit.
 - **Corps, arme et pouvoirs doivent être de la même matière** pour se lire comme

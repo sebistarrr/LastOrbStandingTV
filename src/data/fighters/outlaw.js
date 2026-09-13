@@ -37,20 +37,6 @@ export const OUTLAW = fiche({
     /** Mesuré : le chiffre de PV est crème. Sur le brun sombre c'est le seul
      *  ton lisible — le noir du reste du roster y disparaîtrait. */
     hpColor: '#f5f2ea',
-    /** **Traitement du disque** (voir `render/motifs.js`) : le corps reste un
-     *  aplat — c'est ce qui laisse les trois corps-dessins du roster (Soleil,
-     *  Lune, Comète) se lire comme des objets à part —, mais il est modelé et
-     *  porte **une** marque. Ici les six chambres du barillet : la marque cite
-     *  l'arme de la fiche, elle n'invente pas un emblème. Purement visuel,
-     *  aucune lecture par le moteur. */
-    motif: {
-      gloss: 0.14, // calé : bleu moyen, il prend la lumière sans blanchir
-      shade: 0.2,
-      mark: 'barillet',
-      color: '#0d2f42', // échantillonné sur `handle.dark` du revolver
-      alpha: 0.5,
-      width: 3,
-    },
     aura: {
       color: 'rgba(143,208,238,0.5)',
       radius: 1.58,

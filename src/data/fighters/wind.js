@@ -42,18 +42,6 @@ export const WIND = fiche({
      *  l'anneau reste lisible par-dessus les lames. */
     outline: '#8f8f99',
     hpColor: '#f5f2ea',
-    /** Marque : quatre pointes, parce que **la bille *est* le shuriken**
-     *  (sprite centré, hitbox en disque). Seule du lot à se **remplir** — un
-     *  shuriken est une silhouette — et seule à ne porter **aucune ombre** :
-     *  assombrir un corps déjà noir (`#141414`) le rend illisible, piège déjà
-     *  payé. Ce corps-là se glace au lieu de se creuser. */
-    motif: {
-      gloss: 0.22,
-      shade: 0,
-      mark: 'shuriken',
-      color: '#8f8f99', // son propre `outline` : la seule encre claire qu'il ait
-      alpha: 0.4,
-    },
     /**
      * **Style sombre ninja — demandé, purement visuel.**
      *
