@@ -51,6 +51,16 @@ export const LANCER = fiche({
      *  le cuivre clair de la bille le noyait ; sur ce violet profond, le crème
      *  d'origine repasse sans peine. */
     hpColor: '#f5f2ea',
+    /** Marque : deux chevrons **pointés sur le cap**, puisque la lance l'est
+     *  aussi (`weapon.spin = 0`). Voir `render/motifs.js`. */
+    motif: {
+      gloss: 0.15,
+      shade: 0.2,
+      mark: 'chevrons',
+      color: '#2c1450', // échantillonné sur `handle.dark` de la lance
+      alpha: 0.5,
+      width: 4,
+    },
     aura: {
       /**
        * Halo de la bille, passé au **jaune de foudre**. Attention au fond :

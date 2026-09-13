@@ -13,6 +13,7 @@ import { ARENA, MATCH, PHYSICS } from '../data/tuning.js';
 import { PIXEL_MAPS } from '../data/pixelmaps.js';
 import { TAU, clamp, rotateToward, wrapAngle } from '../core/math.js';
 import { drawSpriteCentered, drawSpriteLeft } from '../render/sprites.js';
+import { drawMotif } from '../render/motifs.js';
 
 export class Fighter {
   /**
@@ -543,6 +544,26 @@ export class Fighter {
         ctx.fillStyle = this.tint ?? dotTint.color;
         ctx.fill();
         ctx.globalAlpha = 1;
+      }
+      /**
+       * **Traitement du disque** (`look.motif`) : modelé + une marque simple,
+       * posés entre le remplissage et le contour. Décoratif au sens strict —
+       * ni aléa, ni horloge, ni écriture d'état, voir `render/motifs.js`.
+       *
+       * Il est **sauté pendant le flash d'encaissement** : ce flash doit rester
+       * un aplat franc, c'est à ça qu'on lit la touche. Même raison pour la
+       * teinte d'un contrôle adverse — on la laisse couvrir le motif, puisque
+       * c'est elle que le joueur doit voir à cet instant-là.
+       */
+      if (look.motif && this.flash <= 0 && !this.tint && !dotTint) {
+        drawMotif(ctx, this.x, this.y, this.radius, this.weaponAngle, look.motif);
+        /**
+         * **Le chemin courant n'est pas sauvegardé par `save()`/`restore()`.**
+         * `drawMotif` a ouvert les siens ; sans ce retracé, le `stroke()`
+         * ci-dessous contournerait la dernière marque au lieu du corps.
+         */
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, TAU);
       }
       ctx.lineWidth = look.outlineWidth;
       ctx.strokeStyle = look.outline;

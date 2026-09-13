@@ -42,6 +42,16 @@ export const MAGE = fiche({
     bodyHit: '#ffffff',
     outline: '#0a0a0a',
     hpColor: '#f5f2ea',
+    /** Marque : l'anneau et les trois points du cercle d'invocation des orbes,
+     *  réduits à ce qui reste lisible à 41 px. Voir `render/motifs.js`. */
+    motif: {
+      gloss: 0.14,
+      shade: 0.2,
+      mark: 'runes',
+      color: '#0a3a1c',
+      alpha: 0.5,
+      width: 3,
+    },
     aura: {
       color: 'rgba(56,205,101,0.42)',
       radius: 1.6,

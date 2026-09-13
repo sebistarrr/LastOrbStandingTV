@@ -28,6 +28,16 @@ export const BLADESMAN = fiche({
      *  — noir sur les tons presque noirs de la manche. Le crème mesuré
      *  redevient donc le bon choix : la manche est sombre, pas le corps. */
     hpColor: '#f5f2ea',
+    /** Marque : deux arcs opposés, **qui tournent avec `weaponAngle`** — le
+     *  corps dit enfin ce que `Damage = Spin` fait. Voir `render/motifs.js`. */
+    motif: {
+      gloss: 0.12, // orange déjà clair : peu de glacis, sinon il se délave
+      shade: 0.22,
+      mark: 'tourbillon',
+      color: '#7a2606', // braise sombre, prise dans sa palette flamme
+      alpha: 0.5,
+      width: 4,
+    },
     /** **Demandé.** Sans ce drapeau, le chiffre se pose **avant** l'arme
      *  (l'ordre par défaut) et la manche — par-dessus la bille depuis
      *  `overBody` — le recouvrirait entièrement au centre. Voir la note dans

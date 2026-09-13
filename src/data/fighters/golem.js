@@ -79,6 +79,17 @@ export const GOLEM = fiche({
     bodyHit: '#e8e4dc', // le bloc blanchit au coup, comme le reste du roster
     outline: '#1c1712',
     hpColor: '#f5f2ea',
+    /** Marque : **trois** brisures, pas un réseau. Le plus gros corps du roster
+     *  en supporterait plus, mais il encaisse aussi le plus de coups : ce qu'on
+     *  ajoute là, on le regarde longtemps. Voir `render/motifs.js`. */
+    motif: {
+      gloss: 0.1, // pierre mate : presque pas de lumière spéculaire
+      shade: 0.24,
+      mark: 'fissures',
+      color: '#2a231a', // échantillonné sur `handle.dark` du bloc
+      alpha: 0.55,
+      width: 4,
+    },
     /**
      * **Le chiffre de PV repasse par-dessus l'arme — demandé.**
      *

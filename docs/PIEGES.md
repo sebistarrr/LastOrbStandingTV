@@ -23,16 +23,16 @@ relevé, puis les pièges eux-mêmes.
 | &nbsp;&nbsp;· Déterminisme et ordre d'exécution | 503 |
 | &nbsp;&nbsp;· Éditer les données | 542 |
 | &nbsp;&nbsp;· Interface et rendu | 671 |
-| &nbsp;&nbsp;· Le son | 981 |
-| &nbsp;&nbsp;· Refactoriser | 1494 |
-| **Le détail des sections condensées de `CLAUDE.md`** | 1535 |
-| &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1537 |
-| &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1580 |
-| &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1623 |
-| &nbsp;&nbsp;· Invariant 13 — comment le moteur a cessé de compter jusqu'à deux | 1642 |
-| &nbsp;&nbsp;· Invariant 3 — la preuve que l'arrivée d'un combattant n'a rien déplacé | 1686 |
-| &nbsp;&nbsp;· Invariant 9 — les deux régressions qui l'ont écrit | 1703 |
-| &nbsp;&nbsp;· Formats — la table, et pourquoi elle a été écrite après coup | 1719 |
+| &nbsp;&nbsp;· Le son | 1028 |
+| &nbsp;&nbsp;· Refactoriser | 1541 |
+| **Le détail des sections condensées de `CLAUDE.md`** | 1582 |
+| &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1584 |
+| &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1627 |
+| &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1670 |
+| &nbsp;&nbsp;· Invariant 13 — comment le moteur a cessé de compter jusqu'à deux | 1689 |
+| &nbsp;&nbsp;· Invariant 3 — la preuve que l'arrivée d'un combattant n'a rien déplacé | 1733 |
+| &nbsp;&nbsp;· Invariant 9 — les deux régressions qui l'ont écrit | 1750 |
+| &nbsp;&nbsp;· Formats — la table, et pourquoi elle a été écrite après coup | 1766 |
 
 ---
 
@@ -977,6 +977,53 @@ L'icône est **générée** (`tools/icone.mjs`) et non dessinée : c'est la règ
 dépôt sur les icônes — « une icône redessinée à la main diverge de son arme » —
 appliquée un cran plus haut, en l'échantillonnant sur la **scène**. Repalettiser
 la Comète ou changer `STAGE.paper`, relancer l'outil, et rien n'a dérivé.
+
+#### Un corps uni se traite, il ne se remplace pas par un dessin
+
+Question posée telle quelle : faut-il donner un dessin aux six billes qui n'en
+ont pas (Pistolero, Ronin, Hoplite, Shinobi, Druide, Golem) — ou est-ce que ça
+ferait *trop*, avec les armes ?
+
+Le risque n'était pas celui-là. Trois corps du roster sont déjà des sprites — le
+Soleil, la Lune, la Comète — et **c'est ce contraste qui les fait lire comme des
+objets à part** : habiller les six autres l'aurait effacé bien plus sûrement
+qu'il n'aurait encombré l'arme. S'y ajoutait le coût déjà connu d'un corps
+dessiné, à payer **six fois** : `hpStroke` (aucun aplat ne tient sur un dessin),
+un flash qui se pose au lieu de remplacer, et l'aura à revoir.
+
+D'où la voie retenue : garder l'aplat et le **traiter**. `look.motif`
+(`src/render/motifs.js`) pose un modelé et **une** marque, citée sur la fiche du
+combattant — les six chambres du barillet, deux arcs pour `Damage = Spin`, des
+chevrons braqués sur le cap comme la lance, quatre pointes pour la bille qui
+*est* un shuriken, l'anneau d'invocation, trois brisures.
+
+Quatre choses en sont ressorties :
+
+- **Deux réglages de modelé, pas un.** Un corps noir (`#141414`, le Shinobi) ne
+  se creuse pas : l'assombrir le rend illisible, piège déjà payé sur
+  `look.body`. Il se **glace**. `gloss` et `shade` sont donc séparés, et le
+  Shinobi porte `shade: 0`.
+- **Le motif se saute pendant le flash et sous une teinte.** Ces deux états sont
+  exactement ceux où le corps doit redevenir un aplat franc : c'est à ça qu'on
+  lit la touche et le contrôle. Une décoration qui survit à un état de jeu le
+  rend illisible.
+- **Tout reste au-delà de 0,45 r**, en fractions du rayon jamais en pixels : le
+  centre est pris par le chiffre de PV, et `sizeFactor` fait enfler le corps
+  (invariant 7). Seule l'épaisseur de trait est en pixels d'écran, comme
+  `outlineWidth` dont elle est la voisine.
+- **`save()`/`restore()` ne sauvegarde pas le chemin courant.** Le corps était
+  tracé, rempli, puis contourné avec le *même* chemin ; le motif intercalé
+  ouvrait les siens, et le `stroke()` final contournait la dernière marque au
+  lieu de la bille. Il faut retracer l'arc.
+
+La marque du Shinobi est le cas limite assumé : sa bille montre un shuriken sous
+un sprite d'arme qui en est un aussi. Ça se lit comme un noyau, et c'est ce qui
+rend une bille noire lisible sur l'arène blanche — mais si ça fait trop, le
+levier est `alpha`, ou retirer `mark` en gardant `gloss`.
+
+Preuve : matrice **identique au fichier près** (c'est du rendu pur — aucun aléa,
+aucune horloge, aucune écriture d'état), `fiche-check`, `lang-check` et
+`sound-check` verts, captures de contrôle sur les six.
 
 ### Le son
 
