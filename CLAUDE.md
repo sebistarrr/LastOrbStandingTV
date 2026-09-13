@@ -1,10 +1,11 @@
 # CLAUDE.md — mémoire du projet
 
-Duels **à deux, en 2 contre 2, en 1 contre X ou en bataille royale**, avec neuf
+Duels **à deux, en 2 contre 2, en 1 contre X ou en bataille royale**, avec dix
 combattants : cinq repris de la chaîne « ballthingsim » — le Pistolero, le
-Ronin, l'Hoplite, le Shinobi et le Druide — et **quatre inventés**, le Golem, le
-Mannequin (une cible d'entraînement qui ne frappe pas) et **deux boss**, le
-Soleil et la Lune. Moteur écrit d'après les vidéos de référence.
+Ronin, l'Hoplite, le Shinobi et le Druide — et **cinq inventés**, le Golem, le
+Mannequin (une cible d'entraînement qui ne frappe pas), la Comète (sans arme :
+son élan est son arme) et **deux boss**, le Soleil et la Lune. Moteur écrit
+d'après les vidéos de référence.
 HTML + CSS + JS ES modules, Canvas 2D, **aucune dépendance, aucun build**.
 Publié sur GitHub Pages à chaque push sur `main` → <https://sebistarrr.github.io/test2/>
 
@@ -44,7 +45,7 @@ bonne (`offset` / `limit`). Les numéros dérivent ; `grep -n '^#\+ '` les recal
 | Registre du roster (`ELEMENTS`, `ROSTER`) | `src/data/elements.js` |
 | Sprites pixel-art (texte) | `src/data/pixelart/<id>.js`, recensés dans `src/data/pixelmaps.js` |
 | Overrides de sprites en vrai PNG (écart assumé à « aucun binaire ») | `assets/sprites/` + `manifest.json` |
-| **Combattant sans arme** (Mannequin et LUNE) | `weapon.reach`/`hitbox.radius` à 0 et pas de `head.sprite` : géométrie **vide**, plus sûre que des dégâts à zéro |
+| **Combattant sans arme** (Mannequin, LUNE, Comète) | `weapon.reach`/`hitbox.radius` à 0 et pas de `head.sprite` : géométrie **vide**, plus sûre que des dégâts à zéro. Ses dégâts, s'il en a, sont appelés **par son module** |
 | Géométrie de scène, phases, export vidéo | `src/data/tuning.js` |
 | Déroulé du duel, dégâts, rendu global | `src/game/match.js` |
 | Entité combattant (état + dessin) | `src/game/fighter.js` |
@@ -67,15 +68,15 @@ navigation, pas un besoin.
 
 ## Roster
 
-**Neuf combattants, tous jouables.** Cinq sont relevés sur trois vidéos
-« ballthingsim » en 576 × 1024, 30 fps ; **le Golem, le Mannequin, le Soleil et
-la Lune sont inventés** — aucune de leurs valeurs ne peut porter `mesuré`, tout
-y est `calé` ou `déduit`.
+**Dix combattants, tous jouables.** Cinq sont relevés sur trois vidéos
+« ballthingsim » en 576 × 1024, 30 fps ; **le Golem, le Mannequin, le Soleil, la
+Lune et la Comète sont inventés** — aucune de leurs valeurs ne peut porter
+`mesuré`, tout y est `calé` ou `déduit`.
 
 **Trois combattants sont hors barème.** Le Mannequin ne peut pas gagner ; les
-**deux boss** battent les six autres et **ne se départagent qu'entre eux** — ce
-sont des **spécifications**, pas des défauts à corriger. Les six du milieu se
-jugent entre eux.
+**deux boss** battent les sept autres et **ne se départagent qu'entre eux** — ce
+sont des **spécifications**, pas des défauts à corriger. Les **sept du milieu**
+se jugent entre eux.
 
 **La spécification des boss n'est plus satisfaite sur deux points, et c'est le
 choix courant** : le Soleil perd une graine sur trois contre l'Hoplite, et leur
@@ -98,6 +99,7 @@ sans le savoir. Les valeurs, les relevés et les demandes : `docs/FICHES.md`.
 | `sun` **SOLEIL** / SUN | **boss.** Deux fois la norme en rayon, `maxHp` ×5, le plus lent de très loin — c'est toute sa contrepartie. **Huit rayons** en couronne (`weapon.spokes: 8`, aucun angle mort) qui **ne blessent pas** (`melee.damage: 0`, demandé) : sa silhouette et son bruit, plus son arme. Tout passe donc par son **ultime** |
 | `lunar` **LUNE** / MOON | **boss, et le seul combattant sans arme qui gagne** — `reach: 0`, `hitbox.radius: 0`, pas de `head.sprite` (le cas du Mannequin) : **100 % de sa production tombe du ciel**, corps de rayon fixe, `maxHp` ×5. Pouvoir et ultime sont la même averse, à deux densités |
 | `dummy` **MANNEQUIN** / DUMMY | **cible d'entraînement, pas un adversaire** : aucune arme, aucun dégât, aucun pouvoir, blanc. Il existe pour qu'on **regarde l'autre** — sa ligne de HUD affiche les dégâts **subis**, donc la production réelle de l'adversaire |
+| `comet` **COMÈTE** / COMET | **sans arme, et c'est son corps qui frappe** — `reach: 0`, `hitbox.radius: 0` : `resolveMelee` ne tourne jamais pour elle, son module appelle `game.damage` lui-même au contact. La plus rapide et la plus petite du roster. Son dégât suit un **facteur continu** (`f.state.rush`) qui monte tout seul et que **chaque choc dépense** — sa vitesse est sa puissance *et* sa ressource |
 
 **Le Clone d'ombre**, parce qu'il touche le moteur : des doubles de 15 PV qui
 sont de **vrais combattants du tableau**, dans le camp du Shinobi, avec **tous
@@ -124,13 +126,14 @@ survivant**. Un commentaire qui cite un élément disparu parle d'une
 
 ### L'équilibrage en cinq lignes
 
-**Relevé courant** (`tools/matrix-reference.txt`), 24 duels hors miroir chacun :
-**Lune 24**, **Soleil 20**, Druide 13, Pistolero 13, Hoplite 12, Shinobi 12,
-Golem 10, Ronin 4, Mannequin 0 (c'est sa définition). Écart **4 à 13** entre les
-six du milieu, connu et non corrigé.
+**Relevé courant** (`tools/matrix-reference.txt`), 27 duels hors miroir chacun :
+**Lune 27**, **Soleil 23**, Pistolero 15, Druide 14, Hoplite 13, Golem 13,
+Shinobi 13, Comète 12, Ronin 5, Mannequin 0 (c'est sa définition). Écart **5 à
+15** entre les sept du milieu, connu et non corrigé.
 
 - **Le sommet n'est plus partagé, et c'est assumé : LUNE est au-dessus** (50/50
-  contre le Soleil, 140/140 contre les sept autres), prix de deux demandes —
+  contre le Soleil, 140/140 contre les sept autres du banc de l'époque, et
+  16/16 contre la Comète, mesurés à part), prix de deux demandes —
   500 PV et une zone de météore de 115 px. **Le retour à un partage tient en un
   chiffre**, `LUNAR.maxHp` : 280 → 27/50, 500 → 50/50, balayage monotone.
 - **Le Soleil perd une graine sur trois contre l'Hoplite** et rien n'a été calé
@@ -144,7 +147,15 @@ six du milieu, connu et non corrigé.
   elle exagère les écarts **et peut aussi en cacher un**. Avant de conclure
   qu'un « dernier » doit remonter, le remesurer **sur les deux camps**.
 - **Un changement confiné à un combattant ne doit déplacer que ses lignes**, et
-  ça se vérifie dans le diff : les six du milieu gardent leur compte **absolu**.
+  ça se vérifie dans le diff : les autres gardent leur compte **absolu**. À
+  l'ajout d'un combattant, le diff ne contient **que des ajouts** et leurs
+  comptes ne montent que des lignes neuves (l'ajout de la Comète : +2 au
+  Pistolero, +3 au Golem, +1 aux quatre autres, et pas une ligne existante
+  déplacée).
+- **La Comète est le premier combattant dont le dégât suit une grandeur
+  continue** (`f.state.rush`, de 1 à 2,3) et non une pile : ses deux leviers
+  sont donc **raides**, un point de dégât couvrant presque toute la bande
+  (4 → 88 %, 3 → 51 %, 2 → 2 % contre les six).
 
 Les chiffres, les balayages et l'histoire de chaque rééquilibrage — division des
 dégâts par deux, Golem/Ronin, nerf Shinobi/Pistolero, refontes de LUNE, banc de

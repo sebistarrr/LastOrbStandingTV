@@ -1,19 +1,20 @@
 # Fiches des combattants
 
-**Neuf combattants.** Cinq repris de la chaîne « ballthingsim » — **Pistolero**
+**Dix combattants.** Cinq repris de la chaîne « ballthingsim » — **Pistolero**
 et **Ronin** du duel *Outlaw vs Bladesman*, **Hoplite** de *Dragoon vs Outlaw*,
 **Druide** construit sur la mécanique de Magia dans *Dragoon vs Magia*, et
-**Shinobi**, reskin du Vent des vidéos *Elemental Armory League*. Les quatre
+**Shinobi**, reskin du Vent des vidéos *Elemental Armory League*. Les cinq
 autres sont **inventés** : pas de vidéo, donc pas un seul `mesuré`. Le
 **Golem** encaisse là où personne n'encaissait ; le **Mannequin** est une
 **cible d'entraînement** sans arme ni dégâts, faite pour qu'on regarde les
 mécaniques des autres ; le **Soleil** et la **Lune** sont les deux **boss**,
 demandés pour gagner contre tous les autres en 1 contre 1 et ne se départager
-qu'entre eux.
+qu'entre eux ; la **Comète** n'a pas d'arme non plus et frappe **avec son
+corps**, à proportion de sa vitesse.
 
 **Trois d'entre eux sont hors barème, aux deux bouts** : le Mannequin ne peut
-pas gagner, les deux boss ne peuvent pas perdre contre les six. Les écarts
-d'équilibrage se lisent sur les six autres.
+pas gagner, les deux boss ne peuvent pas perdre contre les sept. Les écarts
+d'équilibrage se lisent sur les sept autres.
 
 Ces fiches sont la **transcription lisible** de `src/data/fighters/`. Le code
 est la source de vérité : toute valeur ci-dessous existe telle quelle dans la
@@ -29,30 +30,31 @@ les recale en une commande.
 
 | Section | Ligne |
 | --- | --- |
-| Comment lire une valeur | 57 |
-| 📦 Archive — les huit éléments supprimés | 106 |
-| 🥷 SHINOBI — `wind` (affiché « SHINOBI » ; c'est l'ancien Vent reskiné) | 180 |
-| 🤠 PISTOLERO — `outlaw` (affiché « PISTOLERO ») | 970 |
-| ⚔ RONIN — `bladesman` (affiché « RONIN ») | 1125 |
-| 🐲 HOPLITE — `lancer` (affiché « HOPLITE ») | 1382 |
-| 🌿 DRUIDE — `mage` (affiché « DRUIDE » en français, « DRUID » en anglais) | 1947 |
-| 🗿 GOLEM — `golem` (affiché « GOLEM » dans les deux langues) | 2438 |
-| 🎯 MANNEQUIN — `dummy` (cible d'entraînement : sans arme, sans dégâts) | 2652 |
-| ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2738 |
-| 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3072 |
-| La norme passe à 200 PV, le Golem à 400 (historique) | 3273 |
-| Neon Shadow supprimé, la norme redescend à 100 PV | 3328 |
-| Les dégâts de tous les combattants, divisés par deux | 3396 |
-| Rééquilibrage confiné au Golem et au Ronin | 3506 |
-| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3593 |
-| Le son de chacun | 3643 |
-| **Équilibrage du roster** — c'est ici que vivent les chiffres | 3761 |
-| &nbsp;&nbsp;· Relevé courant (les neuf, 24 duels chacun) | 3771 |
-| &nbsp;&nbsp;· Le sommet n'est plus partagé | 3796 |
-| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 3825 |
-| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 3860 |
-| Règles communes (moteur) | 3954 |
-| Comment les mesures ont été prises | 3978 |
+| Comment lire une valeur | 58 |
+| 📦 Archive — les huit éléments supprimés | 107 |
+| 🥷 SHINOBI — `wind` (affiché « SHINOBI » ; c'est l'ancien Vent reskiné) | 181 |
+| 🤠 PISTOLERO — `outlaw` (affiché « PISTOLERO ») | 972 |
+| ⚔ RONIN — `bladesman` (affiché « RONIN ») | 1127 |
+| 🐲 HOPLITE — `lancer` (affiché « HOPLITE ») | 1384 |
+| 🌿 DRUIDE — `mage` (affiché « DRUIDE » en français, « DRUID » en anglais) | 1949 |
+| 🗿 GOLEM — `golem` (affiché « GOLEM » dans les deux langues) | 2440 |
+| 🎯 MANNEQUIN — `dummy` (cible d'entraînement : sans arme, sans dégâts) | 2654 |
+| ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2740 |
+| 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3074 |
+| ☄ COMÈTE — `comet` (sans arme : son corps est l'arme) | 3275 |
+| La norme passe à 200 PV, le Golem à 400 (historique) | 3424 |
+| Neon Shadow supprimé, la norme redescend à 100 PV | 3479 |
+| Les dégâts de tous les combattants, divisés par deux | 3547 |
+| Rééquilibrage confiné au Golem et au Ronin | 3657 |
+| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3744 |
+| Le son de chacun | 3794 |
+| **Équilibrage du roster** — c'est ici que vivent les chiffres | 3912 |
+| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 3922 |
+| &nbsp;&nbsp;· Le sommet n'est plus partagé | 3952 |
+| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 3983 |
+| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4025 |
+| Règles communes (moteur) | 4119 |
+| Comment les mesures ont été prises | 4143 |
 
 ## Comment lire une valeur
 
@@ -3271,6 +3273,155 @@ angle d'or, la chute simulée par une hauteur au-dessus de l'ombre, la nuit
 d'arène, et le fait qu'une orbite doit rester **hors du corps quand le corps
 enfle** — qui ne s'applique plus, faute d'orbite.
 
+## ☄ COMÈTE — `comet` (sans arme : son corps est l'arme)
+
+> Sans arme — son élan est tout ce qu'elle a, et il se dépense.
+
+**Demandé** : « je veux créer un nouveau personnage sans arme qui peut se
+déplacer très vite ».
+
+Cinquième combattant **inventé** du dépôt. Aucune vidéo, donc **pas un seul
+`mesuré`** — tout est `calé` ou `déduit`.
+
+### Les deux moitiés de la demande n'en font qu'une
+
+« Sans arme » et « très vite » auraient pu être deux traits indépendants : un
+combattant rapide dont les dégâts viennent d'ailleurs (c'est LUNE, mobile et
+dont tout tombe du ciel). Le parti pris ici est l'inverse : **puisqu'elle n'a
+pas d'arme, sa vitesse doit en être une.** Tout le reste en découle, y compris
+ce qui la rend difficile à équilibrer.
+
+**Le troisième combattant sans arme, et le premier dont le corps frappe.**
+
+| | 🎯 MANNEQUIN | 🌙 LUNE | ☄ COMÈTE |
+| --- | --- | --- | --- |
+| pourquoi pas d'arme | il ne doit rien faire | tout tombe du ciel | **son corps est l'arme** |
+| d'où vient le dégât | nulle part | le ciel, 100 % | **le contact, 100 %** |
+| qui appelle `game.damage` | personne | son module | **son module** |
+| vitesse | 430 px/s | 430 px/s | **700 à 1 610 px/s** |
+| rayon | 41 | 88 | **34, le plus petit** |
+
+### Les valeurs
+
+| Valeur | Détail | Source |
+| --- | --- | --- |
+| Corps | rayon **34** — le plus petit du roster (41 la norme, 50 le Golem, 82 le Soleil). Un corps étroit est **plus dur à toucher**, et c'est sa seule défense : elle suit la norme de 100 PV, sans aucune réduction. **Pas plus petit** : la police du chiffre de PV fait 34 px, donc « 100 » déborderait d'une bille de moins de 68 px | calé |
+| Palette | `look.palette` — quatre teintes (`edge #3d0b2a` · `body #d63b8f` · `light #ff8ad0` · `core #fff0fa`). Le magenta est la **seule famille libre** du roster : orange pris deux fois (Ronin, Soleil), bleu au Pistolero, vert au Druide, violet à l'Hoplite, gris au Golem et à LUNE, noir au Shinobi, blanc au Mannequin. Vérifié teinte par teinte — deux corps de la même famille qui se croisent à 700 px/s sont indiscernables | calé |
+| Déplacement | **700 px/s**, le plus rapide du roster (655 au Pistolero, précédent record) — et ce n'est que son **plancher** : multiplié par l'élan, il monte à **1 050** en pointe ordinaire et **1 610** pendant la Rentrée, sur une arène de 628 px. `turnRate: 2.8`, le plus haut aussi : à cette vitesse, un cap qui pivote lentement décrit des courbes si larges qu'elle **manquerait sa cible en tournant autour** | calé |
+| **Arme** | **aucune** — `reach: 0`, `hitbox.radius: 0`, pas de `head.sprite`. La géométrie **vide** du Mannequin : la condition de `weaponHit` devient structurellement impossible, et `resolveMelee` ne tourne donc **jamais** pour elle | déduit |
+| **Choc cinétique** | sa mécanique de base et sa seule source de dégâts : au contact, `kinetic.damage × f.state.rush`, verrou de **1,15 s**, recul de 240 porté **dans son sens de marche**, et un contrecoup de 130 sur elle-même | calé |
+| Marge de contact | **8 px explicites**, et c'est un piège déjà payé : un test `distance <= r1 + r2` est **toujours faux et ne crie pas**, `resolveBodies` séparant les corps à chaque pas. La Marée de la première LUNE a infligé **0 PV sur 24 duels** pour cette exacte raison | déduit |
+| **L'élan** | `f.state.rush`, **un seul nombre** qui est à la fois facteur de vitesse et facteur de dégâts : il monte de 1 à **1,5** en 6 s tant qu'elle ne touche personne, et **chaque choc lui en retire 0,3**. Elle est donc la plus dangereuse quand elle vient de **rater** | calé |
+| Le rapport qui fait le personnage | la rampe rend 0,083/s, donc les 0,3 d'un choc se regagnent en **3,6 s**, soit trois verrous sur quatre. C'est ce qui l'empêche de rester au plafond en frappant — changer l'un des trois sans recalculer les autres casse la boucle **sans rien dire** | déduit |
+| **Pouvoir** | *Coup de fouet* — toutes les 6 s, l'élan **saute à 1,9**, au-dessus de son propre plafond. **Aucune durée** : ce qu'il donne, elle le garde jusqu'au prochain choc. `Math.max` et non une affectation, sinon il **redescendrait** l'élan tenu de la Rentrée | calé |
+| **Ultime** | *Rentrée* — 4,5 s : élan **tenu** à 2,3, verrou à 0,4 s, et surtout **les chocs ne coûtent plus rien**. Un ultime qui **retire une contrainte** au lieu d'ajouter une attaque, ce qui est exactement ce qu'appelle un personnage bâti sur une ressource. Horloge de 12 s, +4 par touche | calé |
+| Pas d'annonce | assumé : le Rayon solaire s'annonce 2 s parce qu'il est inesquivable une fois parti ; la Rentrée n'est qu'une suite de chocs, chacun esquivable. Une annonce n'aurait rien donné à esquiver, elle aurait retardé | déduit |
+| Son | trois recettes, **aucune partagée** : `slam` (le choc — transitoire large puis corps grave court), `surge` (la relance — l'exacte inversion : aucun transitoire, bornes qui **montent**), `boom` (la Rentrée — détonation dont l'aigu meurt le premier). `pitch: 1.15`, le plus haut après le Shinobi | calé |
+| Pas de `swing` | et ce n'est pas un oubli : une voix tenue se pilote sur `weaponAngle`, or son arme n'existe pas — `weapon.spin` vaut 0, l'angle ne bouge jamais, la voix resterait collée au silence. Ce qu'il faudrait entendre chez elle est son **élan**, que le banc ne sait pas encore jouer | déduit |
+| Mise en scène | le **fuseau** (`flair.smear`, 34 px de large) est sa queue — c'est le seul mécanisme qu'un combattant sans arme puisse porter, `ribbon` suivant une pointe d'arme qui serait ici le centre de sa bille. Les **images fantômes** ne s'allument que pendant la Rentrée (`f.ghosting`, compteur générique lu par `flair.js` seul, donc sans effet possible sur un vainqueur) | calé |
+| HUD | `Momentum: ×1.42` et `Impact: 4` — le dégât est affiché **calculé**, seule façon de rendre visible une puissance qui bouge en continu là où les autres montent par paliers | — |
+
+### L'équilibrage : un levier raide, et deux façons de le tirer
+
+**Première écriture : beaucoup trop forte.** `kinetic.damage: 4`, verrou 0,9 s →
+**63 victoires sur 72** contre les six (8 graines × les deux camps), et
+**4,2 PV/s** face au Mannequin, record du roster devant le Ronin (3,3).
+
+Le balayage du dégât est **monotone et très raide** — c'est la conséquence
+directe de sa mécanique : un dégât multiplié par un facteur continu **amplifie**
+chaque réglage au lieu de l'amortir.
+
+| `kinetic.damage` | 4 | 3 | 2,8 | 2,5 | 2 |
+| --- | --- | --- | --- | --- | --- |
+| victoires contre les six | **88 %** | 63 % | 37 % | 32 % | **2 %** |
+
+**Un point de dégât couvre presque toute la bande du roster.** À 2, elle ne
+gagne plus un seul duel contre cinq des six ; à 4, elle les gagne tous sauf
+contre le Golem.
+
+Le verrou de touche déplace autant, à dégât égal (3) :
+
+| `kinetic.cooldown` | 0,9 s | 1,05 s | 1,15 s |
+| --- | --- | --- | --- |
+| victoires contre les six | 63 % | 56 % | **51 %** |
+
+Les deux ont été balayés **séparément puis remesurés ensemble** (*deux leviers
+qui marchent ne s'additionnent pas*). Le verrou a été retenu pour la dernière
+marche, et c'est un choix de **lisibilité** autant que d'équilibrage : baisser
+le dégât rendait ses coups illisibles (3 PV affichés sur un corps à 100), alors
+qu'espacer les chocs garde des coups qui **se voient** et laisse l'adversaire
+respirer entre deux passages.
+
+### Le banc final — 8 graines × les deux camps
+
+`kinetic.damage: 3`, `kinetic.cooldown: 1.15` :
+
+| Adversaire | Victoires | Durée moyenne |
+| --- | --- | --- |
+| Ronin | **14/16** | 28,7 s |
+| Druide | **14/16** | 31,4 s |
+| Shinobi | 9/16 | 32,6 s |
+| Hoplite | 8/16 | 37,1 s |
+| Pistolero | 3/16 | 29,9 s |
+| Golem | **1/16** | 40,5 s |
+| **Total contre les six** | **49/96 — 51 %** | |
+| Mannequin | 16/16 | 29,1 s → **2,9 PV/s** |
+| Soleil | 0/16 | 40,0 s |
+| LUNE | 0/16 | 26,3 s |
+
+**Sa ligne est structurellement dispersée, et c'est le personnage.** De 1/16 à
+14/16 selon l'adversaire, là où les six autres se tiennent dans une fourchette
+bien plus serrée. La raison tient en une phrase : **elle doit venir au contact
+pour exister**. Contre un tireur qui recule (Pistolero), elle passe son duel à
+traverser l'arène ; contre un duelliste qui vient à elle (Ronin), elle ne rate
+rien.
+
+**Le Golem à 1/16 est le cas extrême**, et il est structurel plutôt que mal
+calé : son dégât ne s'adapte pas à la barre d'en face, or le Golem en a le
+double (200 PV) et punit la proximité de deux façons (onde sismique, éclats).
+Il lui faudrait environ **soixante-six chocs réussis** pour l'abattre. À ne pas
+« corriger » chez elle : le levier qui la remonterait contre lui la rendrait
+imbattable contre les quatre autres — le balayage ci-dessus le montre au
+chiffre près.
+
+**Les deux boss la battent 16 fois sur 16 chacun** : leur spécification tient,
+son ajout ne l'a pas entamée.
+
+### Ce que son ajout a demandé au moteur
+
+**Rien.** Pas une ligne dans `game/`, pas une clé générique nouvelle. C'est la
+preuve que l'invariant 12 tenait : la géométrie vide venait du Mannequin, les
+compteurs `boost`/`boostFactor` et `ghosting` de l'invariant 7, le fuseau de
+`flair.js` existait pour le Dragoon, et `opts.sound` — qui fait sonner une arme
+que le moteur ne reconnaît pas — avait été ouvert pour le Rayon solaire.
+
+Deux choses méritent d'être connues avant d'y revenir :
+
+- **`f.boost` est utilisé comme un bail, pas comme une durée.** Le module le
+  remet à 0,2 s **à chaque image** au lieu de poser une longue durée une fois :
+  le moteur le décompte dans `Fighter.step()` (invariant 7, il ne sait pas
+  pourquoi), donc le bail se referme tout seul en deux dixièmes de seconde dès
+  que le module cesse de tourner — mort, fin de duel, parade. Une durée longue
+  posée une fois aurait laissé la Comète lancée bien après qu'elle a cessé
+  d'exister.
+- **Son verrou de touche est à elle.** `resolveMelee` ne tournant jamais pour
+  elle, le moteur ne pose **aucun** `meleeCd` : sans `f.state.hitCd`, un contact
+  qui dure trois images ferait trois coups. C'est la même leçon que la couronne
+  à huit branches du Soleil — le garde-fou se pose **une fois pour toutes**,
+  avant la recherche de cible.
+
+### La matrice
+
+Ajoutée **en queue de `ROSTER`**, comme le veut l'invariant 3 : le diff de
+`tools/matrix-reference.txt` ne contient **que des ajouts** — dix lignes, zéro
+suppression. Les neuf combattants existants gardent chacune de leurs lignes au
+caractère près ; leurs comptes ne montent que des lignes neuves (+2 au
+Pistolero, +3 au Golem, +1 aux quatre autres).
+
+Sa ligne de matrice vaut **12/27**. Elle y est **camp B partout sauf contre
+elle-même**, et le camp A pèse lourd : cette ligne **sous-estime** sa force,
+c'est le banc sur les deux camps qui la mesure.
+
 ## La norme passe à 200 PV, le Golem à 400 (historique)
 
 **Demandé, à l'époque — voir la section suivante pour l'état courant.**
@@ -3761,8 +3912,8 @@ ne lit que de l'état déjà calculé.
 
 ## Équilibrage du roster
 
-Vérifié par simulation sans rendu sur les **45 affrontements** du roster
-(9 × 9 avec miroirs), 3 seeds chacun — c'est `tools/matrix.mjs`, et sa sortie
+Vérifié par simulation sans rendu sur les **55 affrontements** du roster
+(10 × 10 avec miroirs), 3 seeds chacun — c'est `tools/matrix.mjs`, et sa sortie
 est figée dans `tools/matrix-reference.txt`.
 
 **C'est ici que vivent les chiffres.** `CLAUDE.md` n'en garde que le relevé
@@ -3771,28 +3922,33 @@ suit ne se paie qu'à l'ouverture de ce fichier.
 
 ### Relevé courant
 
-Sur les **24 duels hors miroir** de chacun (`tools/matrix-reference.txt`) :
+Sur les **27 duels hors miroir** de chacun (`tools/matrix-reference.txt`) :
 
 | | victoires | |
 | --- | --- | --- |
-| **Lune** | 24/24 | boss — hors barème |
-| **Soleil** | 20/24 | boss — hors barème |
-| Druide | 13/24 | |
-| Pistolero | 13/24 | |
-| Hoplite | 12/24 | |
-| Shinobi | 12/24 | |
-| Golem | 10/24 | |
-| Ronin | 4/24 | |
-| Mannequin | 0/24 | c'est sa définition |
+| **Lune** | 27/27 | boss — hors barème |
+| **Soleil** | 23/27 | boss — hors barème |
+| Pistolero | 15/27 | |
+| Druide | 14/27 | |
+| Hoplite | 13/27 | |
+| Golem | 13/27 | |
+| Shinobi | 13/27 | |
+| **Comète** | 12/27 | |
+| Ronin | 5/27 | |
+| Mannequin | 0/27 | c'est sa définition |
 
-Écart **4 à 13** entre les six qui se jugent entre eux, connu et non corrigé.
+Écart **5 à 15** entre les sept qui se jugent entre eux, connu et non corrigé.
 Les deux boss et le Mannequin sont hors barème : leur ligne est une
 **spécification**, pas un défaut.
 
-**Le compte absolu des six est le garde-fou de l'invariant 3.** Il vaut
-**13, 13, 12, 12, 10, 4** et il n'a pas bougé d'un chiffre à travers les trois
-refontes de LUNE : un changement confiné à un combattant ne doit déplacer que
-ses propres lignes, et c'est là qu'on le vérifie.
+**Le compte absolu est le garde-fou de l'invariant 3.** Il valait
+**13, 13, 12, 12, 10, 4** sur 24 duels et n'avait pas bougé d'un chiffre à
+travers les trois refontes de LUNE. L'ajout de la Comète l'a fait monter à
+**15, 14, 13, 13, 13, 5** — mais uniquement parce que chacun joue **trois duels
+de plus** : le diff de la matrice ne contient **que des ajouts**, zéro
+suppression, donc pas une ligne existante n'a bougé. C'est la bonne façon de
+lire ce garde-fou à l'ajout d'un combattant : ce ne sont pas les comptes qu'on
+compare, c'est le **diff**.
 
 ### Le sommet n'est plus partagé
 
@@ -3838,6 +3994,7 @@ réelle** de l'adversaire. 100 PV ÷ la durée moyenne des trois graines :
 | Shinobi | 3,1 | 34,9 · 28,8 · 32,8 |
 | Hoplite | 3,0 | 31,0 · 37,6 · 31,7 |
 | Soleil | 3,0 | 23,7 · 33,2 · 43,8 |
+| **Comète** | 2,9 | 29,9 · 35,7 · 39,2 |
 | Druide | 2,8 | 35,8 · 37,7 · 35,3 |
 | Pistolero | 2,5 | 37,3 · 39,2 · 43,3 |
 | Golem | 1,8 | 62,0 · 46,5 · 55,0 |
@@ -3849,7 +4006,13 @@ Trois choses à en lire, et une seule est une conclusion d'équilibrage :
   celui-ci, exceptionnellement, le dit — c'est aussi pourquoi elle est passée
   au-dessus du Soleil. Ses trois durées sont **identiques au dixième** : sans
   arme, elle ne dépend pas de la trajectoire, seulement de son horloge.
-- **Le Soleil est au milieu et gagne quand même 20 duels sur 24** : il encaisse
+- **La Comète est au milieu du banc et 12e sur 27 à la matrice**, ce qui est la
+  bonne place — mais son écart-type est le plus élevé du roster : elle gagne 14
+  duels sur 16 contre le Ronin et 1 sur 16 contre le Golem. Un banc de DPS ne
+  peut pas dire ça, et c'est le rappel utile : **il mesure une production, pas
+  un appariement**. Sa production, elle, dépend entièrement de qui est en face,
+  puisqu'il faut le toucher.
+- **Le Soleil est au milieu et gagne quand même 23 duels sur 27** : il encaisse
   cinq fois plus qu'il ne frappe vite. Sa ligne est la **plus dispersée du
   banc** (23,7 · 33,2 · 43,8) parce que tout ce qu'il produit passe par une
   horloge d'ultime de 7 s : sa durée dépend de *combien de tirs* il lui a fallu,

@@ -46,6 +46,7 @@ import { GOLEM } from './fighters/golem.js';
 import { DUMMY } from './fighters/dummy.js';
 import { SUN } from './fighters/sun.js';
 import { LUNAR } from './fighters/lunar.js';
+import { COMET } from './fighters/comet.js';
 
 export const ELEMENTS = deepFreeze({
   wind: WIND,
@@ -57,6 +58,7 @@ export const ELEMENTS = deepFreeze({
   dummy: DUMMY,
   sun: SUN,
   lunar: LUNAR,
+  comet: COMET,
 });
 
 /**
@@ -109,6 +111,20 @@ export const ROSTER = deepFreeze([
    * les deux camps.
    */
   'lunar',
+  /**
+   * **La Comète ferme la marche**, et pour la raison générale cette fois : elle
+   * n'est ni un boss ni une cible, elle se juge avec les six du milieu. La
+   * queue de `ROSTER` est la seule position qui laisse les neuf autres
+   * exactement où ils étaient — le diff de la matrice ne contient alors **que
+   * des ajouts** (invariant 3), et le compte absolu des six est resté
+   * 13, 13, 12, 12, 10, 4.
+   *
+   * Conséquence à connaître avant de lire sa ligne : elle est **camp B partout
+   * sauf contre elle-même**, et le camp A pèse lourd (piège documenté du
+   * Golem). Sa ligne de matrice sous-estime donc sa force — c'est le banc sur
+   * les deux camps qui la mesure, pas elle.
+   */
+  'comet',
 ]);
 
 /** @param {string} id */

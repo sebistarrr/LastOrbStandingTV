@@ -301,6 +301,25 @@ export const SOUNDS = deepFreeze({
     { wave: 'noise', filter: 'bandpass', cut0: 3000, cut1: 900, q: 1.2, dur: 0.16, gain: 0.55 },
     { wave: 'sine', f0: 420, f1: 150, dur: 0.1, gain: 0.3 },
   ],
+  /**
+   * **Un corps lancé qui percute** — le choc cinétique de la Comète.
+   *
+   * Ni `crunch` (la pierre qui éclate), ni `pierce` (la pointe qui entre), ni
+   * `bump` (deux billes qui se touchent) : ici **rien ne tranche et rien ne se
+   * brise**, c'est une masse à pleine vitesse qui s'arrête d'un coup. Ce qu'on
+   * entend d'un tel choc, c'est un **transitoire large suivi d'un corps grave
+   * très court** — le contraire d'une résonance, qui supposerait un objet qui
+   * vibre encore après.
+   *
+   * Le passe-haut de 35 ms est ce qui dit la **vitesse** : sans lui, les deux
+   * couches basses sonnaient comme un `thud` de mur, c'est-à-dire comme un
+   * corps qui *arrive*, pas comme un corps qui *arrive vite*.
+   */
+  slam: [
+    { wave: 'noise', filter: 'highpass', cut0: 2600, cut1: 1400, q: 0.8, dur: 0.035, gain: 0.42, attack: 0.001 },
+    { wave: 'noise', filter: 'lowpass', cut0: 2400, cut1: 260, q: 0.9, dur: 0.13, gain: 0.6 },
+    { wave: 'sine', f0: 190, f1: 52, dur: 0.16, gain: 0.48 },
+  ],
   /** Tic d'un dégât sur la durée (brûlure, givre) : presque un souffle. */
   ember: [
     { wave: 'noise', filter: 'bandpass', cut0: 1400, cut1: 700, q: 1.6, dur: 0.16, gain: 0.16, attack: 0.04 },
@@ -566,6 +585,39 @@ export const SOUNDS = deepFreeze({
     { wave: 'noise', filter: 'bandpass', cut0: 3000, cut1: 1100, q: 2.4, dur: 0.3, gain: 0.2 },
     { wave: 'sawtooth', f0: 110, f1: 466, dur: 0.75, gain: 0.16, attack: 0.07, delay: 0.12 },
     { wave: 'noise', filter: 'bandpass', cut0: 500, cut1: 2600, q: 2, dur: 0.8, gain: 0.13, attack: 0.1, delay: 0.12 },
+  ],
+
+  /**
+   * **Une relance d'élan** : rien ne frappe, quelque chose *prend de la
+   * vitesse*.
+   *
+   * C'est l'inverse exact de `slam`, et les deux appartiennent au même
+   * combattant : pas de transitoire du tout (`attack` de 80 ms, soit vingt fois
+   * celle d'un coup), et des bornes qui **montent** au lieu de descendre. Une
+   * recette dont les `cut0`/`cut1` montent s'entend comme une accélération ;
+   * c'est la même bande qu'un `whoosh` prise à l'envers.
+   */
+  surge: [
+    { wave: 'noise', filter: 'bandpass', cut0: 400, cut1: 3200, q: 1.5, dur: 0.34, gain: 0.34, attack: 0.08 },
+    { wave: 'triangle', f0: 180, f1: 720, dur: 0.32, gain: 0.18, attack: 0.06 },
+  ],
+  /**
+   * **Le bang d'une rentrée atmosphérique** — l'ultime de la Comète.
+   *
+   * Un ultime doit dire *quoi* arrive (la leçon de `knell`). Ici ce n'est ni une
+   * cloche, ni une nappe, ni une montée : c'est une **détonation qui s'ouvre**
+   * et qui traîne, donc un passe-bas qui s'effondre sur presque une seconde,
+   * une scie très grave dessous, et la déchirure passe-haut par-dessus.
+   *
+   * La déchirure est plus **courte** que le corps (0,25 s contre 0,7) : un bang
+   * se reconnaît à ce que son aigu meurt le premier, l'onde grave continuant
+   * sans lui. L'égaliser aurait donné un grondement, c'est-à-dire un séisme —
+   * or le Golem en a déjà un (`quake`).
+   */
+  boom: [
+    { wave: 'noise', filter: 'highpass', cut0: 5200, cut1: 1800, q: 0.7, dur: 0.25, gain: 0.3, attack: 0.004 },
+    { wave: 'noise', filter: 'lowpass', cut0: 900, cut1: 120, q: 0.8, dur: 0.7, gain: 0.58, attack: 0.01 },
+    { wave: 'sawtooth', f0: 120, f1: 34, dur: 0.55, gain: 0.3 },
   ],
 
   /* ---------------------------------------------------------------- */

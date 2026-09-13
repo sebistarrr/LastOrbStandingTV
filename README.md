@@ -1,20 +1,21 @@
-# Elemental Duel — neuf combattants, quatre formats
+# Elemental Duel — dix combattants, quatre formats
 
 Duels **à deux, en 2 contre 2, en 1 contre X ou en bataille royale** (jusqu'à
 huit, chacun pour soi), avec cinq combattants repris de la chaîne
-**« ballthingsim »** et quatre inventés — dont **deux boss**, le Soleil et la
+**« ballthingsim »** et cinq inventés — dont **deux boss**, le Soleil et la
 Lune —, en **HTML + CSS + JavaScript** avec un rendu **Canvas 2D**.
 Aucune dépendance, aucun build : le dépôt se publie tel quel sur GitHub Pages.
 
 Les cinq premiers sont relevés image par image sur leur vidéo — couleurs à la
 pipette, portées au pixel, cadences chronométrées. Ce qui n'a pas pu être
-mesuré est calé au banc d'essai, et le dit. Les quatre derniers — le **Golem**,
-le **Mannequin**, le **Soleil** et la **Lune** — n'ont pas de vidéo : **tout
-chez eux est calé**, et leurs fiches ne portent pas un seul `mesuré`.
+mesuré est calé au banc d'essai, et le dit. Les cinq derniers — le **Golem**,
+le **Mannequin**, le **Soleil**, la **Lune** et la **Comète** — n'ont pas de
+vidéo : **tout chez eux est calé**, et leurs fiches ne portent pas un seul
+`mesuré`.
 
 Trois d'entre eux sont **hors barème, aux deux bouts** : le Mannequin ne peut
 pas gagner (c'est une cible d'entraînement), les **deux boss** battent tous les
-autres et ne se départagent qu'entre eux. L'équilibrage se lit sur les six
+autres et ne se départagent qu'entre eux. L'équilibrage se lit sur les sept
 autres.
 
 | Personnage | Arme | Signature | Ultime |
@@ -27,7 +28,8 @@ autres.
 | **Golem** (inventé) | Amas de roche (maquette servie par un vrai PNG, **par-dessus la bille**) — **la portée la plus courte du jeu** (100 px), et la rotation d'arme la plus lente | **le plus lent** (420 px/s), **le plus gros** (rayon 50 contre 41) et **200 PV** quand tout le monde en a 100 : il encaisse chaque coup en entier, il en encaisse simplement deux fois plus. Onde sismique sur horloge, éclats de roche pour qui reste au loin | Séisme / EARTHQUAKE (secousse sur 260 px, puis +35 % de vitesse) |
 | **Soleil** (inventé, **boss**) | Couronne de rayons (maquette de flamme servie par un vrai PNG) — **huit rayons à la fois**, un tous les 45°, et **ils ne blessent pas** : c'est sa silhouette, plus son arme. La bille est elle-même une maquette servie en PNG — **le seul corps du jeu qui ne soit pas un cercle vectoriel** | **fait pour gagner contre tous les autres en 1 contre 1**, et il le fait à une graine près — **139 duels sur 140** contre les six autres, la seule perdue à l'Hoplite ; son duel avec la Lune, lui, il le perd : depuis qu'elle est passée à 500 PV, elle le gagne 50 fois sur 50. **Deux fois plus grand** que la norme (rayon 82 contre 41), **500 PV**, et **le plus lent du jeu de très loin** (230 px/s). Tout passe par son ultime : le coller ne coûte rien, mais c'est de près que le faisceau est inesquivable. Réchauffement solaire : brûle qui reste dans 240 px | Rayon solaire / SOLAR BEAM — **2 s de charge annoncée à l'écran** (anneaux qui se referment, foyer qui bat), puis **2,5 s** d'un faisceau de 124 px qui traverse l'arène, jusqu'à 96 PV |
 | **Lune** (inventée, **boss**) | **aucune** — le second du jeu après le Mannequin, et le seul qui gagne quand même. Portée 0, hitbox de rayon 0, pas de sprite d'arme : elle ne peut pas toucher. Son corps est une lune criblée servie en PNG, **le second corps du jeu qui ne soit pas un cercle vectoriel** | **le second boss, et l'opposé du premier** : lui est planté (230 px/s) et produit par un faisceau annoncé sur *une ligne* ; elle est **mobile** (430 px/s) et **100 % de ce qu'elle produit tombe du ciel**, sur des zones dessinées au sol. Rayon **88, fixe** — le plus gros corps du jeu — et **500 PV**, la barre du Soleil. Elle bat les sept autres 140 fois sur 140 **et le Soleil aussi** : depuis qu'elle porte 500 PV et une zone de météore élargie, le sommet n'est plus partagé. Météores : toutes les 2,6 s, trois pierres tombent sur la cible dans une zone de 115 px, annoncées 0,45 s à l'avance | Pluie de météores / METEOR STORM — 1,1 s pendant lesquelles **la nuit tombe sur l'arène** et des pierres se détachent d'elle, puis **3,2 s d'averse : vingt-cinq météores, une toutes les 0,13 s**, trois ou quatre en l'air en permanence |
-| **Mannequin** (inventé) | **aucune** — le seul du jeu | **cible d'entraînement** : il ne fait aucun dégât, n'a aucun pouvoir, et porte les PV de la norme, en blanc. On le choisit pour **regarder l'autre combattant** : sa ligne de HUD compte les dégâts qu'il a subis, donc ce que l'adversaire produit vraiment | aucun (jauge vide, « NO ULTIMATE ») |
+| **Mannequin** (inventé) | **aucune** | **cible d'entraînement** : il ne fait aucun dégât, n'a aucun pouvoir, et porte les PV de la norme, en blanc. On le choisit pour **regarder l'autre combattant** : sa ligne de HUD compte les dégâts qu'il a subis, donc ce que l'adversaire produit vraiment | aucun (jauge vide, « NO ULTIMATE ») |
+| **Comète** (inventée) | **aucune** — la troisième du jeu, et la première dont le corps frappe : portée 0, hitbox de rayon 0, `resolveMelee` ne tourne jamais pour elle. C'est son module qui inflige les dégâts, au contact | **la plus rapide et la plus petite** (700 px/s de base et rayon 34, contre 655 et 41 au précédent record) : **son élan est son arme**. Un facteur continu monte tout seul de 1 à 1,5 tant qu'elle ne touche personne, multiplie sa vitesse *et* ses dégâts, et **chaque choc le dépense** — elle est donc la plus dangereuse juste après avoir raté. Coup de fouet : toutes les 6 s, l'élan saute à 1,9, au-dessus de son propre plafond | Rentrée / REENTRY — 4,5 s où l'élan est tenu à 2,3 (1 610 px/s), le verrou de touche tombe de moitié et **les chocs ne coûtent plus rien** |
 
 ### Quatre formats
 
@@ -286,7 +288,7 @@ tools/                     outillage de vérification (non chargé par la page)
 │                          audio vivante d'une piste silencieuse
 ├── layout-check.mjs       les écrans DOM tiennent-ils dans la scène ? hauteur
 │                          réelle de la pile, balayée sur les quatre formats,
-│                          leurs tailles et les neuf fiches
+│                          leurs tailles et les dix fiches
 ├── shot.mjs               captures d'écran, avec déclenchement de pouvoir
 ├── frames.py              extraction d'images d'une vidéo de référence
 ├── montage.py             planche-contact des images extraites
