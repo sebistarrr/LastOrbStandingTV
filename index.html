@@ -4,8 +4,34 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>LAST ORB STANDING — ten fighters, one arena</title>
-<meta name="description" content="Duel 2D (Canvas) — clone haute fidélité : Ombre, Glace, Feu, Eau, Lumière, Foudre, Vent, Plante, plus le Hors-la-loi et le Bretteur." />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231c1a26'/><circle cx='11' cy='16' r='7' fill='%23870286'/><circle cx='22' cy='16' r='7' fill='%2300eff0'/></svg>" />
+<meta name="description" content="Ten orb fighters, one arena. Duels, 2 vs 2, 1 vs X and battle royale, rendered in Canvas 2D." />
+
+<!-- Icônes. Toutes produites par `node tools/icone.mjs` depuis les assets du
+     jeu (fond d'encre + carré d'arène + un corps pris dans la banque de
+     sprites) : elles ne peuvent pas dériver du dessin.
+
+     `apple-touch-icon` est le SEUL que lise « Ajouter à l'écran d'accueil »
+     sur iOS — le manifeste web y est ignoré pour l'icône, d'où un fichier
+     dédié en 180 px (60 pt × 3) plutôt qu'un renvoi vers `icon-192`. -->
+<link rel="icon" href="./assets/icons/favicon-32.png" sizes="32x32" type="image/png" />
+<link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+<link rel="manifest" href="./site.webmanifest" />
+
+<!-- Le libellé sous l'icône. Sans lui, iOS prend le `<title>`, qui porte la
+     ligne descriptive et se fait tronquer en « LAST ORB STANDING — te… ».
+     La grille n'affiche qu'une douzaine de caractères : on lui donne un nom
+     qui tient en entier. -->
+<meta name="apple-mobile-web-app-title" content="LAST ORB" />
+<meta name="application-name" content="LAST ORB" />
+
+<!-- Lancé depuis l'écran d'accueil, le jeu s'ouvre en plein écran sans barre
+     d'adresse : la scène est un 9:16, elle occupe alors l'écran entier.
+     `black` et non `black-translucent` — le translucide fait passer la page
+     SOUS l'encoche, et la feuille de style ne gère aucun `safe-area`. -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="theme-color" content="#1c1a26" />
 
 <!-- Polices auto-hébergées (assets/fonts) : aucune requête externe, donc un
      rendu identique hors-ligne comme sur GitHub Pages. Le Canvas attend leur

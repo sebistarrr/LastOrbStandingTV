@@ -175,6 +175,28 @@ de caractères : les deux marques s'ajustent à leur place.
 
 <sup>[Les deux marques sur une arène dégagée](docs/capture-signature.png).</sup>
 
+### Ajouter le jeu à l'écran d'accueil
+
+Sur iPhone (*Partager → Ajouter à l'écran d'accueil*) comme sur Android, le jeu
+se pose avec sa propre icône : l'arène en miniature — fond d'encre, carré blanc,
+liseré noir, un orbe qui la remplit. Lancé depuis l'icône, il s'ouvre **en plein
+écran**, sans barre d'adresse : la scène est un 9:16, elle occupe alors l'écran
+entier.
+
+Les icônes sont **générées**, jamais dessinées :
+
+```bash
+node tools/icone.mjs            # → assets/icons/ (180, 192, 512, 32)
+node tools/icone.mjs --orbe=sunCore   # changer d'orbe
+node tools/icon-check.mjs       # tout ce que la page déclare existe-t-il ?
+```
+
+`tools/icone.mjs` les compose depuis les assets du jeu (`STAGE.paper`, le carré
+d'`ARENA`, un corps pris dans la banque de sprites), donc repalettiser un
+combattant et relancer l'outil suffit — l'icône ne peut pas dériver du dessin.
+`tools/icon-check.mjs` existe parce qu'un `apple-touch-icon` en 404 **ne crie
+nulle part** : iOS pose une capture de la page à la place, sans une erreur.
+
 ### Le son
 
 Le duel s'entend autant qu'il se voit, et **sans un seul fichier audio** :

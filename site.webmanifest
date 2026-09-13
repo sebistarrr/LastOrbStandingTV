@@ -1,0 +1,18 @@
+{
+  "$comment": "Manifeste web : lu par Android/Chrome pour « Installer l'application ». iOS l'ignore pour l'icône d'écran d'accueil — c'est <link rel=apple-touch-icon> qui décide là-bas, voir index.html. Tous les chemins sont RELATIFS au manifeste : le site est publié sous /LastOrbStandingTV/, une barre de tête pointerait à la racine du domaine.",
+  "name": "LAST ORB STANDING",
+  "short_name": "LAST ORB",
+  "description": "Ten orb fighters, one arena. Duels, 2 vs 2, 1 vs X and battle royale.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1c1a26",
+  "theme_color": "#1c1a26",
+  "$comment_icons": "Aucun `purpose: maskable` : ce serait un mensonge. Un masque « maskable » d'Android peut aller jusqu'au disque inscrit (zone sûre = 80 % du côté EN DIAMÈTRE), or les coins du carré d'arène sont à 113 % de ce diamètre et seraient rognés. Le masque d'iOS, lui, est une superellipse qui mange bien moins : c'est pour lui que l'arène est rentrée de 10 %. Sans la clé, Android pose l'icône telle quelle dans sa propre pastille.",
+  "icons": [
+    { "src": "./assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "./assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

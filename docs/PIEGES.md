@@ -23,16 +23,16 @@ relevé, puis les pièges eux-mêmes.
 | &nbsp;&nbsp;· Déterminisme et ordre d'exécution | 503 |
 | &nbsp;&nbsp;· Éditer les données | 542 |
 | &nbsp;&nbsp;· Interface et rendu | 671 |
-| &nbsp;&nbsp;· Le son | 919 |
-| &nbsp;&nbsp;· Refactoriser | 1432 |
-| **Le détail des sections condensées de `CLAUDE.md`** | 1473 |
-| &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1475 |
-| &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1518 |
-| &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1561 |
-| &nbsp;&nbsp;· Invariant 13 — comment le moteur a cessé de compter jusqu'à deux | 1580 |
-| &nbsp;&nbsp;· Invariant 3 — la preuve que l'arrivée d'un combattant n'a rien déplacé | 1624 |
-| &nbsp;&nbsp;· Invariant 9 — les deux régressions qui l'ont écrit | 1641 |
-| &nbsp;&nbsp;· Formats — la table, et pourquoi elle a été écrite après coup | 1657 |
+| &nbsp;&nbsp;· Le son | 981 |
+| &nbsp;&nbsp;· Refactoriser | 1494 |
+| **Le détail des sections condensées de `CLAUDE.md`** | 1535 |
+| &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1537 |
+| &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1580 |
+| &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1623 |
+| &nbsp;&nbsp;· Invariant 13 — comment le moteur a cessé de compter jusqu'à deux | 1642 |
+| &nbsp;&nbsp;· Invariant 3 — la preuve que l'arrivée d'un combattant n'a rien déplacé | 1686 |
+| &nbsp;&nbsp;· Invariant 9 — les deux régressions qui l'ont écrit | 1703 |
+| &nbsp;&nbsp;· Formats — la table, et pourquoi elle a été écrite après coup | 1719 |
 
 ---
 
@@ -915,6 +915,68 @@ Le pseudo **ne passe pas par `ui/lang.js`** : c'est un nom propre, identique
 dans les deux langues, comme LAST ORB STANDING. Deux entrées de table aux
 valeurs égales n'auraient rien décrit de plus et auraient fait croire à une
 traduction possible.
+
+#### Une icône d'application se décide à 60 px, et sous le masque du système
+
+Demande : une icône pour « Ajouter à l'écran d'accueil » sur iPhone. Quatre
+compositions ont été rendues en 1024 puis **regardées à 60 px** — la taille
+réelle sur la grille d'un iPhone —, parce que c'est la seule taille qui décide.
+Le verdict est sans appel, et aucune des quatre ne se jugeait au grand format :
+
+| Candidat | À 1024 | À 60 px |
+| --- | --- | --- |
+| L'orbe seul, plein cadre | superbe | **trop sombre** : fond d'encre + cœur noir, l'icône disparaît sur un fond d'écran sombre |
+| Arène + orbe centré | propre | lisible, mais l'orbe est **noyé** dans le blanc |
+| Arène + orbe en vol, traînée | dynamique | la traînée devient une **bavure grise**, on dirait un défaut de rendu |
+| Arène + trois orbes, un seul vif | raconte le titre | les deux orbes pâles lisent comme **des yeux** — l'icône fait un visage |
+
+Retenue : **l'arène en miniature**, fond d'encre, carré blanc, liseré noir, un
+orbe qui la remplit presque. C'est la composition du jeu lui-même, et c'est ce
+qui la rend reconnaissable plutôt que jolie.
+
+Trois écarts à la scène, tous imposés par la taille ou par le masque :
+
+- **Le liseré est à 2,9 % du côté, contre 0,94 % dans le jeu** (6 px sur 640).
+  À l'échelle juste, il ferait 0,6 px sur la grille : une proportion fidèle
+  donne ici un trait **absent**.
+- **L'arène est rentrée de 10 %.** iOS n'affiche pas un carré, il masque par une
+  superellipse qui mange les coins. Bord à bord, l'arène perdrait ses angles,
+  donc sa forme.
+- **L'orbe remplit presque l'arène.** Aux proportions du duel, il serait un
+  point.
+
+**`purpose: maskable` a été retiré du manifeste, et c'est le piège le plus
+coûteux du lot** parce qu'il se déclare en un mot et se paie en silence. La zone
+sûre d'un masque Android est un disque de 80 % du côté **en diamètre** ; les
+coins du carré d'arène sont à 0,8 × √2 ≈ 113 % de ce diamètre. Déclarer l'icône
+maskable, c'est autoriser Android à rogner exactement ce qu'on a soigné. Sans la
+clé, il la pose telle quelle dans sa propre pastille. **Le masque d'iOS mange
+bien moins que celui d'Android** : les 10 % d'inset sont calés pour le premier
+et ne suffisent pas au second.
+
+Deux choses qui **ne crient nulle part**, d'où `tools/icon-check.mjs` :
+
+- **Un `apple-touch-icon` en 404 ne produit aucune erreur.** iOS pose une
+  capture de la page à la place, et on ne l'apprend qu'en ajoutant le site à son
+  écran d'accueil. L'outil récupère chaque URL déclarée et lit les dimensions
+  dans l'**en-tête IHDR** du PNG, pas dans l'attribut `sizes` — qui n'est qu'une
+  promesse.
+- **Le libellé vient du `<title>` si on ne le dit pas**, et la grille n'affiche
+  qu'une douzaine de caractères : « LAST ORB STANDING — ten fighters… » devenait
+  « LAST ORB STANDING — te… ». D'où `apple-mobile-web-app-title` à `LAST ORB`,
+  qui tient en entier.
+
+Et deux détails de fabrication : la réduction se fait **par moitiés
+successives** (un `drawImage` qui divise par 32 d'un coup n'échantillonne qu'une
+poignée de texels et crénelle le liseré), et le fond opaque est peint **avant**
+le dessin — iOS compose un `apple-touch-icon` transparent sur du noir, ce qui
+poserait un halo noir autour des angles anticrénelés. Vérifié : alpha minimal
+255 sur les quatre fichiers.
+
+L'icône est **générée** (`tools/icone.mjs`) et non dessinée : c'est la règle du
+dépôt sur les icônes — « une icône redessinée à la main diverge de son arme » —
+appliquée un cran plus haut, en l'échantillonnant sur la **scène**. Repalettiser
+la Comète ou changer `STAGE.paper`, relancer l'outil, et rien n'a dérivé.
 
 ### Le son
 

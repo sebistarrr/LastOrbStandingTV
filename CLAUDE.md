@@ -57,6 +57,7 @@ bonne (`offset` / `limit`). Les numéros dérivent ; `grep -n '^#\+ '` les recal
 | **Son** : synthèse des bruitages et annonceur | `src/render/audio.js` |
 | **Recettes de bruitage** (aucun fichier audio) | `src/data/sound.js` + `sound` de chaque fiche |
 | Écrans DOM | `src/ui/select.js`, `src/ui/result.js`, `index.html`, `styles/style.css` |
+| **Icône d'écran d'accueil / d'onglet** | `assets/icons/` (généré par `tools/icone.mjs`, jamais à la main) + le `<head>` d'`index.html` + `site.webmanifest` |
 | **Rangée d'un combattant à la sélection** | clé `tier` de sa fiche — lue par `ui/select.js` seul, jamais par le moteur |
 | Libellés d'interface (les deux langues) | `src/ui/lang.js` |
 | Câblage, boucle, seed, enregistreur | `src/main.js` |
@@ -409,6 +410,9 @@ node tools/fiche-snapshot.mjs            # empreinte des fiches + cartes, SANS
 node tools/fiche-check.mjs               # câblage, clé de sprite absente de
                                          # PIXEL_MAPS, fiche ↔ module
 node tools/lang-check.mjs                # clés des deux tables + champs `Ref`
+node tools/icon-check.mjs                # les icônes déclarées existent-elles ?
+node tools/icone.mjs                     # (re)génère assets/icons/ depuis les
+                                         # assets du jeu — `--orbe=sunCore`
 node tools/sound-check.mjs               # action muette, recette refusée
 node tools/layout-check.mjs              # les écrans DOM tiennent-ils dans la
                                          # scène ? (pile réelle × formats ×
@@ -610,6 +614,9 @@ est dans `docs/PIEGES.md`, sous le même intitulé.
 - **Un filigrane posé hors de l'aire de jeu ne protège rien** : 57 % de la
   hauteur de la scène se recadre sans rien perdre du duel. Une signature va
   **dans** l'arène, et en deux marques — une qu'on retrouve, une qu'on lit.
+- **Une icône d'application se décide à 60 px, et sous le masque du système** :
+  les proportions de la scène y disparaissent, et `purpose: maskable` déclaré à
+  tort fait rogner ce qu'on a soigné. Elle se **génère** depuis les assets.
 
 **Sonoriser**
 
