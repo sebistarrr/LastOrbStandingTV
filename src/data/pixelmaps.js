@@ -36,7 +36,7 @@ import { GOLEM_ROCK, GOLEM_SHARD, ICON_GOLEM } from './pixelart/golem.js';
 import { ICON_DUMMY } from './pixelart/dummy.js';
 import { SUN_RAY, SUN_CORE, SUN_BEAM, ICON_SUN } from './pixelart/sun.js';
 import { LUNAR_BALL, LUNAR_ROCK1, LUNAR_ROCK2, LUNAR_ROCK3, ICON_LUNAR } from './pixelart/lunar.js';
-import { ICON_COMET } from './pixelart/comet.js';
+import { COMET_CORE, COMET_RING, ICON_COMET } from './pixelart/comet.js';
 
 export const PIXEL_MAPS = deepFreeze({
   // Hors-la-loi
@@ -80,7 +80,10 @@ export const PIXEL_MAPS = deepFreeze({
   lunarRock2: LUNAR_ROCK2,
   lunarRock3: LUNAR_ROCK3,
   iconLunar: ICON_LUNAR,
-  // Comète — une seule carte, et c'est une icône : sans arme ni projectile,
-  // elle n'a rien d'autre à dessiner. On ajoute en queue, on ne réordonne pas.
+  // Comète — le corps et l'**entourage** du même dessin, coupés l'un de
+  // l'autre : `cometCore` est la sphère, `cometRing` est tout ce qui tourne
+  // autour et qui lui sert d'arme. Les deux sont servis par de vrais PNG.
+  cometCore: COMET_CORE,
+  cometRing: COMET_RING,
   iconComet: ICON_COMET,
 });

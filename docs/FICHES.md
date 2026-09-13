@@ -9,8 +9,8 @@ autres sont **inventés** : pas de vidéo, donc pas un seul `mesuré`. Le
 **cible d'entraînement** sans arme ni dégâts, faite pour qu'on regarde les
 mécaniques des autres ; le **Soleil** et la **Lune** sont les deux **boss**,
 demandés pour gagner contre tous les autres en 1 contre 1 et ne se départager
-qu'entre eux ; la **Comète** n'a pas d'arme non plus et frappe **avec son
-corps**, à proportion de sa vitesse.
+qu'entre eux ; la **Comète** ne peut toucher avec rien de ce qu'elle porte et
+frappe **avec son corps**, à proportion de sa vitesse.
 
 **Trois d'entre eux sont hors barème, aux deux bouts** : le Mannequin ne peut
 pas gagner, les deux boss ne peuvent pas perdre contre les sept. Les écarts
@@ -30,31 +30,31 @@ les recale en une commande.
 
 | Section | Ligne |
 | --- | --- |
-| Comment lire une valeur | 58 |
-| 📦 Archive — les huit éléments supprimés | 107 |
-| 🥷 SHINOBI — `wind` (affiché « SHINOBI » ; c'est l'ancien Vent reskiné) | 181 |
-| 🤠 PISTOLERO — `outlaw` (affiché « PISTOLERO ») | 972 |
-| ⚔ RONIN — `bladesman` (affiché « RONIN ») | 1127 |
-| 🐲 HOPLITE — `lancer` (affiché « HOPLITE ») | 1384 |
-| 🌿 DRUIDE — `mage` (affiché « DRUIDE » en français, « DRUID » en anglais) | 1949 |
-| 🗿 GOLEM — `golem` (affiché « GOLEM » dans les deux langues) | 2440 |
-| 🎯 MANNEQUIN — `dummy` (cible d'entraînement : sans arme, sans dégâts) | 2654 |
-| ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2740 |
-| 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3074 |
-| ☄ COMÈTE — `comet` (sans arme : son corps est l'arme) | 3275 |
-| La norme passe à 200 PV, le Golem à 400 (historique) | 3424 |
-| Neon Shadow supprimé, la norme redescend à 100 PV | 3479 |
-| Les dégâts de tous les combattants, divisés par deux | 3547 |
-| Rééquilibrage confiné au Golem et au Ronin | 3657 |
-| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3744 |
-| Le son de chacun | 3794 |
-| **Équilibrage du roster** — c'est ici que vivent les chiffres | 3912 |
-| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 3922 |
-| &nbsp;&nbsp;· Le sommet n'est plus partagé | 3952 |
-| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 3983 |
-| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4025 |
-| Règles communes (moteur) | 4119 |
-| Comment les mesures ont été prises | 4143 |
+| Comment lire une valeur | 59 |
+| 📦 Archive — les huit éléments supprimés | 108 |
+| 🥷 SHINOBI — `wind` (affiché « SHINOBI » ; c'est l'ancien Vent reskiné) | 182 |
+| 🤠 PISTOLERO — `outlaw` (affiché « PISTOLERO ») | 973 |
+| ⚔ RONIN — `bladesman` (affiché « RONIN ») | 1128 |
+| 🐲 HOPLITE — `lancer` (affiché « HOPLITE ») | 1385 |
+| 🌿 DRUIDE — `mage` (affiché « DRUIDE » en français, « DRUID » en anglais) | 1950 |
+| 🗿 GOLEM — `golem` (affiché « GOLEM » dans les deux langues) | 2441 |
+| 🎯 MANNEQUIN — `dummy` (cible d'entraînement : sans arme, sans dégâts) | 2655 |
+| ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2741 |
+| 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3075 |
+| ☄ COMÈTE — `comet` (rien qui frappe : son corps est l'arme) | 3276 |
+| La norme passe à 200 PV, le Golem à 400 (historique) | 3489 |
+| Neon Shadow supprimé, la norme redescend à 100 PV | 3544 |
+| Les dégâts de tous les combattants, divisés par deux | 3612 |
+| Rééquilibrage confiné au Golem et au Ronin | 3722 |
+| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3809 |
+| Le son de chacun | 3859 |
+| **Équilibrage du roster** — c'est ici que vivent les chiffres | 3977 |
+| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 3987 |
+| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4017 |
+| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4048 |
+| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4090 |
+| Règles communes (moteur) | 4184 |
+| Comment les mesures ont été prises | 4208 |
 
 ## Comment lire une valeur
 
@@ -3273,9 +3273,9 @@ angle d'or, la chute simulée par une hauteur au-dessus de l'ombre, la nuit
 d'arène, et le fait qu'une orbite doit rester **hors du corps quand le corps
 enfle** — qui ne s'applique plus, faute d'orbite.
 
-## ☄ COMÈTE — `comet` (sans arme : son corps est l'arme)
+## ☄ COMÈTE — `comet` (rien qui frappe : son corps est l'arme)
 
-> Sans arme — son élan est tout ce qu'elle a, et il se dépense.
+> Rien qui frappe — son élan est tout ce qu'elle a, et il se dépense.
 
 **Demandé** : « je veux créer un nouveau personnage sans arme qui peut se
 déplacer très vite ».
@@ -3306,9 +3306,16 @@ ce qui la rend difficile à équilibrer.
 | Valeur | Détail | Source |
 | --- | --- | --- |
 | Corps | rayon **34** — le plus petit du roster (41 la norme, 50 le Golem, 82 le Soleil). Un corps étroit est **plus dur à toucher**, et c'est sa seule défense : elle suit la norme de 100 PV, sans aucune réduction. **Pas plus petit** : la police du chiffre de PV fait 34 px, donc « 100 » déborderait d'une bille de moins de 68 px | calé |
-| Palette | `look.palette` — quatre teintes (`edge #3d0b2a` · `body #d63b8f` · `light #ff8ad0` · `core #fff0fa`). Le magenta est la **seule famille libre** du roster : orange pris deux fois (Ronin, Soleil), bleu au Pistolero, vert au Druide, violet à l'Hoplite, gris au Golem et à LUNE, noir au Shinobi, blanc au Mannequin. Vérifié teinte par teinte — deux corps de la même famille qui se croisent à 700 px/s sont indiscernables | calé |
+| **Dessin du corps** | **un sprite, le troisième du roster** après le Soleil et LUNE — `assets/sprites/comet-core.png`, la maquette de tourbillon fournie, **coupée à sa sphère**. Détourage par **topologie** : le fond est ce que le remplissage atteint depuis le bord, le reste est l'objet. Un seuil de clarté aurait été faux et l'a d'abord été — les bras magenta portent `R = 255`, donc un seuil sur le canal **maximum** les prenait pour du fond et trouait le dessin ; le seuil porte sur le canal **minimum**. Coupe à **286 px** du centre, dernier rayon encore plein à 98,5 % (0,93 à 288 px, 0,28 à 300) | relevé sur la maquette |
+| Poids du PNG | la maquette est un **JPEG** : 43 000 couleurs distinctes pour un dessin qui en montre une cinquantaine. Réduction de moitié (moyenne d'aire, qui efface le bruit) puis quantification à 48 teintes — le dessin y gagne et le fichier passe de **489 à 69 Ko**, dans la moyenne des autres sprites du dépôt | déduit |
+| `spriteScale` | **absent, et c'est une mesure** : le PNG est coupé au disque plein, donc la correction vaudrait 1,007 — du bruit de bord JPEG. Une clé qui recopie son défaut est une occasion de divergence silencieuse | déduit |
+| Chiffre de PV | **une seule encre claire (`#fbe6fb`), et c'est mesuré** : sous l'empreinte des digits, **82 % des pixels sont sombres et 6 % clairs**, parce que le vide central du tourbillon tombe exactement là où le nombre s'écrit. Le Soleil était à 53 / 40 et aucun aplat n'y tenait — d'où son `hpStroke`. Ici un contour n'ajouterait qu'un pâté | mesuré sur la maquette |
+| Palette | `look.palette` — **cinq teintes relevées par bandes de luminance** sur `comet-core.png` (28ᵉ, 46ᵉ, 62ᵉ, 86ᵉ, 98ᵉ centile) : `edge #04010e` · `shadow #290651` · `body #540f8b` · `light #cb2fad` · `core #ee82ec`. Elle était **magenta uni** (`#d63b8f`) avant la maquette ; toutes ses couleurs ont suivi dans la même passe — queue, fuseau, fantômes, poussière, halo, sillage, jauge, ligne de HUD. Le violet-magenta reste la seule famille libre du roster, et le violet de l'Hoplite (`#7046ac`) est le seul voisin : celui-ci est **beaucoup plus sombre** (luminance médiane 19 contre 63) | relevé sur la maquette |
 | Déplacement | **700 px/s**, le plus rapide du roster (655 au Pistolero, précédent record) — et ce n'est que son **plancher** : multiplié par l'élan, il monte à **1 050** en pointe ordinaire et **1 610** pendant la Rentrée, sur une arène de 628 px. `turnRate: 2.8`, le plus haut aussi : à cette vitesse, un cap qui pivote lentement décrit des courbes si larges qu'elle **manquerait sa cible en tournant autour** | calé |
-| **Arme** | **aucune** — `reach: 0`, `hitbox.radius: 0`, pas de `head.sprite`. La géométrie **vide** du Mannequin : la condition de `weaponHit` devient structurellement impossible, et `resolveMelee` ne tourne donc **jamais** pour elle | déduit |
+| **Arme** | **une ceinture de débris qui se voit et qui ne touche pas — demandé.** `assets/sprites/comet-ring.png` : **tout ce qui entoure la sphère** dans la maquette (15,7 % du dessin), découpé d'elle et centré sur la bille. `hitbox` reste **`from`/`to`/`radius` à zéro** — `bladeSegment()` écrase alors le segment tranchant sur le pivot quelle que soit la portée, donc la condition de `weaponHit` est **structurellement impossible** et `resolveMelee` ne tourne toujours jamais pour elle | déduit |
+| Géométrie de la ceinture | l'entourage s'étend à **404 px** du centre là où la sphère en fait 286, soit **1,413 × le rayon du corps** → `reach` **48,03** à 34 de rayon, et l'invariant tient au centième comme pour le Shinobi : `handle.length + largeur dessinée = −48,03 + 96,06 = 48,03 = reach`. Base prise **12 px en deçà** de la sphère pour qu'elle chevauche la bille — sans ce recouvrement, une couture circulaire se verrait tourner (leçon de la couronne du Soleil) | déduit |
+| Échelle du sprite | `scale = 96,056 / 17 = 5,650348` : `drawSpriteLeft` dimensionne par la **hauteur** de la carte texte puis applique le rapport d'aspect du PNG — carré ici, donc 1. Piège déjà payé trois fois (lance de l'Hoplite, arme du Golem, couronne du Soleil) | déduit |
+| ⚠ Ce que ça n'a **pas** coûté | **la matrice est identique au caractère près**, et c'est la différence avec le Soleil : sa couronne ne blesse pas non plus mais elle a une **vraie hitbox**, donc `resolveMelee` y pose un verrou, applique un recul propre et décolle les corps *hors* de `Match.damage` — sa géométrie reste du gameplay. Ici il n'y a aucune touche possible, donc `reach` et `spin` ne servent qu'au dessin | mesuré |
 | **Choc cinétique** | sa mécanique de base et sa seule source de dégâts : au contact, `kinetic.damage × f.state.rush`, verrou de **1,15 s**, recul de 240 porté **dans son sens de marche**, et un contrecoup de 130 sur elle-même | calé |
 | Marge de contact | **8 px explicites**, et c'est un piège déjà payé : un test `distance <= r1 + r2` est **toujours faux et ne crie pas**, `resolveBodies` séparant les corps à chaque pas. La Marée de la première LUNE a infligé **0 PV sur 24 duels** pour cette exacte raison | déduit |
 | **L'élan** | `f.state.rush`, **un seul nombre** qui est à la fois facteur de vitesse et facteur de dégâts : il monte de 1 à **1,5** en 6 s tant qu'elle ne touche personne, et **chaque choc lui en retire 0,3**. Elle est donc la plus dangereuse quand elle vient de **rater** | calé |
@@ -3318,8 +3325,65 @@ ce qui la rend difficile à équilibrer.
 | Pas d'annonce | assumé : le Rayon solaire s'annonce 2 s parce qu'il est inesquivable une fois parti ; la Rentrée n'est qu'une suite de chocs, chacun esquivable. Une annonce n'aurait rien donné à esquiver, elle aurait retardé | déduit |
 | Son | trois recettes, **aucune partagée** : `slam` (le choc — transitoire large puis corps grave court), `surge` (la relance — l'exacte inversion : aucun transitoire, bornes qui **montent**), `boom` (la Rentrée — détonation dont l'aigu meurt le premier). `pitch: 1.15`, le plus haut après le Shinobi | calé |
 | Pas de `swing` | et ce n'est pas un oubli : une voix tenue se pilote sur `weaponAngle`, or son arme n'existe pas — `weapon.spin` vaut 0, l'angle ne bouge jamais, la voix resterait collée au silence. Ce qu'il faudrait entendre chez elle est son **élan**, que le banc ne sait pas encore jouer | déduit |
-| Mise en scène | le **fuseau** (`flair.smear`, 34 px de large) est sa queue — c'est le seul mécanisme qu'un combattant sans arme puisse porter, `ribbon` suivant une pointe d'arme qui serait ici le centre de sa bille. Les **images fantômes** ne s'allument que pendant la Rentrée (`f.ghosting`, compteur générique lu par `flair.js` seul, donc sans effet possible sur un vainqueur) | calé |
+| Mise en scène | le **fuseau** (`flair.smear`, 34 px de large, magenta `#cb2fad`) est sa queue — c'est le seul mécanisme qu'un combattant sans pointe d'arme puisse porter, `ribbon` suivant une pointe qui serait ici le centre de sa bille. **Le magenta des bras plutôt que le rose clair** : sur l'arène blanche, c'est la teinte saturée qui porte. Les **images fantômes** ne s'allument que pendant la Rentrée (`f.ghosting`, compteur générique lu par `flair.js` seul, donc sans effet possible sur un vainqueur). La ceinture tourne à `SPIN × 0,25` (1,44 rad/s), la rotation d'arme la plus lente du roster : des débris en orbite dérivent, ils ne fouettent pas l'air | calé |
 | HUD | `Momentum: ×1.42` et `Impact: 4` — le dégât est affiché **calculé**, seule façon de rendre visible une puissance qui bouge en continu là où les autres montent par paliers | — |
+
+### Le tourbillon — la bille devient un dessin, l'entourage devient l'arme
+
+**Demandé**, après coup : « modifie uniquement le design de la balle par la
+pièce jointe (reprends la technique image png, découpe pour prendre que la
+sphère). Tout ce qui y a autour devient l'arme. Modifie la couleur de la
+traînée pour l'adapter à la couleur de la balle. »
+
+C'est **exactement la manœuvre du Soleil**, refaite sur une autre maquette :
+couper le dessin à sa sphère, faire de tout le reste une arme, et repalettiser
+le personnage sur ce qu'on vient de découper.
+
+| | avant | après |
+| --- | --- | --- |
+| corps | cercle vectoriel magenta `#d63b8f` | **sprite** `comet-core.png`, tourbillon violet |
+| arme | aucune, rien de dessiné | **ceinture de débris** `comet-ring.png`, centrée sur la bille |
+| palette | quatre teintes inventées | **cinq, relevées** sur la maquette |
+| chiffre de PV | crème sur aplat | crème sur le **vide central**, mesuré à 82 % sombre |
+| matrice | — | **identique au caractère près** |
+
+**Le piège de détourage, payé puis compris.** Le fond blanc s'enlève par
+remplissage depuis le bord — méthode du Soleil — mais le masque initial était
+faux : il prenait `max(R, G, B) < 235` pour « pas du fond », or **les bras
+magenta portent `R = 255`**. Le dessin ressortait troué de l'intérieur, et le
+profil d'anneau annonçait un disque plein à peine à 86 % là où il l'est à 100.
+Le seuil porte donc sur le canal **minimum** : un blanc a ses trois canaux
+clairs, un magenta saturé non. C'est le piège du dépôt — *un détourage ne se
+fait pas toujours à la couleur* — dans une variante qu'il n'avait pas encore
+rencontrée, puisque ses maquettes précédentes étaient sombres sur clair.
+
+**Où couper, et c'est mesuré.** Couverture par anneau : le disque est plein à
+100 % jusqu'à 286 px, à 93 % à 288 et à 28 % à 300. La coupe tombe donc à
+**286**, et les 15,7 % du dessin qui restent dehors — éclats et éclairs —
+deviennent l'arme. Sa base est reprise **12 px en deçà** pour qu'elle chevauche
+la bille : sans ce recouvrement, une couture circulaire se verrait tourner.
+
+**Ce que ça ne change pas, et c'est le point.** `hitbox` reste à zéro sur ses
+trois clés, donc `bladeSegment()` écrase le segment tranchant sur le pivot
+quelle que soit la portée : la ceinture est un **dessin**, pas une arme. La
+distinction avec le Soleil est celle qui compte — sa couronne ne blesse pas non
+plus, mais elle a une vraie hitbox, donc `resolveMelee` y pose un verrou,
+applique un recul propre et **décolle les deux corps** hors de `Match.damage`,
+et toucher à sa portée déplace la matrice. Ici, rien. La matrice régénérée est
+identique au caractère près — c'est la preuve exigée pour un changement
+annoncé comme visuel, et elle est fournie.
+
+**La passe de couleur est complète, et c'est une règle.** Palette, corps,
+`bodyHit`, contour, chiffre de PV, halo, fuseau, fantômes, poussière, impacts,
+`castFlash`, sillage, accent, **jauge d'ultime et ligne de HUD**. Une passe
+incomplète n'en est pas une : le dépôt a déjà payé un Rayon solaire qui ne
+ressemblait plus à l'astre qui le tirait.
+
+**Une conséquence d'affichage, assumée** : son accroche disait « Sans arme ».
+La carte de sélection montre désormais une ligne « Arme : Ceinture de débris »,
+et les deux ensemble se contrediraient. L'accroche est devenue « **Rien qui
+frappe** » / « Nothing that strikes » — la moitié affichée suit le dessin, la
+mécanique ne bouge pas.
 
 ### L'équilibrage : un levier raide, et deux façons de le tirer
 

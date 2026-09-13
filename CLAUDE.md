@@ -3,8 +3,8 @@
 Duels **à deux, en 2 contre 2, en 1 contre X ou en bataille royale**, avec dix
 combattants : cinq repris de la chaîne « ballthingsim » — le Pistolero, le
 Ronin, l'Hoplite, le Shinobi et le Druide — et **cinq inventés**, le Golem, le
-Mannequin (une cible d'entraînement qui ne frappe pas), la Comète (sans arme :
-son élan est son arme) et **deux boss**, le Soleil et la Lune. Moteur écrit
+Mannequin (une cible d'entraînement qui ne frappe pas), la Comète (rien qui
+frappe : son élan est son arme) et **deux boss**, le Soleil et la Lune. Moteur écrit
 d'après les vidéos de référence.
 HTML + CSS + JS ES modules, Canvas 2D, **aucune dépendance, aucun build**.
 Publié sur GitHub Pages à chaque push sur `main` → <https://sebistarrr.github.io/test2/>
@@ -45,7 +45,7 @@ bonne (`offset` / `limit`). Les numéros dérivent ; `grep -n '^#\+ '` les recal
 | Registre du roster (`ELEMENTS`, `ROSTER`) | `src/data/elements.js` |
 | Sprites pixel-art (texte) | `src/data/pixelart/<id>.js`, recensés dans `src/data/pixelmaps.js` |
 | Overrides de sprites en vrai PNG (écart assumé à « aucun binaire ») | `assets/sprites/` + `manifest.json` |
-| **Combattant sans arme** (Mannequin, LUNE, Comète) | `weapon.reach`/`hitbox.radius` à 0 et pas de `head.sprite` : géométrie **vide**, plus sûre que des dégâts à zéro. Ses dégâts, s'il en a, sont appelés **par son module** |
+| **Combattant sans arme** (Mannequin, LUNE, Comète) | **c'est `hitbox` à 0 qui l'empêche de toucher**, pas la portée : `bladeSegment()` écrase le tranchant sur le pivot, la condition de `weaponHit` devient impossible. Plus sûr que des dégâts à zéro. Une arme peut donc être **dessinée sans exister** (la ceinture de la Comète : sprite + `reach`, hitbox nulle, matrice identique), et les dégâts, s'il y en a, sont appelés **par le module** |
 | Géométrie de scène, phases, export vidéo | `src/data/tuning.js` |
 | Déroulé du duel, dégâts, rendu global | `src/game/match.js` |
 | Entité combattant (état + dessin) | `src/game/fighter.js` |
@@ -99,7 +99,7 @@ sans le savoir. Les valeurs, les relevés et les demandes : `docs/FICHES.md`.
 | `sun` **SOLEIL** / SUN | **boss.** Deux fois la norme en rayon, `maxHp` ×5, le plus lent de très loin — c'est toute sa contrepartie. **Huit rayons** en couronne (`weapon.spokes: 8`, aucun angle mort) qui **ne blessent pas** (`melee.damage: 0`, demandé) : sa silhouette et son bruit, plus son arme. Tout passe donc par son **ultime** |
 | `lunar` **LUNE** / MOON | **boss, et le seul combattant sans arme qui gagne** — `reach: 0`, `hitbox.radius: 0`, pas de `head.sprite` (le cas du Mannequin) : **100 % de sa production tombe du ciel**, corps de rayon fixe, `maxHp` ×5. Pouvoir et ultime sont la même averse, à deux densités |
 | `dummy` **MANNEQUIN** / DUMMY | **cible d'entraînement, pas un adversaire** : aucune arme, aucun dégât, aucun pouvoir, blanc. Il existe pour qu'on **regarde l'autre** — sa ligne de HUD affiche les dégâts **subis**, donc la production réelle de l'adversaire |
-| `comet` **COMÈTE** / COMET | **sans arme, et c'est son corps qui frappe** — `reach: 0`, `hitbox.radius: 0` : `resolveMelee` ne tourne jamais pour elle, son module appelle `game.damage` lui-même au contact. La plus rapide et la plus petite du roster. Son dégât suit un **facteur continu** (`f.state.rush`) qui monte tout seul et que **chaque choc dépense** — sa vitesse est sa puissance *et* sa ressource |
+| `comet` **COMÈTE** / COMET | **rien qui frappe, et c'est son corps qui blesse** — `hitbox` à 0 sur ses trois clés : `resolveMelee` ne tourne jamais pour elle, son module appelle `game.damage` lui-même au contact. Sa **ceinture de débris est un dessin** (sprite + portée, hitbox nulle), comme son corps, tous deux découpés de la même maquette. La plus rapide et la plus petite du roster. Son dégât suit un **facteur continu** (`f.state.rush`) qui monte tout seul et que **chaque choc dépense** — sa vitesse est sa puissance *et* sa ressource |
 
 **Le Clone d'ombre**, parce qu'il touche le moteur : des doubles de 15 PV qui
 sont de **vrais combattants du tableau**, dans le camp du Shinobi, avec **tous

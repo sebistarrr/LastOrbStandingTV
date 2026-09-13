@@ -1,4 +1,4 @@
-import { fiche } from '../defaults.js';
+import { fiche, SPIN } from '../defaults.js';
 
 /* ==========================================================================
  *  COMÈTE  (COMET) — le combattant qui n'a que sa vitesse
@@ -50,8 +50,14 @@ export const COMET = fiche({
    *  donc « la Rentrée » et non « le ». */
   name: 'COMÈTE',
   nameRef: 'COMET',
-  tagline: 'Sans arme — son élan est tout ce qu’elle a, et il se dépense',
-  taglineRef: 'No weapon — momentum is all it has, and it spends',
+  /** **« Rien qui frappe » et non « sans arme »** : depuis que son entourage est
+   *  dessiné, la carte de sélection montre une *Ceinture de débris*. Elle ne
+   *  touche toujours rien — géométrie vide, voir `weapon` — mais une accroche
+   *  qui dirait « sans arme » à côté d'une ligne « Arme : Ceinture de débris »
+   *  serait fausse à l'écran. La moitié affichée suit donc le dessin, la
+   *  mécanique ne bouge pas. */
+  tagline: 'Rien qui frappe — son élan est tout ce qu’elle a, et il se dépense',
+  taglineRef: 'Nothing that strikes — momentum is all it has, and it spends',
   icon: 'iconComet',
 
   look: {
@@ -69,76 +75,147 @@ export const COMET = fiche({
      */
     radius: 34,
     /**
-     * **Les quatre teintes du personnage, et la source unique de tout ce qui
-     * est rose chez elle** — corps, queue, anneaux de pouvoir et icône.
+     * **Les cinq teintes du personnage, relevées sur sa maquette** — et la
+     * source unique de tout ce qui est violet chez elle : corps, entourage,
+     * anneaux de pouvoir, queue et icône.
      *
-     * Le magenta est la seule famille de teintes **libre** du roster : l'orange
-     * est pris deux fois (Ronin, Soleil), le bleu par le Pistolero, le vert par
-     * le Druide, le violet par l'Hoplite (`#7046ac`), le gris par le Golem et
-     * LUNE, le noir par le Shinobi, le blanc par le Mannequin. Vérifié teinte
-     * par teinte avant de choisir : sur une arène blanche où deux combattants
-     * se croisent à 700 px/s, deux corps de la même famille seraient
-     * indiscernables au premier coup d'œil.
+     * Prises par **bandes de luminance** sur `comet-core.png` (28ᵉ, 46ᵉ, 62ᵉ,
+     * 86ᵉ et 98ᵉ centile des pixels opaques), donc **dans le dessin** et pas
+     * choisies à côté : le corps et l'entourage sont littéralement la même
+     * matière, ce qui est le seul moyen qu'un tourbillon cerné d'éclats se lise
+     * comme **un** objet.
      *
-     * Elles sont **nommées ici et lues par le module**, jamais écrites en dur —
-     * c'est la règle que le Soleil a payée : un module qui code ses couleurs
-     * finit par ne plus avoir la même matière que le personnage qu'il dessine.
+     * **Elle était magenta uni** (`#d63b8f`) ; le dessin l'a emmenée vers le
+     * violet profond, et **toutes** ses couleurs ont suivi dans la même passe —
+     * queue, fuseau, fantômes, poussière, halo, sillage, ligne de HUD. Une
+     * passe de couleur incomplète n'en est pas une : le dépôt a déjà payé le
+     * Rayon solaire qui ne ressemblait plus à l'astre qui le tirait.
+     *
+     * La famille violet-magenta reste **libre** au roster : l'orange est pris
+     * deux fois (Ronin, Soleil), le bleu par le Pistolero, le vert par le
+     * Druide, le gris par le Golem et LUNE, le noir par le Shinobi, le blanc
+     * par le Mannequin. Le violet de l'Hoplite (`#7046ac`) est le seul voisin,
+     * et il est vérifié : celui-ci est **beaucoup plus sombre** (luminance
+     * médiane 19 contre 63) et cerné d'éclats.
      */
     palette: {
-      edge: '#3d0b2a', // l'encre du contour
-      body: '#d63b8f', // magenta de corps
-      light: '#ff8ad0', // le rose de la queue
-      core: '#fff0fa', // le cœur, presque blanc
+      edge: '#04010e', // l'encre du vide central
+      shadow: '#290651', // violet d'ombre
+      body: '#540f8b', // violet de corps
+      light: '#cb2fad', // magenta des bras
+      core: '#ee82ec', // rose clair, la crête des bras
     },
-    body: '#d63b8f',
-    /** Elle **blanchit** au coup, comme le reste du roster : sur un magenta
-     *  saturé, le cœur clair de sa propre palette est le contraste le plus fort
-     *  dont elle dispose. */
-    bodyHit: '#fff0fa',
-    outline: '#3d0b2a',
-    /** Crème très clair : le chiffre de PV est posé sur un aplat magenta de
-     *  luminance moyenne, une seule encre suffit (le contour `hpStroke` ne se
-     *  déclare que sur un **dessin**, ce qu'elle n'est pas). */
-    hpColor: '#fff0fa',
+    /**
+     * **Le corps est un sprite — le troisième du roster**, après le Soleil et
+     * LUNE, et pour la même raison : une maquette fournie vaut mieux qu'un
+     * cercle qui l'imite.
+     *
+     * `assets/sprites/comet-core.png`, **coupé à sa sphère**. Le détourage est
+     * fait par **topologie** et non à la couleur : le fond blanc est ce que le
+     * remplissage atteint depuis le bord de l'image, le reste est l'objet. Un
+     * simple seuil de clarté aurait été faux ici et l'a d'abord été — les bras
+     * magenta saturés portent `R = 255`, donc un seuil sur le canal maximum les
+     * prenait **pour du fond** et trouait le dessin. Le seuil porte sur le
+     * canal **minimum** : un blanc a ses trois canaux clairs, un magenta non.
+     *
+     * La coupe tombe à **286 px** du centre, relevée par couverture d'anneau :
+     * c'est le dernier rayon encore plein à 98,5 %, et au-delà la couverture
+     * s'effondre (0,93 à 288 px, 0,28 à 300). Tout ce qui est dehors — 15,7 %
+     * du dessin — est devenu l'**arme**, voir `weapon`.
+     *
+     * La maquette est un JPEG, donc ses aplats sont bruités : 43 000 couleurs
+     * distinctes pour un dessin qui en montre une cinquantaine. Le PNG est donc
+     * réduit de moitié (moyenne d'aire, qui efface le bruit) puis quantifié à
+     * 48 teintes — le dessin y gagne, et le fichier passe de 489 à 69 Ko.
+     */
+    sprite: 'cometCore',
+    /**
+     * **Pas de `spriteScale`, et c'est une mesure.** La clé existe (défaut 1)
+     * pour corriger un dessin qui déborde de son disque plein. Ici le PNG est
+     * coupé **à** ce disque : la correction vaudrait 1,007, soit du bruit de
+     * bord JPEG. Une clé qui recopie son défaut est une occasion de divergence
+     * silencieuse, pas une intention.
+     */
+    /**
+     * **Opacité du voile d'encaissement.** Sur un aplat le flash *remplace* la
+     * couleur ; sur un dessin, le remplacer l'effacerait — on ne verrait qu'une
+     * pastille unie à chaque coup. 0,55 : le coup se voit, le tourbillon reste
+     * lisible dessous.
+     */
+    spriteFlash: 0.55,
+    /**
+     * **Plus peinte, mais toujours lue** : la carte de sélection en cerne sa
+     * vignette et `Match.damage` en tire la couleur des gerbes. C'est le violet
+     * de corps de la maquette (bande médiane de luminance), donc ces deux
+     * usages restent d'accord avec ce qu'on voit.
+     */
+    body: '#540f8b',
+    /** Elle **s'embrase** au lieu de blanchir, comme le Soleil : le corps
+     *  touché passe au rose clair de ses propres bras. Sur un dessin aussi
+     *  sombre, c'est le contraste le plus fort dont elle dispose — un blanc pur
+     *  serait la seule couleur du personnage à ne pas venir du dessin. */
+    bodyHit: '#ee82ec',
+    /** **Plus tracé sur le corps** — un cercle net autour d'un tourbillon se
+     *  lirait comme un carcan, et le sprite porte son propre bord. La clé reste
+     *  lue par la carte de sélection, ce n'est donc pas une clé morte
+     *  (invariant 9). C'est l'encre du dessin. */
+    outline: '#04010e',
+    /**
+     * **Une seule encre claire, et c'est mesuré.** Le corps est un dessin, donc
+     * la question du contour (`hpStroke`) se pose comme pour le Soleil — mais
+     * elle se tranche dans l'autre sens : sous l'empreinte des digits, **82 %
+     * des pixels sont sombres et 6 % clairs**, parce que le vide central du
+     * tourbillon tombe exactement là où le nombre s'écrit. Le Soleil était à
+     * 53 % clairs / 40 % sombres, et aucun aplat n'y tenait ; ici une encre
+     * claire suffit, et un contour n'ajouterait qu'un pâté.
+     *
+     * À remesurer si la maquette change — c'est le genre de valeur qui devient
+     * fausse sans rien dire.
+     */
+    hpColor: '#fbe6fb',
     /**
      * **Halo visible quand le Coup de fouet est prêt.** Contrairement au
      * Mannequin et aux deux boss, elle n'a aucune raison d'en porter un en
-     * permanence : son corps est saturé, il se détache tout seul. Le halo sert
-     * donc à ce qu'il sert partout ailleurs — **annoncer qu'un pouvoir est
-     * chargé**.
+     * permanence : son corps est sombre et saturé, il se détache tout seul sur
+     * l'arène blanche. Le halo sert donc à ce qu'il sert partout ailleurs —
+     * **annoncer qu'un pouvoir est chargé**.
      */
-    aura: { color: 'rgba(255,138,208,0.38)', radius: 1.3, pulse: 1.2, showWhen: 'ability-ready' },
+    aura: { color: 'rgba(203,47,173,0.38)', radius: 1.3, pulse: 1.2, showWhen: 'ability-ready' },
     flair: {
       /**
        * **Le fuseau, c'est sa queue** — et c'est pour elle que le mécanisme
        * existait déjà : `flair.js` suit les positions passées du **corps**, pas
-       * d'une pointe d'arme. Un combattant sans arme ne peut porter que
-       * celui-là ; un `ribbon` désignerait le centre de sa bille et se lirait
-       * comme une tache.
+       * d'une pointe d'arme. Un combattant sans arme au sens du moteur ne peut
+       * porter que celui-là ; un `ribbon` désignerait le centre de sa bille et
+       * se lirait comme une tache.
        *
        * Large (34, soit son diamètre) et franchement opaque : à 700 px/s, une
        * traînée fine ne se voit pas — elle est étalée sur toute la largeur de
-       * l'écran et n'a qu'une image pour exister.
+       * l'écran et n'a qu'une image pour exister. **Le magenta des bras**
+       * plutôt que le rose clair : sur l'arène blanche, c'est la teinte saturée
+       * qui porte, pas la plus claire.
        */
-      smear: { color: '#ff8ad0', width: 34, alpha: 0.42 },
+      smear: { color: '#cb2fad', width: 34, alpha: 0.42 },
       /**
        * **Images fantômes pendant la Rentrée seulement** : le module allume
        * `f.ghosting` le temps de l'ultime et rien d'autre ne l'allume. C'est le
        * compteur générique de l'invariant 7 — le rendu le lit, il ne sait pas
        * pourquoi.
        */
-      ghost: { color: '#ff8ad0', every: 0.035, alpha: 0.4 },
+      ghost: { color: '#cb2fad', every: 0.035, alpha: 0.4 },
       /** Poussière qui **retombe** derrière elle : des débris, pas de la
-       *  chaleur — l'inverse des braises montantes du Soleil. */
-      motes: { rate: 16, size: 6, drift: 30, rise: 34, colors: ['#fff0fa', '#ff8ad0', '#d63b8f'] },
-      impact: ['#fff0fa', '#ffffff', '#d63b8f'],
+       *  chaleur — l'inverse des braises montantes du Soleil. Ses trois teintes
+       *  sont celles du dessin : ce qui s'échappe d'elle est fait de la même
+       *  matière qu'elle. */
+      motes: { rate: 16, size: 6, drift: 30, rise: 34, colors: ['#ee82ec', '#cb2fad', '#540f8b'] },
+      impact: ['#ee82ec', '#ffffff', '#540f8b'],
       shape: 'spark',
-      castFlash: 'rgba(255,138,208,0.5)',
+      castFlash: 'rgba(203,47,173,0.5)',
     },
     /** Sillage court et dense : il double le fuseau de près, là où celui-ci
-     *  porte loin. */
-    trail: { color: 'rgba(255,138,208,0.3)', every: 0.02, life: 0.3 },
-    accent: '#ff8ad0',
+     *  porte loin. Même magenta, plus transparent. */
+    trail: { color: 'rgba(203,47,173,0.3)', every: 0.02, life: 0.3 },
+    accent: '#ee82ec',
   },
 
   /**
@@ -197,32 +274,88 @@ export const COMET = fiche({
   movement: { speed: 700, turnRate: 2.8, seek: 0.62 },
 
   /**
-   * **Aucune arme — la géométrie vide du Mannequin, et pour une raison
-   * opposée.**
+   * **Une arme qui se voit et qui ne touche pas — demandé** (« tout ce qu'il y
+   * a autour devient l'arme »).
    *
-   * Lui ne doit pas pouvoir blesser ; elle **blesse beaucoup**, mais jamais par
-   * ce chemin-là. `weaponHit` compare la distance de la cible au segment
-   * tranchant : avec `from`/`to`/`radius` à zéro, ce segment se réduit au pivot
-   * et la condition devient « le centre adverse est à moins de zéro du sien » —
-   * or `resolveBodies` maintient les corps séparés. La condition est donc
-   * **structurellement impossible**, pas seulement inoffensive, et c'est plus
-   * sûr que des dégâts à zéro (piège documenté sur la couronne du Soleil :
-   * `melee.damage: 0` laisse tourner le recul propre et le décollement des
-   * corps, donc la géométrie d'une arme muette reste du gameplay).
+   * C'est la **géométrie vide du Mannequin** avec un dessin par-dessus, et les
+   * deux moitiés de cette phrase comptent autant l'une que l'autre :
    *
-   * Le bloc reste obligatoire : le moteur et la carte de sélection le lisent
-   * sans le tester.
+   *  • `hitbox` reste **`from`/`to`/`radius` à zéro**. `bladeSegment()` écrase
+   *    alors le segment tranchant sur le pivot quelle que soit la portée, et la
+   *    condition de `weaponHit` devient « le centre adverse est à moins de zéro
+   *    du sien » — or `resolveBodies` maintient les corps séparés d'au moins la
+   *    somme des rayons. La condition est **structurellement impossible**, pas
+   *    seulement inoffensive, donc `resolveMelee` ne tourne toujours **jamais**
+   *    pour elle. Ses dégâts continuent de passer par son seul module ;
+   *  • `reach`, `spin` et `handle.length` ne servent donc plus **qu'au
+   *    dessin**. C'est exactement le cas du Shinobi, dont la rotation d'arme a
+   *    été poussée deux fois sans qu'un vainqueur bouge : depuis que sa hitbox
+   *    est un disque centré, `weaponAngle` ne décide plus d'aucune collision.
+   *
+   * **Ce n'est pas le cas du Soleil, et la différence est à connaître.** Sa
+   * couronne ne blesse pas (`melee.damage: 0`) mais elle a une **vraie hitbox**
+   * : `resolveMelee` pose son verrou, applique son recul propre et décolle les
+   * deux corps *hors* de `Match.damage` — d'où le piège documenté, « une arme à
+   * zéro dégât n'est pas une arme inerte », et une matrice qui bouge dès qu'on
+   * touche à sa portée. Ici, rien de tout ça ne peut arriver : il n'y a aucune
+   * touche possible, donc aucun effet de bord. **Preuve exigée et fournie : la
+   * matrice est identique au caractère près.**
    */
   weapon: {
-    name: 'Aucune',
-    nameRef: 'None',
-    reach: 0,
-    spin: 0,
+    /** Ce que le dessin montre : les éclats et les éclairs qui tournent autour
+     *  d'elle. Nommé, parce que la carte de sélection affiche toujours une ligne
+     *  « Arme » — et « aucune » mentirait maintenant sur ce qu'on voit. */
+    name: 'Ceinture de débris',
+    nameRef: 'Debris Belt',
+    /**
+     * **48,03 px — et c'est de la géométrie de dessin, pas de collision.**
+     *
+     * Déduite de la maquette comme partout : l'entourage s'étend jusqu'à 404 px
+     * du centre là où la sphère en fait 286, soit **1,413 × le rayon du corps**.
+     * À 34 de rayon, cela fait 48,03. Les débris dépassent donc de 14 px tout
+     * autour de la bille — ce que montre le dessin, ni plus ni moins.
+     *
+     * L'invariant du dépôt tient au centième, comme pour le Shinobi :
+     * `handle.length + largeur dessinée = −48,03 + 96,06 = 48,03 = reach`.
+     */
+    reach: 48.028,
+    /**
+     * **SPIN × 0,25**, soit 1,44 rad/s — une rotation lente, la plus lente du
+     * roster devant le Golem (0,45). Des débris en orbite ne fouettent pas
+     * l'air : ils dérivent. **Purement visuel** (voir plus haut), donc calé à
+     * l'œil et pas au banc — c'est le seul réglage de cette fiche qui ait ce
+     * droit.
+     */
+    spin: SPIN * 0.25,
     spinDir: 1,
-    handle: { length: 0, width: 0, color: '#d63b8f', dark: '#3d0b2a', outline: '#3d0b2a', gem: null },
-    /** Pas de sprite : `drawWeapon` retombe sur son garde, `ui/select.js` sur
-     *  sa chaîne de repli, qui prend l'icône. */
-    head: { sprite: null, scale: 1 },
+    /**
+     * **Aucun manche, et `length` négatif** : `width: 0` demande au moteur de ne
+     * rien tracer, et la longueur ne sert plus qu'à reculer le sprite d'une
+     * demi-largeur pour le **centrer sur la bille** — même mécanique que le
+     * shuriken du Shinobi. Sans ça, la ceinture pendrait à côté du corps au lieu
+     * de l'entourer.
+     */
+    handle: { length: -48.028, width: 0, color: '#540f8b', dark: '#290651', outline: '#04010e', gem: null },
+    /**
+     * **L'entourage du dessin, découpé de la sphère** :
+     * `assets/sprites/comet-ring.png`, tout ce qui est au-delà de 286 px du
+     * centre. Sa base est prise **12 px en deçà** de la sphère pour qu'elle
+     * chevauche la bille : sans ce recouvrement, une couture circulaire se
+     * verrait tourner (la leçon de la couronne du Soleil, prise à 168 px pour
+     * une sphère de 178).
+     *
+     * **L'échelle ne se lit pas sur la carte texte**, et c'est le piège déjà
+     * payé trois fois (lance de l'Hoplite, arme du Golem, couronne du Soleil) :
+     * `drawSpriteLeft` dimensionne par la **hauteur** (`map.h × scale`, donc
+     * 17) puis applique le rapport d'aspect du PNG — carré ici, donc 1. La
+     * largeur dessinée vaut `17 × scale`, d'où `scale = 96,056 / 17 = 5,650348`.
+     */
+    head: { sprite: 'cometRing', scale: 5.650348 },
+    /**
+     * **Zéro partout, et c'est ce qui garde le personnage intact.** Voir le
+     * commentaire de bloc : c'est cette ligne, et elle seule, qui fait que le
+     * dessin ajouté ci-dessus ne peut toucher personne.
+     */
     hitbox: { from: 0, to: 0, radius: 0 },
     melee: { damage: 0, cooldown: 1, knockback: 0, selfRecoil: 0 },
   },
@@ -377,8 +510,8 @@ export const COMET = fiche({
     nameRef: 'REENTRY',
     barLabel: 'REENTRY',
     barLabelFr: 'RENTRÉE',
-    barFill: '#d63b8f',
-    barText: '#fff0fa',
+    barFill: '#cb2fad',
+    barText: '#fbe6fb',
     /** 12 s : entre le Soleil (7) et le Golem. Calé — il doit tomber deux à
      *  trois fois dans un duel, pas ponctuer chaque échange. */
     chargeRate: 100 / 12,
@@ -418,6 +551,6 @@ export const COMET = fiche({
       (f) => `Élan : ×${(f.state.rush ?? 1).toFixed(2)}`,
       (f) => `Choc : ${Math.round(f.el.kinetic.damage * (f.state.rush ?? 1))}`,
     ],
-    color: '#ff8ad0',
+    color: '#ee82ec',
   },
 });

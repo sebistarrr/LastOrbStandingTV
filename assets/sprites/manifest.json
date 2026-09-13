@@ -10,6 +10,8 @@
     "lunarBall": "lunar-ball.png",
     "lunarRock1": "lunar-rock-1.png",
     "lunarRock2": "lunar-rock-2.png",
-    "lunarRock3": "lunar-rock-3.png"
+    "lunarRock3": "lunar-rock-3.png",
+    "cometCore": "comet-core.png",
+    "cometRing": "comet-ring.png"
   }
 }
