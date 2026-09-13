@@ -137,7 +137,7 @@ export const UI = {
     ariaRoster: 'Available fighters',
     ariaResult: 'Duel result',
     noscript: 'This duel needs JavaScript.',
-    docTitle: 'Elemental Duel — elemental arena',
+    docTitle: 'LAST ORB STANDING — ten fighters, one arena',
   },
 
   /** Français : la traduction, atteignable par `?lang=fr`. */
@@ -212,7 +212,7 @@ export const UI = {
     ariaRoster: 'Combattants disponibles',
     ariaResult: 'Résultat du duel',
     noscript: 'Ce duel nécessite JavaScript.',
-    docTitle: 'Elemental Duel — arène élémentaire',
+    docTitle: 'LAST ORB STANDING — dix combattants, une arène',
   },
 };
 

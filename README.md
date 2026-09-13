@@ -1,4 +1,4 @@
-# Elemental Duel — dix combattants, quatre formats
+# LAST ORB STANDING — dix combattants, quatre formats
 
 Duels **à deux, en 2 contre 2, en 1 contre X ou en bataille royale** (jusqu'à
 huit, chacun pour soi), avec cinq combattants repris de la chaîne
