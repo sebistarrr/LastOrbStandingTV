@@ -36,7 +36,7 @@ import { GOLEM_ROCK, GOLEM_SHARD, ICON_GOLEM } from './pixelart/golem.js';
 import { ICON_DUMMY } from './pixelart/dummy.js';
 import { SUN_RAY, SUN_CORE, SUN_BEAM, ICON_SUN } from './pixelart/sun.js';
 import { LUNAR_BALL, LUNAR_ROCK1, LUNAR_ROCK2, LUNAR_ROCK3, ICON_LUNAR } from './pixelart/lunar.js';
-import { COMET_CORE, COMET_RING, ICON_COMET } from './pixelart/comet.js';
+import { COMET_CORE, COMET_RING, COMET_SHARD, ICON_COMET } from './pixelart/comet.js';
 
 export const PIXEL_MAPS = deepFreeze({
   // Hors-la-loi
@@ -85,5 +85,8 @@ export const PIXEL_MAPS = deepFreeze({
   // autour et qui lui sert d'arme. Les deux sont servis par de vrais PNG.
   cometCore: COMET_CORE,
   cometRing: COMET_RING,
+  // …et l'éclat qu'elle en détache (Fragmentation), pris dans une composante
+  // détachée de la même maquette.
+  cometShard: COMET_SHARD,
   iconComet: ICON_COMET,
 });

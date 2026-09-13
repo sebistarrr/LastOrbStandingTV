@@ -42,19 +42,19 @@ les recale en une commande.
 | ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2741 |
 | 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3075 |
 | ☄ COMÈTE — `comet` (rien qui frappe : son corps est l'arme) | 3276 |
-| La norme passe à 200 PV, le Golem à 400 (historique) | 3489 |
-| Neon Shadow supprimé, la norme redescend à 100 PV | 3544 |
-| Les dégâts de tous les combattants, divisés par deux | 3612 |
-| Rééquilibrage confiné au Golem et au Ronin | 3722 |
-| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3809 |
-| Le son de chacun | 3859 |
-| **Équilibrage du roster** — c'est ici que vivent les chiffres | 3977 |
-| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 3987 |
-| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4017 |
-| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4048 |
-| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4090 |
-| Règles communes (moteur) | 4184 |
-| Comment les mesures ont été prises | 4208 |
+| La norme passe à 200 PV, le Golem à 400 (historique) | 3573 |
+| Neon Shadow supprimé, la norme redescend à 100 PV | 3628 |
+| Les dégâts de tous les combattants, divisés par deux | 3696 |
+| Rééquilibrage confiné au Golem et au Ronin | 3806 |
+| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3893 |
+| Le son de chacun | 3943 |
+| **Équilibrage du roster** — c'est ici que vivent les chiffres | 4061 |
+| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 4071 |
+| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4101 |
+| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4132 |
+| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4174 |
+| Règles communes (moteur) | 4268 |
+| Comment les mesures ont été prises | 4292 |
 
 ## Comment lire une valeur
 
@@ -3318,6 +3318,11 @@ ce qui la rend difficile à équilibrer.
 | ⚠ Ce que ça n'a **pas** coûté | **la matrice est identique au caractère près**, et c'est la différence avec le Soleil : sa couronne ne blesse pas non plus mais elle a une **vraie hitbox**, donc `resolveMelee` y pose un verrou, applique un recul propre et décolle les corps *hors* de `Match.damage` — sa géométrie reste du gameplay. Ici il n'y a aucune touche possible, donc `reach` et `spin` ne servent qu'au dessin | mesuré |
 | **Choc cinétique** | sa mécanique de base et sa seule source de dégâts : au contact, `kinetic.damage × f.state.rush`, verrou de **1,15 s**, recul de 240 porté **dans son sens de marche**, et un contrecoup de 130 sur elle-même | calé |
 | Marge de contact | **8 px explicites**, et c'est un piège déjà payé : un test `distance <= r1 + r2` est **toujours faux et ne crie pas**, `resolveBodies` séparant les corps à chaque pas. La Marée de la première LUNE a infligé **0 PV sur 24 duels** pour cette exacte raison | déduit |
+| **Rebond** | **demandé.** Chaque mur touché ajoute **+0,12** d'élan, plafonné à **1,7**. Ni horloge ni jauge : une règle permanente de plus sur la même ressource, qui transforme son temps mort — traverser l'arène — en accumulation. `Fighter.wall` était déjà posé à chaque pas pour la seule mise en scène ; le lire ne change rien pour les neuf autres | calé |
+| L'étage des plafonds | chaque source d'élan a le sien, et ils s'étagent : rampe **1,5** < murs **1,7** < Coup de fouet **1,9** < Rentrée **2,3**. Un mur va donc plus loin que le temps seul, jamais aussi loin qu'un pouvoir | déduit |
+| **Fragmentation** | **demandé.** Troisième créneau (`special`), patron des Éclats de roche du Golem : horloge de **10 s**, **huit éclats en anneau complet**, aucune visée, première salve à 3 s. Mais elle **coûte 0,2 d'élan** — le seul pouvoir du dépôt qui se paie dans la ressource de son porteur : elle échange vitesse et puissance de choc contre de la portée, et le HUD montre le nombre reculer au moment où les éclats partent | calé |
+| L'éclat | `projectiles.shard` — **un morceau de sa propre maquette** (`comet-shard-1.png`, une des composantes détachées du tourbillon). Lent (**300 px/s**, le plus lent du dépôt) : ce sont des débris qu'elle **sème**, pas des projectiles qu'elle tire. 3 de dégât, ricoche une fois | calé |
+| Une seule silhouette | trois avaient été découpées puis **retirées** : `Projectiles.draw` tourne chaque projectile de son cap, donc les huit éclats d'un anneau sont déjà orientés à 45° les uns des autres. C'est l'inverse de LUNE, dont les vingt-cinq météores tombent tous dans le même sens — là, la silhouette est le seul levier de variété | mesuré |
 | **L'élan** | `f.state.rush`, **un seul nombre** qui est à la fois facteur de vitesse et facteur de dégâts : il monte de 1 à **1,5** en 6 s tant qu'elle ne touche personne, et **chaque choc lui en retire 0,3**. Elle est donc la plus dangereuse quand elle vient de **rater** | calé |
 | Le rapport qui fait le personnage | la rampe rend 0,083/s, donc les 0,3 d'un choc se regagnent en **3,6 s**, soit trois verrous sur quatre. C'est ce qui l'empêche de rester au plafond en frappant — changer l'un des trois sans recalculer les autres casse la boucle **sans rien dire** | déduit |
 | **Pouvoir** | *Coup de fouet* — toutes les 6 s, l'élan **saute à 1,9**, au-dessus de son propre plafond. **Aucune durée** : ce qu'il donne, elle le garde jusqu'au prochain choc. `Math.max` et non une affectation, sinon il **redescendrait** l'élan tenu de la Rentrée | calé |
@@ -3416,31 +3421,110 @@ le dégât rendait ses coups illisibles (3 PV affichés sur un corps à 100), al
 qu'espacer les chocs garde des coups qui **se voient** et laisse l'adversaire
 respirer entre deux passages.
 
-### Le banc final — 8 graines × les deux camps
+### Fragmentation et Rebond — un pouvoir, une règle, et ce qu'ils ont coûté
 
-`kinetic.damage: 3`, `kinetic.cooldown: 1.15` :
+**Demandé** : les deux idées 2 et 3 d'une liste de trois. Elles ne vont pas au
+même endroit, et c'est la première chose à comprendre :
+
+- **Fragmentation est un pouvoir** — troisième créneau (`special`), avec sa
+  jauge au HUD, son horloge et son bruitage ;
+- **Rebond n'en est pas un** — ni horloge, ni jauge, ni visée. C'est une règle
+  permanente de plus sur l'élan, au même titre que la rampe : elle vit dans le
+  bloc `rush`, pas dans un créneau.
+
+#### Ce qu'ils ont fait au personnage, et ce n'est pas ce qu'on croit
+
+Posés sur ses valeurs d'alors (choc 3, verrou 1,15 s), les deux ensemble l'ont
+portée de **51 % à 79 %** de victoires contre les six. Il fallait donc reprendre
+trente points — et **le banc a désigné un levier auquel je ne m'attendais pas**.
+
+| ce qu'on rogne | victoires contre les six |
+| --- | --- |
+| rien (les deux pouvoirs posés) | **79 %** |
+| l'éclat à 1 **et** le rebond à 0,07 / 1,6 | 70 % |
+| le choc à 2,5 | 58 % |
+| le choc à 2,5 **et** le verrou à 1,9 s | **46 %** |
+
+**Rogner les nouveaux outils ne rend presque rien** (neuf points pour les deux
+amputés), rogner son contact rend tout. C'est que la Fragmentation et le Rebond
+n'ajoutent pas du **dégât** : ils ajoutent de l'**accès**. Ils ne la rendent pas
+plus forte au contact, ils lui donnent de quoi peser pendant qu'elle traverse
+l'arène — et c'est son choc, inchangé, qui encaisse le bénéfice.
+
+C'est pourquoi le rééquilibrage a porté sur le **verrou de touche** (1,15 →
+1,9 s) plutôt que sur eux : elle frappe désormais moins d'une fois toutes les
+deux secondes, ce qui en fait un personnage de **passage** et non de corps à
+corps continu — exactement ce que la Fragmentation raconte déjà.
+
+#### Le piège : un total stable cache une redistribution
+
+À 46 %, elle est revenue là où elle était (51 %). **Sa ligne, elle, n'est plus
+du tout la même** — 20 duels par paire :
+
+| adversaire | avant les deux | après |
+| --- | --- | --- |
+| Hoplite | 50 % | **85 %** |
+| Shinobi | 56 % | 50 % |
+| Ronin | 88 % | 65 % |
+| Druide | 88 % | 60 % |
+| **Pistolero** | 19 % | **15 %** |
+| Golem | 6 % | 0 % |
+
+**Le Pistolero n'a pas bougé, et c'était pourtant la cible.** Les deux pouvoirs
+ont été choisis pour réparer le duel contre qui recule ; ils l'ont réparé contre
+l'**Hoplite** (430 px/s) et pas du tout contre le Pistolero (655 px/s, le tireur
+le plus rapide du roster). La raison est dans la fiche de l'éclat : **300 px/s**,
+le projectile le plus lent du dépôt. Un semis de débris rattrape un chargeur, pas
+un pistolero — et c'est cohérent avec ce qu'il est censé être.
+
+À garder pour la prochaine fois : *une ligne réparée n'est pas la ligne qu'on
+visait*, et seul le relevé adversaire par adversaire le dit — le total, lui,
+était revenu à sa place.
+
+#### Trois écueils évités en chemin
+
+- **Un éclat trop faible la rendait plus faible qu'avant sur sa propre
+  faiblesse.** À 2 de dégât par éclat, elle tombait à 1 victoire sur 20 contre
+  le Pistolero, là où elle en prenait 3 sur 16 **sans aucun pouvoir** : le
+  nouveau créneau ne payait plus ce que son contact avait perdu. À 3, il le
+  paie. Un pouvoir ajouté puis sous-calé peut donc **coûter** des duels.
+- **Le balayage est devenu non monotone à 10 duels par paire** (verrou 1,4 s →
+  60 %, 1,55 s → 67 %, 1,4 s + salve longue → 55 %). C'était du bruit : toutes
+  les décisions finales sont prises à **20 duels par paire**.
+- **Trois silhouettes d'éclat découpées puis retirées** : `Projectiles.draw`
+  tourne déjà chaque projectile de son cap, donc un anneau de huit est varié
+  sans elles — et trois entrées de `projectiles` auraient encombré la carte de
+  sélection pour rien.
+
+### Le banc final — 10 graines × les deux camps
+
+`kinetic.damage: 2.5`, `kinetic.cooldown: 1.9`, éclat 3, salve 10 s :
 
 | Adversaire | Victoires | Durée moyenne |
 | --- | --- | --- |
-| Ronin | **14/16** | 28,7 s |
-| Druide | **14/16** | 31,4 s |
-| Shinobi | 9/16 | 32,6 s |
-| Hoplite | 8/16 | 37,1 s |
-| Pistolero | 3/16 | 29,9 s |
-| Golem | **1/16** | 40,5 s |
-| **Total contre les six** | **49/96 — 51 %** | |
-| Mannequin | 16/16 | 29,1 s → **2,9 PV/s** |
-| Soleil | 0/16 | 40,0 s |
-| LUNE | 0/16 | 26,3 s |
+| Hoplite | **17/20** | 34,3 s |
+| Ronin | 13/20 | 29,3 s |
+| Druide | 12/20 | 33,4 s |
+| Shinobi | 10/20 | 33,5 s |
+| Pistolero | 3/20 | 30,6 s |
+| Golem | **0/20** | 40,1 s |
+| **Total contre les six** | **55/120 — 46 %** | |
+| Mannequin | 16/16 | 32,4 s → **3,1 PV/s** |
+| Soleil | 0/16 | 43,0 s |
+| LUNE | 0/16 | 35,4 s |
 
-**Sa ligne est structurellement dispersée, et c'est le personnage.** De 1/16 à
-14/16 selon l'adversaire, là où les six autres se tiennent dans une fourchette
+*(Le relevé d'avant la Fragmentation et le Rebond — 49/96, soit 51 % — est dans
+la section précédente, ligne par ligne : le total est revenu à sa place, la
+forme non.)*
+
+**Sa ligne est structurellement dispersée, et c'est le personnage.** De 0/20 à
+17/20 selon l'adversaire, là où les six autres se tiennent dans une fourchette
 bien plus serrée. La raison tient en une phrase : **elle doit venir au contact
 pour exister**. Contre un tireur qui recule (Pistolero), elle passe son duel à
 traverser l'arène ; contre un duelliste qui vient à elle (Ronin), elle ne rate
 rien.
 
-**Le Golem à 1/16 est le cas extrême**, et il est structurel plutôt que mal
+**Le Golem à 0/20 est le cas extrême**, et il est structurel plutôt que mal
 calé : son dégât ne s'adapte pas à la barre d'en face, or le Golem en a le
 double (200 PV) et punit la proximité de deux façons (onde sismique, éclats).
 Il lui faudrait environ **soixante-six chocs réussis** pour l'abattre. À ne pas
@@ -3992,16 +4076,16 @@ Sur les **27 duels hors miroir** de chacun (`tools/matrix-reference.txt`) :
 | --- | --- | --- |
 | **Lune** | 27/27 | boss — hors barème |
 | **Soleil** | 23/27 | boss — hors barème |
-| Pistolero | 15/27 | |
-| Druide | 14/27 | |
-| Hoplite | 13/27 | |
+| Pistolero | 16/27 | |
+| Druide | 15/27 | |
 | Golem | 13/27 | |
 | Shinobi | 13/27 | |
+| Hoplite | 12/27 | |
 | **Comète** | 12/27 | |
-| Ronin | 5/27 | |
+| Ronin | 4/27 | |
 | Mannequin | 0/27 | c'est sa définition |
 
-Écart **5 à 15** entre les sept qui se jugent entre eux, connu et non corrigé.
+Écart **4 à 16** entre les sept qui se jugent entre eux, connu et non corrigé.
 Les deux boss et le Mannequin sont hors barème : leur ligne est une
 **spécification**, pas un défaut.
 
@@ -4058,7 +4142,7 @@ réelle** de l'adversaire. 100 PV ÷ la durée moyenne des trois graines :
 | Shinobi | 3,1 | 34,9 · 28,8 · 32,8 |
 | Hoplite | 3,0 | 31,0 · 37,6 · 31,7 |
 | Soleil | 3,0 | 23,7 · 33,2 · 43,8 |
-| **Comète** | 2,9 | 29,9 · 35,7 · 39,2 |
+| **Comète** | 3,4 | 30,6 · 29,6 · 26,9 |
 | Druide | 2,8 | 35,8 · 37,7 · 35,3 |
 | Pistolero | 2,5 | 37,3 · 39,2 · 43,3 |
 | Golem | 1,8 | 62,0 · 46,5 · 55,0 |
@@ -4070,9 +4154,9 @@ Trois choses à en lire, et une seule est une conclusion d'équilibrage :
   celui-ci, exceptionnellement, le dit — c'est aussi pourquoi elle est passée
   au-dessus du Soleil. Ses trois durées sont **identiques au dixième** : sans
   arme, elle ne dépend pas de la trajectoire, seulement de son horloge.
-- **La Comète est au milieu du banc et 12e sur 27 à la matrice**, ce qui est la
-  bonne place — mais son écart-type est le plus élevé du roster : elle gagne 14
-  duels sur 16 contre le Ronin et 1 sur 16 contre le Golem. Un banc de DPS ne
+- **La Comète est au milieu du banc et 12 sur 27 à la matrice**, ce qui est la
+  bonne place — mais son écart-type est le plus élevé du roster : elle gagne 17
+  duels sur 20 contre l'Hoplite et 0 sur 20 contre le Golem. Un banc de DPS ne
   peut pas dire ça, et c'est le rappel utile : **il mesure une production, pas
   un appariement**. Sa production, elle, dépend entièrement de qui est en face,
   puisqu'il faut le toucher.

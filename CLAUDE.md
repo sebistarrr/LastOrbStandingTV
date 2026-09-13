@@ -99,7 +99,7 @@ sans le savoir. Les valeurs, les relevés et les demandes : `docs/FICHES.md`.
 | `sun` **SOLEIL** / SUN | **boss.** Deux fois la norme en rayon, `maxHp` ×5, le plus lent de très loin — c'est toute sa contrepartie. **Huit rayons** en couronne (`weapon.spokes: 8`, aucun angle mort) qui **ne blessent pas** (`melee.damage: 0`, demandé) : sa silhouette et son bruit, plus son arme. Tout passe donc par son **ultime** |
 | `lunar` **LUNE** / MOON | **boss, et le seul combattant sans arme qui gagne** — `reach: 0`, `hitbox.radius: 0`, pas de `head.sprite` (le cas du Mannequin) : **100 % de sa production tombe du ciel**, corps de rayon fixe, `maxHp` ×5. Pouvoir et ultime sont la même averse, à deux densités |
 | `dummy` **MANNEQUIN** / DUMMY | **cible d'entraînement, pas un adversaire** : aucune arme, aucun dégât, aucun pouvoir, blanc. Il existe pour qu'on **regarde l'autre** — sa ligne de HUD affiche les dégâts **subis**, donc la production réelle de l'adversaire |
-| `comet` **COMÈTE** / COMET | **rien qui frappe, et c'est son corps qui blesse** — `hitbox` à 0 sur ses trois clés : `resolveMelee` ne tourne jamais pour elle, son module appelle `game.damage` lui-même au contact. Sa **ceinture de débris est un dessin** (sprite + portée, hitbox nulle), comme son corps, tous deux découpés de la même maquette. La plus rapide et la plus petite du roster. Son dégât suit un **facteur continu** (`f.state.rush`) qui monte tout seul et que **chaque choc dépense** — sa vitesse est sa puissance *et* sa ressource |
+| `comet` **COMÈTE** / COMET | **rien qui frappe, et c'est son corps qui blesse** — `hitbox` à 0 sur ses trois clés : `resolveMelee` ne tourne jamais pour elle, son module appelle `game.damage` lui-même au contact. Sa **ceinture de débris est un dessin** (sprite + portée, hitbox nulle), comme son corps, tous deux découpés de la même maquette. La plus rapide et la plus petite du roster. Son dégât suit un **facteur continu** (`f.state.rush`) qui monte tout seul, que **les murs alimentent** (Rebond) et que **chaque choc dépense** — y compris sa **Fragmentation**, seul pouvoir du dépôt qui se paie dans la ressource de son porteur |
 
 **Le Clone d'ombre**, parce qu'il touche le moteur : des doubles de 15 PV qui
 sont de **vrais combattants du tableau**, dans le camp du Shinobi, avec **tous
@@ -127,9 +127,9 @@ survivant**. Un commentaire qui cite un élément disparu parle d'une
 ### L'équilibrage en cinq lignes
 
 **Relevé courant** (`tools/matrix-reference.txt`), 27 duels hors miroir chacun :
-**Lune 27**, **Soleil 23**, Pistolero 15, Druide 14, Hoplite 13, Golem 13,
-Shinobi 13, Comète 12, Ronin 5, Mannequin 0 (c'est sa définition). Écart **5 à
-15** entre les sept du milieu, connu et non corrigé.
+**Lune 27**, **Soleil 23**, Pistolero 16, Druide 15, Golem 13, Shinobi 13,
+Hoplite 12, Comète 12, Ronin 4, Mannequin 0 (c'est sa définition). Écart **4 à
+16** entre les sept du milieu, connu et non corrigé.
 
 - **Le sommet n'est plus partagé, et c'est assumé : LUNE est au-dessus** (50/50
   contre le Soleil, 140/140 contre les sept autres du banc de l'époque, et
@@ -156,6 +156,12 @@ Shinobi 13, Comète 12, Ronin 5, Mannequin 0 (c'est sa définition). Écart **5 
   continue** (`f.state.rush`, de 1 à 2,3) et non une pile : ses deux leviers
   sont donc **raides**, un point de dégât couvrant presque toute la bande
   (4 → 88 %, 3 → 51 %, 2 → 2 % contre les six).
+- **Un pouvoir peut ajouter de l'*accès* et non du dégât**, et le banc le dit :
+  la Fragmentation et le Rebond l'ont portée de 51 à 79 %, mais les rogner ne
+  rendait que 9 points — c'est son **contact** qu'il a fallu reprendre. Et le
+  total revenu à sa place cachait une **redistribution complète** de sa ligne
+  (Hoplite 50 → 85 %, Druide 88 → 60 %, Pistolero inchangé à 15 %) : la ligne
+  réparée n'était pas celle qu'on visait.
 
 Les chiffres, les balayages et l'histoire de chaque rééquilibrage — division des
 dégâts par deux, Golem/Ronin, nerf Shinobi/Pistolero, refontes de LUNE, banc de

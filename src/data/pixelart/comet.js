@@ -94,6 +94,38 @@ export const COMET_RING = deepFreeze({
 });
 
 /**
+ * **L'éclat de la Fragmentation** — repli de `comet-shard-1.png`, et c'est **un
+ * morceau de la maquette elle-même** : une des composantes détachées qui
+ * flottaient autour du tourbillon. Choisie parmi les 37 par **remplissage de
+ * boîte** (0,71, le plus haut) — c'est un caillou, pas un éclair, et un éclair
+ * filiforme lancé à travers l'arène ne se lit pas.
+ *
+ * **Une seule silhouette, et c'est une mesure de rendu, pas une économie** :
+ * `Projectiles.draw` tourne chaque projectile de son propre cap
+ * (`ctx.rotate(p.angle)`), donc les huit éclats d'un anneau complet sont déjà
+ * orientés à 45° les uns des autres. Trois silhouettes avaient été découpées
+ * puis **retirées** : elles n'ajoutaient rien que la rotation ne donne déjà, et
+ * trois entrées de `projectiles` auraient encombré la carte de sélection. C'est
+ * l'inverse du cas de LUNE, dont les vingt-cinq météores tombent **tous dans le
+ * même sens** — là, la silhouette est le seul levier de variété.
+ */
+export const COMET_SHARD = deepFreeze({
+  w: 6,
+  h: 8,
+  palette: PALETTE,
+  rows: [
+    '.sKs..',
+    'bsKKs.',
+    'bssKKs',
+    'bbssKs',
+    '.bssKs',
+    '.bbsss',
+    '..bbss',
+    '...bs.',
+  ],
+});
+
+/**
  * **Icône de sélection : le personnage entier, en petit.**
  *
  * Échantillonnée sur le **composite** bille + entourage, et non redessinée :

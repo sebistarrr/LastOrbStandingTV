@@ -63,6 +63,12 @@ export const cometAbilities = {
      *  Elle n'a pas d'arme, donc le moteur n'en pose aucun : sans ce compteur,
      *  un contact qui dure trois images ferait trois coups. */
     f.state.hitCd = 0;
+    /** Horloge de la Fragmentation, et la portée d'horloge que la jauge du
+     *  troisième créneau doit couvrir. `first` est plus court que `cooldown`,
+     *  donc les deux ne se confondent pas : sans `specSpan`, la première jauge
+     *  se remplirait à la mauvaise échelle. Même forme que le Golem. */
+    f.state.specCd = f.el.special.first;
+    f.state.specSpan = f.el.special.first;
   },
 
   update(f, dt, now, game) {
@@ -97,6 +103,34 @@ export const cometAbilities = {
       f.state.rush = Math.min(r.max, f.state.rush + ((r.max - 1) / r.ramp) * dt);
     }
     this.syncRush(f);
+
+    /**
+     * **Rebond : le mur lui rend de l'élan.**
+     *
+     * `f.wall` est posé par `Fighter.step()`, qui tourne **avant** ce module —
+     * on lit donc le rebond du pas courant. C'était jusqu'ici un marquage de
+     * pure mise en scène (le bruitage de rebond) ; le lire ne change rien pour
+     * les neuf autres combattants.
+     *
+     * Le plafond est **le sien** (`bounce.cap`, 1,7), au-dessus de la rampe
+     * (1,5) et en dessous du Coup de fouet (1,9) : un mur va plus loin que le
+     * temps seul, jamais aussi loin qu'un pouvoir. Et on compte **un gain par
+     * pas** : un rebond de coin pose `wall` deux fois dans la même image, ce
+     * qui reste un seul rebond à l'écran.
+     */
+    const bd = r.bounce;
+    if (f.wall && f.ult.active <= 0 && f.state.rush < bd.cap) {
+      f.state.rush = Math.min(bd.cap, f.state.rush + bd.gain);
+      this.syncRush(f);
+    }
+
+    /* ---------- Fragmentation : horloge fixe, anneau complet ------------- */
+    f.state.specCd -= dt;
+    if (f.state.specCd <= 0) {
+      f.state.specCd = el.special.cooldown;
+      f.state.specSpan = el.special.cooldown;
+      this.castShed(f, game);
+    }
 
     /* ---------- Coup de fouet : horloge fixe, aucune visée --------------- */
     f.ability.timer -= dt;
@@ -192,6 +226,36 @@ export const cometAbilities = {
     game.sfx.cast(f, 'ability');
     game.fx.ring(f.x, f.y, f.radius, a.ring.to, a.ring.time, a.ring.color, a.ring.width, false);
     f.state.rush = Math.max(f.state.rush, a.to);
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  Fragmentation — le troisième créneau                               */
+  /* ------------------------------------------------------------------ */
+
+  /**
+   * **Huit éclats en anneau complet, et ils lui coûtent son élan.**
+   *
+   * L'anneau part d'un **cap fixe** (`f.heading`) et non d'un tirage : la
+   * géométrie est entièrement déduite de l'état, comme tout ce module
+   * (invariant 2). Partir du cap plutôt que d'un angle absolu fait que la salve
+   * **suit son sens de marche** — les deux éclats de l'avant partent devant
+   * elle, ceux de l'arrière couvrent ce qu'elle vient de dépasser.
+   *
+   * `cost` est ce qui rattache le pouvoir au personnage : elle échange de la
+   * vitesse et de la puissance de choc contre de la portée. Le plancher reste 1
+   * — la Fragmentation ne peut pas la faire descendre *sous* son élan de
+   * départ, sinon un pouvoir qui tombe pendant qu'elle est déjà à sec la
+   * clouerait au sol.
+   */
+  castShed(f, game) {
+    const sp = f.el.special;
+    game.sfx.cast(f, 'special');
+    game.fx.ring(f.x, f.y, f.radius, f.radius + 90, 0.3, teinte(f.el.look.palette.body, 0.85), 6, false);
+    for (let i = 0; i < sp.count; i++) {
+      game.projectiles.spawn(f, sp.projectile, f.heading + (TAU * i) / sp.count, f.radius + 4);
+    }
+    f.state.rush = Math.max(1, f.state.rush - sp.cost);
+    this.syncRush(f);
   },
 
   /* ------------------------------------------------------------------ */
@@ -291,5 +355,13 @@ export const cometAbilities = {
   barValue(f) {
     if (f.ult.active > 0) return f.ult.active / f.el.ultimate.duration;
     return f.ult.charge / 100;
+  },
+
+  /** Seconde rangée de jauge : le remplissage de la Fragmentation. `specSpan`
+   *  et non `cooldown`, sinon la **première** salve — qui arrive plus tôt —
+   *  afficherait une jauge à la mauvaise échelle. */
+  specialBar(f) {
+    const span = f.state.specSpan || f.el.special.cooldown;
+    return { value: 1 - Math.max(0, Math.min(1, f.state.specCd / span)), active: false };
   },
 };

@@ -602,6 +602,25 @@ export const SOUNDS = deepFreeze({
     { wave: 'triangle', f0: 180, f1: 720, dur: 0.32, gain: 0.18, attack: 0.06 },
   ],
   /**
+   * **Ce qui se détache et part en morceaux** — la Fragmentation de la Comète.
+   *
+   * Trois temps, et c'est l'ordre qui raconte : le **craquement** de la ceinture
+   * qui cède (transitoire sec et haut, 50 ms), les **morceaux qui s'éparpillent**
+   * (une bande médium qui descend), et dessous un **corps** court — ce qui se
+   * détache a une masse.
+   *
+   * Ni `crunch` (la pierre du Golem qui *écrase*) ni `pebble` (un caillou jeté,
+   * sans queue) : ici rien ne frappe, quelque chose **lâche**. C'est aussi la
+   * raison pour laquelle les huit éclats partent muets : `MIX.repeatGap`
+   * fondrait huit `shot` identiques en un seul coup saturé, et la salve est
+   * déjà annoncée d'un bloc par cette recette.
+   */
+  shatter: [
+    { wave: 'noise', filter: 'highpass', cut0: 3800, cut1: 1600, q: 0.9, dur: 0.05, gain: 0.5, attack: 0.001 },
+    { wave: 'noise', filter: 'bandpass', cut0: 2200, cut1: 600, q: 1.1, dur: 0.3, gain: 0.34, attack: 0.01 },
+    { wave: 'triangle', f0: 260, f1: 90, dur: 0.14, gain: 0.26 },
+  ],
+  /**
    * **Le bang d'une rentrée atmosphérique** — l'ultime de la Comète.
    *
    * Un ultime doit dire *quoi* arrive (la leçon de `knell`). Ici ce n'est ni une

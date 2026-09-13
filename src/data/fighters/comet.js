@@ -227,7 +227,7 @@ export const COMET = fiche({
    */
   sound: {
     pitch: 1.15,
-    shot: null, // aucun projectile : elle n'atteint que ce qu'elle percute
+    shot: null, // les éclats de la Fragmentation partent muets, voir `special`
     /**
      * **Le son du choc cinétique**, et il faut le réclamer explicitement.
      *
@@ -249,7 +249,11 @@ export const COMET = fiche({
      * rotation : le banc ne sait pas encore le jouer, et c'est écrit ici pour
      * que personne ne recâble `swing` en croyant à un oubli.
      */
-    special: null, // pas de troisième créneau
+    /** La Fragmentation — voir la recette : ce qui se détache et part en
+     *  morceaux. Les huit éclats, eux, partent **muets** (`shot: null`) :
+     *  `MIX.repeatGap` fondrait huit tirs identiques en un seul coup saturé, et
+     *  la salve est déjà annoncée d'un bloc par ce créneau. */
+    special: 'shatter',
     ultimate: 'boom',
   },
 
@@ -379,16 +383,20 @@ export const COMET = fiche({
   kinetic: {
     /**
      * **Le dégât d'un choc à élan 1, et c'est son levier de puissance** — calé
-     * au banc, 5 à 8 graines × les deux camps contre les six.
+     * au banc, jusqu'à 20 duels par paire contre les six.
      *
-     * Le balayage est **monotone et raide** : 4 → 88 % de victoires, 3 → 51 %,
-     * 2,8 → 37 %, 2,5 → 32 %, **2 → 2 %**. Un point de dégât couvre donc presque
-     * toute la bande du roster, et c'est la conséquence directe de sa
-     * mécanique — un dégât multiplié par un facteur continu amplifie chaque
+     * Le balayage est **raide** : quand elle n'avait que le Coup de fouet,
+     * 4 → 88 % de victoires, 3 → 51 %, 2,8 → 37 %, **2 → 2 %**. Un point de
+     * dégât couvre presque toute la bande du roster — conséquence directe de sa
+     * mécanique, un dégât multiplié par un facteur continu amplifie chaque
      * réglage au lieu de l'amortir. Ne pas y toucher « d'un demi-point pour
      * voir ».
+     *
+     * **3 → 2,5 à l'arrivée de la Fragmentation et du Rebond** : les deux
+     * ensemble l'avaient portée à **79 %**, et c'est son contact qu'il fallait
+     * reprendre, pas eux (voir `cooldown` juste en dessous).
      */
-    damage: 3,
+    damage: 2.5,
     /**
      * **Son verrou de touche, et il joue le rôle de `melee.cooldown`.**
      *
@@ -398,16 +406,25 @@ export const COMET = fiche({
      * huit branches du Soleil — le garde-fou se pose **une fois pour toutes**,
      * avant la recherche de cible, pas par cible.
      *
-     * **1,15 s, et c'est le second levier — mesuré contre le premier.** À dégât
-     * égal (3), le verrou déplace autant que le dégât : 0,9 → 63 %, 1,05 → 56 %,
-     * 1,15 → 51 %. Les deux ont donc été balayés séparément puis remesurés
-     * ensemble (*deux leviers qui marchent ne s'additionnent pas*), et c'est
-     * celui-ci qui a été retenu pour la dernière marche : baisser le dégât
-     * rendait ses coups illisibles (3 PV affichés sur un corps à 100), alors
-     * qu'espacer les chocs garde des coups qui **se voient** et laisse
-     * l'adversaire respirer entre deux passages.
+     * **Le second levier, mesuré contre le premier.** À dégât égal, le verrou
+     * déplace autant que le dégât : quand elle n'avait que le Coup de fouet,
+     * 0,9 s → 63 %, 1,05 → 56 %, 1,15 → 51 %. Les deux sont donc balayés
+     * séparément puis remesurés ensemble (*deux leviers qui marchent ne
+     * s'additionnent pas*).
+     *
+     * **1,15 → 1,9 s avec la Fragmentation et le Rebond, et c'est un changement
+     * de personnage assumé.** Les deux pouvoirs l'avaient portée de 51 % à
+     * **79 %** ; il fallait reprendre 30 points. Les reprendre sur les nouveaux
+     * outils ne rendait presque rien (éclat à 1 et rebond rogné : 79 → 70 %),
+     * parce qu'ils n'ajoutent pas du **dégât**, ils ajoutent de l'**accès**.
+     * Les reprendre sur le contact, si.
+     *
+     * Le balayage final, éclat et salve tenus, 20 duels par paire :
+     * verrou 1,4 s → 66 %, **1,9 s → 46 %**. Elle frappe donc moins d'une fois
+     * toutes les deux secondes — c'est devenu un personnage de **passage** et
+     * plus de corps à corps continu, ce que le reste de la fiche disait déjà.
      */
-    cooldown: 1.15,
+    cooldown: 1.9,
     /**
      * **La marge, et c'est un piège déjà payé par LUNE.**
      *
@@ -460,6 +477,32 @@ export const COMET = fiche({
      * boucle sans rien dire.
      */
     spend: 0.3,
+    /* ---------- REBOND — le mur lui rend son élan ---------- */
+    /**
+     * **Demandé.** Jusqu'ici un rebond de mur ne lui coûtait ni ne lui rendait
+     * rien : elle traversait l'arène, tapait la paroi, repartait. C'était son
+     * **temps mort** — et c'est justement là qu'elle en passe le plus, puisque
+     * tout ce qu'elle produit demande d'aller au contact.
+     *
+     * Chaque mur touché ajoute désormais `gain` à son élan, plafonné à `cap`.
+     * Ce n'est pas un pouvoir : **aucune horloge, aucune jauge, aucune visée**,
+     * exactement comme la rampe au-dessus. C'est une règle permanente de plus
+     * sur la même ressource, et elle transforme un déplacement subi en
+     * accumulation.
+     *
+     * **Le plafond est le point.** Chaque source d'élan a le sien, et ils
+     * s'étagent : rampe **1,5** < murs **1,7** < Coup de fouet **1,9** <
+     * Rentrée **2,3**. Un mur ne remplace donc jamais un pouvoir — il va un
+     * cran plus loin que ce que le temps seul donnerait, et pas davantage.
+     *
+     * **Ce que le moteur fournit déjà** : `Fighter.wall` est posé à chaque pas
+     * par `step()` — il était jusqu'ici *marquage de mise en scène*, lu par le
+     * seul bruitage de rebond. Le lire ne coûte donc rien et ne change rien
+     * pour les neuf autres. Un rebond de coin pose `wall` deux fois dans le
+     * même pas et ne vaut qu'un gain : c'est la bonne lecture, on compte des
+     * **pas**, pas des parois.
+     */
+    bounce: { gain: 0.12, cap: 1.7 },
   },
 
   /* ---------- POUVOIR — Coup de fouet ---------- */
@@ -493,6 +536,59 @@ export const COMET = fiche({
      *  et il ne suffit pas de relire `look` : un pouvoir porte ses propres
      *  couleurs. */
     ring: { to: 150, time: 0.35, color: 'rgba(203,47,173,0.9)', width: 7 },
+  },
+
+  /* ---------- POUVOIR SPÉCIAL — Fragmentation ---------- */
+  /**
+   * **Elle détache des morceaux de sa ceinture et les sème — demandé.**
+   *
+   * **Troisième créneau** (`special`), celui du Champ de givre et du Dôme de
+   * drain : il ne remplace pas l'ultime, il s'ajoute, avec sa propre jauge au
+   * HUD. Le patron est celui des Éclats de roche du Golem — anneau complet,
+   * horloge fixe, aucune visée — mais ce qu'il **fait au personnage** n'a rien à
+   * voir, et c'est tout l'intérêt :
+   *
+   *  • **il coûte de l'élan** (`cost`). C'est le seul pouvoir du dépôt qui se
+   *    paie dans la ressource de son porteur : elle échange de la vitesse et de
+   *    la puissance de choc contre de la portée. Sans ce prix, ce serait une
+   *    salve gratuite greffée sur un personnage de contact ;
+   *  • **il lui donne ce qu'elle n'avait pas : atteindre sans toucher.** Son
+   *    banc le disait — elle s'effondre contre qui recule (3 victoires sur 16
+   *    contre le Pistolero) parce que tout ce qu'elle produit demande d'aller au
+   *    contact. Huit éclats en anneau menacent aussi **derrière elle**, ce qui
+   *    est exactement ce qui manquait au combattant le plus rapide du roster :
+   *    de quoi peser pendant qu'elle traverse l'arène.
+   *
+   * **Anneau complet et pas éventail**, comme le Golem : trois éclats répartis
+   * sur 360° se lisent comme trois éclats qui partent n'importe où, huit se
+   * lisent comme un anneau. Il n'y a donc aucune ouverture à régler, la
+   * géométrie est fixée par `count`.
+   */
+  special: {
+    id: 'shed',
+    name: 'Fragmentation',
+    nameRef: 'Shed',
+    barLabel: 'SHED',
+    barLabelFr: 'FRAGMENTATION',
+    barFill: '#540f8b',
+    barText: '#fbe6fb',
+    /** Calé : **deux à trois salves** dans un duel de 30 s. 8 → 10 s à
+     *  l'équilibrage final — c'est le levier qui dose la part du pouvoir dans
+     *  sa production sans toucher à la lisibilité d'un éclat. */
+    cooldown: 10,
+    /** Première salve tôt — elle perd certains duels avant la deuxième. */
+    first: 3,
+    /** Huit, un éclat tous les 45° : c'est le seuil de lecture d'un anneau,
+     *  mesuré par le Golem qui est passé de 3 à 8 pour cette raison. */
+    count: 8,
+    /**
+     * **Ce que la salve lui coûte en élan**, et c'est la clé du pouvoir. Elle
+     * tombe donc de vitesse *et* de puissance de choc en tirant — un joueur voit
+     * le nombre du HUD reculer au moment où les éclats partent. Calé au banc
+     * avec les deux autres leviers du personnage.
+     */
+    cost: 0.2,
+    projectile: 'shard',
   },
 
   /* ---------- ULTIME — Rentrée ---------- */
@@ -535,8 +631,57 @@ export const COMET = fiche({
     shake: 6,
   },
 
-  /** Ni projectile, ni troisième créneau. */
-  projectiles: {},
+  /**
+   * **Un seul projectile, et ce sont ses propres débris.**
+   *
+   * Elle n'en avait aucun : tout passait par le contact. La Fragmentation lui
+   * en donne, et ce n'est pas une arme de tir qu'on lui greffe — ce sont les
+   * **morceaux de sa ceinture**, découpés dans la même maquette que son corps
+   * (les composantes détachées du tourbillon).
+   */
+  projectiles: {
+    shard: {
+      label: 'Éclat de ceinture',
+      labelRef: 'Belt Shard',
+      /**
+       * **Une seule silhouette, et c'est une mesure de rendu.**
+       * `Projectiles.draw` tourne chaque projectile de son propre cap, donc les
+       * huit éclats d'un anneau sont déjà orientés à 45° les uns des autres.
+       * Trois avaient été découpées puis retirées — voir `pixelart/comet.js`.
+       */
+      sprite: 'cometShard',
+      /** Carte de 8 px × 2,6 = ~21 px dessinés, un peu plus petit que l'éclat
+       *  du Golem (24) : elle est elle-même le plus petit corps du roster. */
+      scale: 2.6,
+      /**
+       * **Lents — 300 px/s, les plus lents du dépôt** (380 pour l'éclat du
+       * Golem, 936 pour la balle du Pistolero). C'est voulu : ce sont des
+       * débris qu'elle **sème**, pas des projectiles qu'elle tire. Un éclat
+       * rapide aurait fait d'elle une tireuse, ce qu'elle n'est pas.
+       */
+      speed: 300,
+      /**
+       * **Calé au banc, et le levier le plus raide des trois nouveaux** :
+       * 2 → 43 % de victoires contre les six, **3 → 66 %** à réglages de contact
+       * égaux (20 duels par paire). Huit éclats × trois salves, c'est jusqu'à
+       * 72 PV par duel sur une barre de 100 — d'où l'écart.
+       *
+       * À 2 elle était **plus faible qu'avant les pouvoirs là où elle l'était
+       * déjà** (1 victoire sur 20 contre le Pistolero, contre 3 sur 16 avant) :
+       * le pouvoir ne payait plus ce que son contact avait perdu. À 3 il le
+       * paie. Reste faible devant son choc (4 à 6) : la Fragmentation est là
+       * pour **atteindre ce qu'elle ne rattrape pas**, pas pour tuer.
+       */
+      damage: 3,
+      radius: 10,
+      /** 2,4 s à 300 px/s = 720 px, soit un peu plus que la diagonale utile de
+       *  l'arène : un éclat qui ricoche une fois finit toujours sa course. */
+      life: 2.4,
+      bounces: 1,
+      knockback: 60,
+      trail: { color: 'rgba(84,15,139,0.38)', every: 0.04, life: 0.28 },
+    },
+  },
 
   /** Aucune stat par paliers : sa montée est continue, c'est `rush`. */
   progression: { stack: 0, stack2: 0 },
