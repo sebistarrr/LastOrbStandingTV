@@ -127,9 +127,9 @@ survivant**. Un commentaire qui cite un élément disparu parle d'une
 ### L'équilibrage en cinq lignes
 
 **Relevé courant** (`tools/matrix-reference.txt`), 27 duels hors miroir chacun :
-**Lune 27**, **Soleil 23**, Pistolero 15, Druide 15, Shinobi 14, Golem 13,
-Hoplite 12, Comète 12, Ronin 4, Mannequin 0 (c'est sa définition). Écart **4 à
-15** entre les sept du milieu, connu et non corrigé.
+**Lune 27**, **Soleil 23**, Pistolero 16, Druide 14, Golem 13, Shinobi 13,
+Comète 13, Hoplite 12, Ronin 4, Mannequin 0 (c'est sa définition). Écart **4 à
+16** entre les sept du milieu, connu et non corrigé.
 
 - **Le sommet n'est plus partagé, et c'est assumé : LUNE est au-dessus** (50/50
   contre le Soleil, 140/140 contre les sept autres du banc de l'époque, et

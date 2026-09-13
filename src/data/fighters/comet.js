@@ -189,7 +189,7 @@ export const COMET = fiche({
        * porter que celui-là ; un `ribbon` désignerait le centre de sa bille et
        * se lirait comme une tache.
        *
-       * Large (34, soit son diamètre) et franchement opaque : à 700 px/s, une
+       * Large (34, soit son diamètre) et franchement opaque : à 1 050 px/s, une
        * traînée fine ne se voit pas — elle est étalée sur toute la largeur de
        * l'écran et n'a qu'une image pour exister. **Le magenta des bras**
        * plutôt que le rose clair : sur l'arène blanche, c'est la teinte saturée
@@ -201,8 +201,17 @@ export const COMET = fiche({
        * `f.ghosting` le temps de l'ultime et rien d'autre ne l'allume. C'est le
        * compteur générique de l'invariant 7 — le rendu le lit, il ne sait pas
        * pourquoi.
+       *
+       * **`every` se calcule sur la vitesse de pointe, il ne se choisit pas.**
+       * Une traînée de fantômes doit être une bande de billes qui **se
+       * recouvrent** (le relevé du Dragoon), pas un pointillé. À 2 415 px/s —
+       * sa pointe en Rentrée — un dépôt toutes les 0,035 s les espaçait de
+       * **85 px** pour un corps qui en fait 68 de large : le trait se cassait.
+       * 0,022 s les ramène à 53 px, donc ils se chevauchent encore.
+       * **À recalculer si sa vitesse rebouge** : `every < diamètre / vitesse de
+       * pointe`, et rien ne crie si on l'oublie.
        */
-      ghost: { color: '#cb2fad', every: 0.035, alpha: 0.4 },
+      ghost: { color: '#cb2fad', every: 0.022, alpha: 0.4 },
       /** Poussière qui **retombe** derrière elle : des débris, pas de la
        *  chaleur — l'inverse des braises montantes du Soleil. Ses trois teintes
        *  sont celles du dessin : ce qui s'échappe d'elle est fait de la même
@@ -258,14 +267,30 @@ export const COMET = fiche({
   },
 
   /**
-   * **700 px/s : la plus rapide du roster, et de loin** — 655 au Pistolero, qui
-   * détenait le record, 624 au Druide, 500 au Shinobi, 230 au Soleil. Calé.
+   * **1 050 px/s : la plus rapide du roster, et de très loin** — 655 au
+   * Pistolero, qui détenait le record, 624 au Druide, 500 au Shinobi, 230 au
+   * Soleil. Elle va **60 % plus vite que le deuxième**. Calé.
+   *
+   * **700 → 1 050, demandé** (« augmente sa vitesse de 50 % »). Mesuré : +6
+   * points de victoires contre les six (45 → **51 %**) et 2,2 → 2,9 PV/s au banc
+   * du Mannequin. Un gain modeste pour la moitié de vitesse en plus, et c'est
+   * cohérent avec ce qu'elle est devenue depuis `seek: 0` — aller plus vite en
+   * ligne droite fait autant rater que toucher. Elle reste dans la bande du
+   * roster, donc **aucun autre chiffre n'a été retouché**.
    *
    * Et ce n'est que son **plancher** : `movement.speed` est multiplié par son
-   * élan (`rush`), qui monte jusqu'à 1,5 en temps normal et 2,3 pendant la
-   * Rentrée. Elle passe donc **1 050 px/s** en pointe ordinaire et **1 610**
-   * pendant son ultime, sur une arène de 628 px de large — elle la traverse en
-   * quatre dixièmes de seconde.
+   * élan (`rush`), qui monte à 1,5 tout seul, 1,7 par les murs, 1,9 au Coup de
+   * fouet et 2,3 pendant la Rentrée. Elle passe donc **1 575 px/s** en pointe
+   * ordinaire, **1 785** en s'appuyant sur les parois, et **2 415** pendant son
+   * ultime — sur une arène de 628 px de large, qu'elle traverse alors en **un
+   * quart de seconde**.
+   *
+   * **Ce que ça oblige à revérifier, et ça ne crie pas** : à 2 415 px/s le pas
+   * fixe de 1/120 s fait avancer de **20 px** par image. C'est bien en deçà de
+   * la somme des rayons (34 + 34 = 68 au minimum), donc aucun corps ne peut
+   * être traversé sans que le choc cinétique le voie — la condition de contact
+   * est testée à chaque pas. La cadence des images fantômes, elle, a dû suivre
+   * (voir `look.flair.ghost`).
    *
    * **`seek: 0` — elle file droit et ne vise personne, demandé.**
    *
@@ -295,7 +320,7 @@ export const COMET = fiche({
    * baisser ne déplacerait pas un duel ; ça ne changerait que la ligne
    * « Vitesse » de sa fiche à l'écran.
    */
-  movement: { speed: 700, turnRate: 2.8, seek: 0 },
+  movement: { speed: 1050, turnRate: 2.8, seek: 0 },
 
   /**
    * **Une arme qui se voit et qui ne touche pas — demandé** (« tout ce qu'il y
@@ -486,7 +511,7 @@ export const COMET = fiche({
    * divergé au premier réglage.
    */
   rush: {
-    /** Plafond ordinaire. À 1,5, elle plafonne à 1 050 px/s. Calé. */
+    /** Plafond ordinaire. À 1,5, elle plafonne à 1 575 px/s. Calé. */
     max: 1.5,
     /** Secondes pour aller de 1 au plafond, à froid. Calé : plus court, elle
      *  est en permanence au plafond et l'élan cesse d'être une ressource. */
@@ -624,7 +649,7 @@ export const COMET = fiche({
    * **Quatre secondes et demie où la boucle n'a plus de coût.**
    *
    * Son élan est **tenu** au-dessus de tout ce qu'elle peut atteindre seule
-   * (2,3, soit 1 610 px/s), son verrou de touche tombe de 0,9 s à 0,4, et
+   * (2,3, soit 2 415 px/s), son verrou de touche tombe de 1,15 s à 0,4, et
    * surtout **ses chocs ne lui coûtent plus rien** : `rush.spend` ne s'applique
    * pas. C'est exactement l'ultime qu'appelle un personnage bâti sur une
    * ressource — il ne lui donne pas une attaque de plus, il lui **retire sa
