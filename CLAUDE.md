@@ -47,6 +47,7 @@ bonne (`offset` / `limit`). Les numéros dérivent ; `grep -n '^#\+ '` les recal
 | Overrides de sprites en vrai PNG (écart assumé à « aucun binaire ») | `assets/sprites/` + `manifest.json` |
 | **Combattant sans arme** (Mannequin, LUNE, Comète) | **c'est `hitbox` à 0 qui l'empêche de toucher**, pas la portée : `bladeSegment()` écrase le tranchant sur le pivot, la condition de `weaponHit` devient impossible. Plus sûr que des dégâts à zéro. Une arme peut donc être **dessinée sans exister** (la ceinture de la Comète : sprite + `reach`, hitbox nulle, matrice identique), et les dégâts, s'il y en a, sont appelés **par le module** |
 | Géométrie de scène, phases, export vidéo | `src/data/tuning.js` |
+| **Signature de chaîne** (`@LastOrbStandingTV`) | bloc `SIGNATURE` de `tuning.js` + `drawSignature()` de `render/scene.js` — **dans** l'aire de jeu, cuite dans le décor |
 | Déroulé du duel, dégâts, rendu global | `src/game/match.js` |
 | Entité combattant (état + dessin) | `src/game/fighter.js` |
 | Pouvoirs d'un combattant | `src/game/abilities/<id>.js` |
@@ -605,6 +606,9 @@ est dans `docs/PIEGES.md`, sous le même intitulé.
   largeur comme les `padding`.
 - Un pouvoir dessiné dans `drawOver` peut **recouvrir le chiffre de PV**, qui est
   repassé après la boucle (`globalAlpha` remis à 1 avant).
+- **Un filigrane posé hors de l'aire de jeu ne protège rien** : 57 % de la
+  hauteur de la scène se recadre sans rien perdre du duel. Une signature va
+  **dans** l'arène, et en deux marques — une qu'on retrouve, une qu'on lit.
 
 **Sonoriser**
 

@@ -153,6 +153,22 @@ et les combattants**. Ce qui remplit le cadre est au fond, sur les bords, ou
 derrière la boule. Tout vit dans `src/render/flair.js`, avec son propre aléa :
 la mise en scène ne peut pas déplacer une virgule de l'équilibrage.
 
+### La signature de la chaîne
+
+Le sol de l'arène porte `@LastOrbStandingTV`, en deux marques : un **filigrane**
+large et très pâle au centre, et une **ligne lisible** au coin bas-droit. Les
+deux sont **dans l'aire de jeu**, et c'est le point : le reste de l'écran — le
+bandeau de titre, la bande du haut, les jauges du bas — représente 57 % de la
+hauteur et se recadre sans rien perdre du duel. Une marque posée là partirait
+avec le recadrage ; celles-ci obligent à amputer le terrain.
+
+Elles sont cuites dans le décor rasterisé une fois (`SIGNATURE` dans
+`src/data/tuning.js`), donc gratuites par image, fixes quand la caméra tremble,
+et présentes dans la vidéo exportée. Changer le pseudo, c'est changer une chaîne
+de caractères : les deux marques s'ajustent à leur place.
+
+<sup>[Les deux marques sur une arène dégagée](docs/capture-signature.png).</sup>
+
 ### Le son
 
 Le duel s'entend autant qu'il se voit, et **sans un seul fichier audio** :

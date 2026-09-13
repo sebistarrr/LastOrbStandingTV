@@ -64,6 +64,53 @@ export const TITLE = deepFreeze({
   strokeWidth: 7,
 });
 
+/**
+ * **Signature de la chaîne, cuite dans le sol de l'arène.**
+ *
+ * Elle est là pour qu'une vidéo réuploadée reste attribuable, donc sa place
+ * n'est pas un choix d'esthétique : **tout ce qui est hors de l'aire de jeu se
+ * recadre sans rien perdre**. Le bandeau de titre, la bande sombre du haut, les
+ * jauges du bas — un voleur coupe tout ça et garde un duel intact. La seule
+ * zone qu'il ne peut pas jeter est celle où les combattants se déplacent : la
+ * signature y vit, et pas ailleurs.
+ *
+ * **Deux marques, deux métiers**, et c'est pour ça qu'il y en a deux :
+ *
+ *  • `mark` — le **filigrane**, aussi large que l'arène, à 5,5 % d'encre. On ne
+ *    le lit pas, on le retrouve : il traverse un recadrage, un réencodage et
+ *    une compression YouTube parce qu'il couvre la moitié de la surface utile.
+ *    Le monter en opacité le rendrait lisible *et* gênant — c'est le fond du
+ *    terrain, pas un élément de jeu.
+ *  • `tag` — la **ligne lisible**, petite et nette, au coin de l'aire de jeu.
+ *    C'est celle qu'un spectateur lit pour retrouver la chaîne. Elle se recadre,
+ *    elle, et c'est assumé : le filigrane est ce qui reste dans ce cas.
+ *
+ * **Le pseudo ne passe pas par `ui/lang.js`** : c'est un nom propre, identique
+ * dans les deux langues, comme LAST ORB STANDING. Deux entrées de table aux
+ * valeurs égales n'auraient rien décrit de plus et auraient fait croire à une
+ * traduction possible.
+ *
+ * Le tout est dessiné **dans le décor rasterisé une fois** (`render/scene.js`,
+ * invariant 4) : coût nul par image, et — conséquence voulue — la signature
+ * **ne tremble pas** avec l'arène, puisque le tremblement ne s'applique qu'au
+ * contenu. Une marque qui bouge avec l'image se laisse deviner comme une
+ * incrustation ; celle-ci fait partie du terrain.
+ */
+export const SIGNATURE = deepFreeze({
+  /** La chaîne YouTube. Changer ce texte suffit : les deux marques s'y ajustent. */
+  handle: '@LastOrbStandingTV',
+  /**
+   * Filigrane. `widthRatio` est une fraction de la **largeur intérieure** de
+   * l'arène, pas une taille de casse : le jour où le pseudo change de longueur,
+   * la marque garde son encombrement au lieu de déborder ou de rétrécir.
+   * `y` est la même chose en hauteur — 0,5, le centre, le point le plus cher à
+   * recadrer.
+   */
+  mark: { widthRatio: 0.88, y: 0.5, color: '#000000', alpha: 0.055 },
+  /** Ligne lisible, ancrée au coin bas-droit de l'aire de jeu. */
+  tag: { size: 19, pad: 13, color: '#000000', alpha: 0.3 },
+});
+
 export const HUD = deepFreeze({
   /**
    * **Bandeau de points de vie, en haut de l'écran** — à plusieurs seulement.

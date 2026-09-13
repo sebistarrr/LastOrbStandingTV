@@ -23,16 +23,16 @@ relevé, puis les pièges eux-mêmes.
 | &nbsp;&nbsp;· Déterminisme et ordre d'exécution | 503 |
 | &nbsp;&nbsp;· Éditer les données | 542 |
 | &nbsp;&nbsp;· Interface et rendu | 671 |
-| &nbsp;&nbsp;· Le son | 874 |
-| &nbsp;&nbsp;· Refactoriser | 1387 |
-| **Le détail des sections condensées de `CLAUDE.md`** | 1428 |
-| &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1396 |
-| &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1439 |
-| &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1482 |
-| &nbsp;&nbsp;· Invariant 13 — comment le moteur a cessé de compter jusqu'à deux | 1501 |
-| &nbsp;&nbsp;· Invariant 3 — la preuve que l'arrivée d'un combattant n'a rien déplacé | 1545 |
-| &nbsp;&nbsp;· Invariant 9 — les deux régressions qui l'ont écrit | 1562 |
-| &nbsp;&nbsp;· Formats — la table, et pourquoi elle a été écrite après coup | 1578 |
+| &nbsp;&nbsp;· Le son | 919 |
+| &nbsp;&nbsp;· Refactoriser | 1432 |
+| **Le détail des sections condensées de `CLAUDE.md`** | 1473 |
+| &nbsp;&nbsp;· L'écart du roster, et ce que la matrice cache | 1475 |
+| &nbsp;&nbsp;· Formats — ce qui change à l'écran au-delà de deux | 1518 |
+| &nbsp;&nbsp;· Invariant 12 — corollaire pour les modules de pouvoirs | 1561 |
+| &nbsp;&nbsp;· Invariant 13 — comment le moteur a cessé de compter jusqu'à deux | 1580 |
+| &nbsp;&nbsp;· Invariant 3 — la preuve que l'arrivée d'un combattant n'a rien déplacé | 1624 |
+| &nbsp;&nbsp;· Invariant 9 — les deux régressions qui l'ont écrit | 1641 |
+| &nbsp;&nbsp;· Formats — la table, et pourquoi elle a été écrite après coup | 1657 |
 
 ---
 
@@ -870,6 +870,51 @@ dans `docs/FICHES.md`. Ce qui suit vaut pour tout le dépôt.
   débordement est proportionnel, **la corriger sur un écran la corrige sur
   tous** : aucune requête de média n'a été nécessaire, et en ajouter une aurait
   laissé le bug entier sur les appareils non couverts.
+
+#### Un filigrane posé hors de l'aire de jeu ne protège rien
+
+La signature `@LastOrbStandingTV` est là pour qu'une vidéo réuploadée reste
+attribuable. Le réflexe est de la poser dans un coin de l'écran — la bande
+sombre du haut est vide en duel, c'est la place qui « ne gêne pas ». **C'est
+exactement la place qui ne sert à rien.**
+
+La scène fait 720 × 1280, l'aire de jeu 628 × 628 entre 46 et 674 en x, 326 et
+954 en y. Tout le reste — bandeau de titre, bande vide du haut, jauges et lignes
+de stat du bas — représente **57 % de la hauteur et ne contient aucun duel**.
+Quelqu'un qui recadre sur l'arène jette ces 57 % sans rien perdre de ce qu'il
+vient voler. Une marque qui y vivait part avec.
+
+D'où la règle : **une signature anti-copie se pose là où le contenu est**, et
+nulle part ailleurs. Le seul rectangle irréductible d'une vidéo de duel est
+l'aire de jeu.
+
+Trois conséquences, toutes payées par ce raisonnement et pas par un essai :
+
+- **Deux marques, parce qu'il y a deux métiers.** Le *filigrane* (`mark`) fait
+  88 % de la largeur intérieure et 5,5 % d'encre : on ne le lit pas, on le
+  retrouve. Il traverse un recadrage puisqu'il couvre la moitié de la surface
+  utile, et il traverse un réencodage YouTube parce que 5,5 % de noir sur blanc
+  — `rgb(241,241,241)` — reste au-dessus de ce qu'un codeur écrase. La *ligne
+  lisible* (`tag`), 19 px au coin bas-droit, est celle qu'un spectateur lit pour
+  retrouver la chaîne ; elle se recadre, et c'est assumé — le filigrane est ce
+  qui reste dans ce cas. Une seule marque aurait dû être à la fois lisible et
+  discrète, ce qui n'existe pas.
+- **Elle se cuit dans le décor rasterisé** (`render/scene.js`, invariant 4),
+  après `drawArena` qui repeint le carré en blanc. Coût nul par image, et
+  surtout : le tremblement de caméra ne s'applique **qu'au contenu de l'arène**,
+  donc la signature ne bouge pas avec l'image. Une marque qui tremble avec le
+  reste se lit comme une incrustation ; celle-ci fait partie du terrain.
+- **Tout passe par-dessus** — nappe de sol, zones de pouvoir, combattants. La
+  règle de composition du dépôt (rien entre le spectateur et les combattants)
+  est donc respectée par construction. En contrepartie, une ambiance d'arène
+  opaque la teinterait : aucune ne l'est, elles sont toutes en alpha faible, et
+  c'est ce qui rend la place tenable. Vérifié à l'écran sur l'ambiance bleue de
+  LUNE en 2 contre 2 — le filigrane survit, légèrement teinté.
+
+Le pseudo **ne passe pas par `ui/lang.js`** : c'est un nom propre, identique
+dans les deux langues, comme LAST ORB STANDING. Deux entrées de table aux
+valeurs égales n'auraient rien décrit de plus et auraient fait croire à une
+traduction possible.
 
 ### Le son
 

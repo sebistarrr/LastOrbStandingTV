@@ -9,7 +9,7 @@
  * @module render/scene
  */
 
-import { ARENA, STAGE, TITLE } from '../data/tuning.js';
+import { ARENA, SIGNATURE, STAGE, TITLE } from '../data/tuning.js';
 import { drawSpriteCentered } from './sprites.js';
 
 /** @type {HTMLCanvasElement|null} */
@@ -47,6 +47,8 @@ export function buildBackdrop({ fighters, teams, lang }) {
   if (fighters.length === 2) drawTitle(ctx, a, b, lang);
   else drawTitleMulti(ctx, fighters, teams, lang);
   drawArena(ctx);
+  // après l'arène, forcément : `drawArena` repeint tout le carré en blanc
+  drawSignature(ctx);
 
   cache = cv;
   cacheKey = key;
@@ -67,6 +69,59 @@ function drawArena(ctx) {
   ctx.lineWidth = border;
   ctx.lineJoin = 'miter';
   ctx.strokeRect(x + border / 2, y + border / 2, size - border, size - border);
+}
+
+/**
+ * **La signature de la chaîne, posée sur le sol de l'aire de jeu.**
+ *
+ * Elle est ici et pas dans une passe par image parce que le décor est le seul
+ * endroit qui ne coûte rien : rasterisé une fois, blitté ensuite. Et elle est
+ * **dans l'arène** et pas dans la bande sombre parce qu'un filigrane hors du
+ * terrain se recadre — voir `SIGNATURE` dans `data/tuning.js` pour le
+ * raisonnement complet.
+ *
+ * Conséquence de rendu à connaître : tout ce que `match.js` dessine ensuite
+ * passe **par-dessus** — nappe de sol, zones de pouvoir, combattants. La
+ * signature n'est donc jamais entre le spectateur et le duel, ce qui est la
+ * règle de composition du dépôt ; en contrepartie, une ambiance d'arène opaque
+ * la teinterait. Aucune ne l'est : elles sont toutes en alpha faible.
+ */
+function drawSignature(ctx) {
+  const inner = ARENA.inner;
+  const w = inner.right - inner.left;
+  const h = inner.bottom - inner.top;
+  const { handle, mark, tag } = SIGNATURE;
+
+  ctx.save();
+
+  /*
+   * Le filigrane s'**ajuste à la largeur**, comme le bandeau de titre : une
+   * taille de casse en dur mentirait le jour où le pseudo change de longueur.
+   * Les métriques d'une police sont linéaires en taille, donc deux passes
+   * suffisent ; la troisième est là pour le cas d'une police de repli.
+   */
+  const cible = w * mark.widthRatio;
+  let size = 64;
+  for (let i = 0; i < 3; i++) {
+    ctx.font = `400 ${size}px "Archivo Black", "Arial Black", sans-serif`;
+    size *= cible / ctx.measureText(handle).width;
+  }
+  ctx.font = `400 ${size}px "Archivo Black", "Arial Black", sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.globalAlpha = mark.alpha;
+  ctx.fillStyle = mark.color;
+  ctx.fillText(handle, inner.left + w / 2, inner.top + h * mark.y);
+
+  // la ligne lisible : coin bas-droit, à l'intérieur du trait noir
+  ctx.font = `600 ${tag.size}px "Oswald", "Arial Narrow", sans-serif`;
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'alphabetic';
+  ctx.globalAlpha = tag.alpha;
+  ctx.fillStyle = tag.color;
+  ctx.fillText(handle, inner.right - tag.pad, inner.bottom - tag.pad);
+
+  ctx.restore();
 }
 
 /**
