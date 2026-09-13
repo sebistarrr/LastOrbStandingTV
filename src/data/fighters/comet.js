@@ -484,8 +484,15 @@ export const COMET = fiche({
     /** L'élan visé — **au-dessus de `rush.max`**, sinon le pouvoir ne ferait
      *  qu'anticiper une rampe qui serait arrivée toute seule. */
     to: 1.9,
-    /** Anneau de détente au sol, tracé par `Effects.ring`. */
-    ring: { to: 150, time: 0.35, color: 'rgba(255,138,208,0.9)', width: 7 },
+    /** Anneau de détente au sol, tracé par `Effects.ring`. Au magenta des bras
+     *  (`light`) : c'est la teinte saturée qui porte sur l'arène blanche, la
+     *  même que celle du fuseau. **Cette ligne avait été oubliée** à la passe de
+     *  couleur du tourbillon — elle était restée au rose de l'ancienne palette,
+     *  hors du bloc `look` et donc hors du balayage. C'est exactement le piège
+     *  que le dépôt nomme (*une passe de couleur incomplète n'en est pas une*),
+     *  et il ne suffit pas de relire `look` : un pouvoir porte ses propres
+     *  couleurs. */
+    ring: { to: 150, time: 0.35, color: 'rgba(203,47,173,0.9)', width: 7 },
   },
 
   /* ---------- ULTIME — Rentrée ---------- */
