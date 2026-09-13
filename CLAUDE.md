@@ -77,6 +77,13 @@ y est `calé` ou `déduit`.
 sont des **spécifications**, pas des défauts à corriger. Les six du milieu se
 jugent entre eux.
 
+**La spécification des boss n'est plus satisfaite sur deux points, et c'est le
+choix courant** : le Soleil perd une graine sur trois contre l'Hoplite, et leur
+duel a désormais un vainqueur (LUNE, 50/50). Les deux écarts sont mesurés et
+leurs leviers connus — voir « L'équilibrage en cinq lignes » ci-dessous. Les
+lire comme des bugs à corriger, c'est rouvrir un rééquilibrage que personne n'a
+demandé.
+
 Chaque ligne dit **ce qui est structurel** — la clé de fiche qu'on ne casse pas
 sans le savoir. Les valeurs, les relevés et les demandes : `docs/FICHES.md`.
 

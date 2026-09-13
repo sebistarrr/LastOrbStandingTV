@@ -3797,8 +3797,10 @@ ses propres lignes, et c'est là qu'on le vérifie.
 ### Le sommet n'est plus partagé
 
 La spécification dit que les deux boss battent les six autres et **ne se
-départagent qu'entre eux**. La première moitié tient toujours ; la seconde non,
-et c'est assumé.
+départagent qu'entre eux**. **Aucune des deux moitiés n'est vraie au chiffre
+près, et c'est assumé** : la première à une graine près (le Soleil lâche
+`lancer vs sun`, voir plus bas), la seconde franchement — leur duel a un
+vainqueur.
 
 | | contre les six | duel des boss |
 | --- | --- | --- |
