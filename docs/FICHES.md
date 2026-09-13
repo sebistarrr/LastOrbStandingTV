@@ -42,19 +42,19 @@ les recale en une commande.
 | ☀ SOLEIL — `sun` (le boss : il est fait pour gagner contre tous) | 2741 |
 | 🌙 LUNE — `lunar` (le second boss : il est fait pour matcher le Soleil) | 3075 |
 | ☄ COMÈTE — `comet` (rien qui frappe : son corps est l'arme) | 3276 |
-| La norme passe à 200 PV, le Golem à 400 (historique) | 3573 |
-| Neon Shadow supprimé, la norme redescend à 100 PV | 3628 |
-| Les dégâts de tous les combattants, divisés par deux | 3696 |
-| Rééquilibrage confiné au Golem et au Ronin | 3806 |
-| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3893 |
-| Le son de chacun | 3943 |
-| **Équilibrage du roster** — c'est ici que vivent les chiffres | 4061 |
-| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 4071 |
-| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4101 |
-| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4132 |
-| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4174 |
-| Règles communes (moteur) | 4268 |
-| Comment les mesures ont été prises | 4292 |
+| La norme passe à 200 PV, le Golem à 400 (historique) | 3626 |
+| Neon Shadow supprimé, la norme redescend à 100 PV | 3681 |
+| Les dégâts de tous les combattants, divisés par deux | 3749 |
+| Rééquilibrage confiné au Golem et au Ronin | 3859 |
+| Nerf confiné au Shinobi et au Pistolero, les deux qui dominaient | 3946 |
+| Le son de chacun | 3996 |
+| **Équilibrage du roster** — c'est ici que vivent les chiffres | 4114 |
+| &nbsp;&nbsp;· Relevé courant (les dix, 27 duels chacun) | 4124 |
+| &nbsp;&nbsp;· Le sommet n'est plus partagé | 4154 |
+| &nbsp;&nbsp;· Le banc de DPS contre le Mannequin | 4185 |
+| &nbsp;&nbsp;· Deux conventions avant de juger un écart | 4231 |
+| Règles communes (moteur) | 4325 |
+| Comment les mesures ont été prises | 4349 |
 
 ## Comment lire une valeur
 
@@ -3311,7 +3311,10 @@ ce qui la rend difficile à équilibrer.
 | `spriteScale` | **absent, et c'est une mesure** : le PNG est coupé au disque plein, donc la correction vaudrait 1,007 — du bruit de bord JPEG. Une clé qui recopie son défaut est une occasion de divergence silencieuse | déduit |
 | Chiffre de PV | **une seule encre claire (`#fbe6fb`), et c'est mesuré** : sous l'empreinte des digits, **82 % des pixels sont sombres et 6 % clairs**, parce que le vide central du tourbillon tombe exactement là où le nombre s'écrit. Le Soleil était à 53 / 40 et aucun aplat n'y tenait — d'où son `hpStroke`. Ici un contour n'ajouterait qu'un pâté | mesuré sur la maquette |
 | Palette | `look.palette` — **cinq teintes relevées par bandes de luminance** sur `comet-core.png` (28ᵉ, 46ᵉ, 62ᵉ, 86ᵉ, 98ᵉ centile) : `edge #04010e` · `shadow #290651` · `body #540f8b` · `light #cb2fad` · `core #ee82ec`. Elle était **magenta uni** (`#d63b8f`) avant la maquette ; toutes ses couleurs ont suivi dans la même passe — queue, fuseau, fantômes, poussière, halo, sillage, jauge, ligne de HUD. Le violet-magenta reste la seule famille libre du roster, et le violet de l'Hoplite (`#7046ac`) est le seul voisin : celui-ci est **beaucoup plus sombre** (luminance médiane 19 contre 63) | relevé sur la maquette |
-| Déplacement | **700 px/s**, le plus rapide du roster (655 au Pistolero, précédent record) — et ce n'est que son **plancher** : multiplié par l'élan, il monte à **1 050** en pointe ordinaire et **1 610** pendant la Rentrée, sur une arène de 628 px. `turnRate: 2.8`, le plus haut aussi : à cette vitesse, un cap qui pivote lentement décrit des courbes si larges qu'elle **manquerait sa cible en tournant autour** | calé |
+| Déplacement | **700 px/s**, le plus rapide du roster (655 au Pistolero, précédent record) — et ce n'est que son **plancher** : multiplié par l'élan, il monte à **1 050** en pointe ordinaire et **1 610** pendant la Rentrée, sur une arène de 628 px | calé |
+| **Pilotage** | **`seek: 0` — elle file droit et ne vise personne, demandé.** Le pilotage de `Fighter.step()` est gardé par `mv.seek > 0` : à zéro, la ligne qui tourne le cap vers l'adversaire ne s'exécute pas du tout, et son cap ne change plus qu'aux **rebonds de mur**. Troisième combattant du roster dans ce cas (Hoplite, Mannequin), et le seul dont **tous les dégâts sont au contact** | demandé |
+| `turnRate` | **2,8, et il ne pilote plus rien** : `step()` ne le lit qu'à travers `mv.turnRate * mv.seek`, nul ici. Il reste lu par la **carte de sélection** (`speedLine`), donc ce n'est pas une clé morte au sens de l'invariant 9 — même situation que l'Hoplite (1,85) et le Mannequin (1,6) | déduit |
+| Jauges | **les deux rangées sont de la même encre** (`#cb2fad`), comme chez le Pistolero, le Ronin, l'Hoplite et le Shinobi. Elle a dérogé un temps — violet de corps en bas, magenta en haut —, ce qui laissait croire à deux matières là où il n'y a qu'un personnage | calé |
 | **Arme** | **une ceinture de débris qui se voit et qui ne touche pas — demandé.** `assets/sprites/comet-ring.png` : **tout ce qui entoure la sphère** dans la maquette (15,7 % du dessin), découpé d'elle et centré sur la bille. `hitbox` reste **`from`/`to`/`radius` à zéro** — `bladeSegment()` écrase alors le segment tranchant sur le pivot quelle que soit la portée, donc la condition de `weaponHit` est **structurellement impossible** et `resolveMelee` ne tourne toujours jamais pour elle | déduit |
 | Géométrie de la ceinture | l'entourage s'étend à **404 px** du centre là où la sphère en fait 286, soit **1,413 × le rayon du corps** → `reach` **48,03** à 34 de rayon, et l'invariant tient au centième comme pour le Shinobi : `handle.length + largeur dessinée = −48,03 + 96,06 = 48,03 = reach`. Base prise **12 px en deçà** de la sphère pour qu'elle chevauche la bille — sans ce recouvrement, une couture circulaire se verrait tourner (leçon de la couronne du Soleil) | déduit |
 | Échelle du sprite | `scale = 96,056 / 17 = 5,650348` : `drawSpriteLeft` dimensionne par la **hauteur** de la carte texte puis applique le rapport d'aspect du PNG — carré ici, donc 1. Piège déjà payé trois fois (lance de l'Hoplite, arme du Golem, couronne du Soleil) | déduit |
@@ -3496,35 +3499,85 @@ visait*, et seul le relevé adversaire par adversaire le dit — le total, lui,
   sans elles — et trois entrées de `projectiles` auraient encombré la carte de
   sélection pour rien.
 
-### Le banc final — 10 graines × les deux camps
+### Le pilotage passe en linéaire — et le verrou revient d'où il venait
 
-`kinetic.damage: 2.5`, `kinetic.cooldown: 1.9`, éclat 3, salve 10 s :
+**Demandé** : « je veux que le déplacement de Comet soit linéaire et non visé ».
+
+`movement.seek` passe de **0,62 à 0**. Le pilotage de `Fighter.step()` est gardé
+par `mv.seek > 0`, donc à zéro la ligne qui tourne le cap vers l'adversaire **ne
+s'exécute pas du tout** : son cap ne change plus qu'aux rebonds de mur. Elle
+rejoint l'Hoplite et le Mannequin, à ceci près qu'elle est la seule des trois
+dont **toute la production est au contact**.
+
+| | visée (0,62) | linéaire (0) |
+| --- | --- | --- |
+| victoires contre les six | 46 % | **28 %** puis 45 % après recalage |
+| PV/s au Mannequin | 3,1 | **2,2** |
+| verrou de touche | 1,9 s | **1,15 s** |
+
+**Ce que ça coûte brut** : 46 % → 28 %, et 3,1 → 2,2 PV/s. Une comète qui ne
+corrige pas sa trajectoire rate simplement beaucoup plus, et c'est la moitié de
+l'intérêt du changement — elle **traverse** au lieu de fondre sur sa cible.
+
+**Le recalage tient en un chiffre, et c'est un aller-retour instructif.** Le
+verrou de touche avait été allongé à 1,9 s pour brider un personnage visé qui
+touchait trop ; sans visée, ce bridage n'a plus d'objet. Balayage, 16 duels par
+paire :
+
+| `kinetic.cooldown` | 1,4 s | **1,15 s** | 0,9 s |
+| --- | --- | --- | --- |
+| victoires contre les six | 32 % | **45 %** | 43 % |
+
+Il **plafonne** en dessous de 1,15 : sans visée, les contacts sont trop rares
+pour qu'un verrou plus court serve à quelque chose. La valeur d'origine est donc
+redevenue la bonne — pour une raison qui n'a rien à voir avec celle du premier
+jour, ce qui est exactement le genre de chose qu'un commentaire de fiche doit
+dire.
+
+**Et le Rebond devient central.** Puisque les murs sont désormais la seule chose
+qui change son cap, ils sont aussi le rythme du personnage : chaque paroi la
+relance *et* la réoriente. Le plus discret de ses trois pouvoirs est devenu
+celui qui structure son déplacement — ce qui n'était pas prévu en l'écrivant.
+
+**Ce que le banc de DPS en dit, et il faut le lire pour ce qu'il est** : 2,2 PV/s
+la met avant-dernière, devant le seul Golem. Ce n'est pas une mesure
+d'équilibrage — elle reste à 12/27 à la matrice, au milieu du roster. C'est une
+mesure de **production contre une cible qui dérive**, et une comète qui ne vise
+pas en produit peu par définition.
+
+### Le banc final — 8 graines × les deux camps
+
+`seek: 0`, `kinetic.damage: 2.5`, `kinetic.cooldown: 1.15`, éclat 3, salve 10 s :
 
 | Adversaire | Victoires | Durée moyenne |
 | --- | --- | --- |
-| Hoplite | **17/20** | 34,3 s |
-| Ronin | 13/20 | 29,3 s |
-| Druide | 12/20 | 33,4 s |
-| Shinobi | 10/20 | 33,5 s |
-| Pistolero | 3/20 | 30,6 s |
-| Golem | **0/20** | 40,1 s |
-| **Total contre les six** | **55/120 — 46 %** | |
-| Mannequin | 16/16 | 32,4 s → **3,1 PV/s** |
-| Soleil | 0/16 | 43,0 s |
-| LUNE | 0/16 | 35,4 s |
+| Ronin | **12/16** | 30,4 s |
+| Hoplite | **12/16** | 43,2 s |
+| Druide | 9/16 | 36,0 s |
+| Shinobi | 8/16 | 35,9 s |
+| Pistolero | 2/16 | 33,7 s |
+| Golem | **0/16** | 42,5 s |
+| **Total contre les six** | **43/96 — 45 %** | |
+| Mannequin | 16/16 | 42,9 s → **2,2 PV/s** |
+| Soleil | 0/16 | 40,1 s |
+| LUNE | 0/16 | 35,2 s |
+
+*(Le relevé d'avant le passage en pilotage linéaire — 55/120, soit 46 % — est
+dans la section « Le pilotage passe en linéaire » plus bas : le total est le
+même, la façon de l'obtenir non.)*
 
 *(Le relevé d'avant la Fragmentation et le Rebond — 49/96, soit 51 % — est dans
 la section précédente, ligne par ligne : le total est revenu à sa place, la
 forme non.)*
 
-**Sa ligne est structurellement dispersée, et c'est le personnage.** De 0/20 à
-17/20 selon l'adversaire, là où les six autres se tiennent dans une fourchette
+**Sa ligne est structurellement dispersée, et c'est le personnage.** De 0/16 à
+12/16 selon l'adversaire, là où les six autres se tiennent dans une fourchette
 bien plus serrée. La raison tient en une phrase : **elle doit venir au contact
 pour exister**. Contre un tireur qui recule (Pistolero), elle passe son duel à
 traverser l'arène ; contre un duelliste qui vient à elle (Ronin), elle ne rate
 rien.
 
-**Le Golem à 0/20 est le cas extrême**, et il est structurel plutôt que mal
+**Le Golem à 0/16 est le cas extrême**, et il est structurel plutôt que mal
 calé : son dégât ne s'adapte pas à la barre d'en face, or le Golem en a le
 double (200 PV) et punit la proximité de deux façons (onde sismique, éclats).
 Il lui faudrait environ **soixante-six chocs réussis** pour l'abattre. À ne pas
@@ -4076,16 +4129,16 @@ Sur les **27 duels hors miroir** de chacun (`tools/matrix-reference.txt`) :
 | --- | --- | --- |
 | **Lune** | 27/27 | boss — hors barème |
 | **Soleil** | 23/27 | boss — hors barème |
-| Pistolero | 16/27 | |
+| Pistolero | 15/27 | |
 | Druide | 15/27 | |
+| Shinobi | 14/27 | |
 | Golem | 13/27 | |
-| Shinobi | 13/27 | |
 | Hoplite | 12/27 | |
 | **Comète** | 12/27 | |
 | Ronin | 4/27 | |
 | Mannequin | 0/27 | c'est sa définition |
 
-Écart **4 à 16** entre les sept qui se jugent entre eux, connu et non corrigé.
+Écart **4 à 15** entre les sept qui se jugent entre eux, connu et non corrigé.
 Les deux boss et le Mannequin sont hors barème : leur ligne est une
 **spécification**, pas un défaut.
 
@@ -4142,7 +4195,7 @@ réelle** de l'adversaire. 100 PV ÷ la durée moyenne des trois graines :
 | Shinobi | 3,1 | 34,9 · 28,8 · 32,8 |
 | Hoplite | 3,0 | 31,0 · 37,6 · 31,7 |
 | Soleil | 3,0 | 23,7 · 33,2 · 43,8 |
-| **Comète** | 3,4 | 30,6 · 29,6 · 26,9 |
+| Comète | 2,2 | 47,8 · 48,0 · 41,4 |
 | Druide | 2,8 | 35,8 · 37,7 · 35,3 |
 | Pistolero | 2,5 | 37,3 · 39,2 · 43,3 |
 | Golem | 1,8 | 62,0 · 46,5 · 55,0 |
@@ -4154,9 +4207,13 @@ Trois choses à en lire, et une seule est une conclusion d'équilibrage :
   celui-ci, exceptionnellement, le dit — c'est aussi pourquoi elle est passée
   au-dessus du Soleil. Ses trois durées sont **identiques au dixième** : sans
   arme, elle ne dépend pas de la trajectoire, seulement de son horloge.
-- **La Comète est au milieu du banc et 12 sur 27 à la matrice**, ce qui est la
-  bonne place — mais son écart-type est le plus élevé du roster : elle gagne 17
-  duels sur 20 contre l'Hoplite et 0 sur 20 contre le Golem. Un banc de DPS ne
+- **La Comète est avant-dernière du banc de DPS et pourtant 12 sur 27 à la
+  matrice**, et c'est le cas le plus net du dépôt contre la lecture naïve d'un
+  DPS : depuis qu'elle **file droit sans viser**, elle rate beaucoup — donc elle
+  produit peu contre une cible qui dérive, ce que mesure exactement cette
+  colonne — mais ses duels, eux, restent équilibrés. Son écart-type reste le
+  plus élevé du roster (12/16 contre le Ronin et l'Hoplite, 0/16 contre le
+  Golem). Un banc de DPS ne
   peut pas dire ça, et c'est le rappel utile : **il mesure une production, pas
   un appariement**. Sa production, elle, dépend entièrement de qui est en face,
   puisqu'il faut le toucher.

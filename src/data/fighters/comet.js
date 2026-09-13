@@ -267,15 +267,35 @@ export const COMET = fiche({
    * pendant son ultime, sur une arène de 628 px de large — elle la traverse en
    * quatre dixièmes de seconde.
    *
-   * `turnRate: 2.8` est également le plus haut du roster (2,2 au Shinobi) : à
-   * cette vitesse, un cap qui pivote lentement décrit des courbes si larges
-   * qu'elle **manquerait sa cible en tournant autour**. Le braquage est ce qui
-   * rend la vitesse utilisable.
+   * **`seek: 0` — elle file droit et ne vise personne, demandé.**
    *
-   * `seek: 0.62` — le plus décidé du roster (0,44 au Pistolero) : elle n'a
-   * aucune raison de dériver, tout ce qu'elle produit est au contact.
+   * Le pilotage de `Fighter.step()` est gardé par `mv.seek > 0` : à zéro, la
+   * ligne qui tourne le cap vers l'adversaire **ne s'exécute pas du tout**. Son
+   * cap ne change donc plus qu'aux rebonds de mur, comme l'Hoplite et le
+   * Mannequin. C'est le troisième combattant du roster dans ce cas, et le seul
+   * dont **tous les dégâts sont au contact** — les deux autres tirent ou
+   * n'attaquent pas.
+   *
+   * **Ce que ça change, mesuré** : elle tombe de 46 % à **28 %** de victoires
+   * contre les six, et de 3,1 à 2,2 PV/s au banc du Mannequin. Une comète qui
+   * ne corrige pas sa trajectoire rate simplement beaucoup plus. C'est
+   * `kinetic.cooldown` qui l'a ramenée (1,9 → 1,15 s, voir là-bas) : le verrou
+   * long ne servait qu'à brider un personnage **visé**.
+   *
+   * **Et ça rend le Rebond central** : puisque les murs sont désormais la seule
+   * chose qui change son cap, ils sont aussi le rythme du personnage — chaque
+   * paroi la relance *et* la réoriente. Le pouvoir le moins spectaculaire des
+   * trois est devenu celui qui structure son déplacement.
+   *
+   * **`turnRate: 2.8` ne pilote donc plus rien**, et c'est assumé : `step()` ne
+   * le lit qu'à travers `mv.turnRate * mv.seek`, nul ici. Il reste **lu par la
+   * carte de sélection** (`speedLine(speed, turnRate)`), donc ce n'est pas une
+   * clé morte au sens de l'invariant 9 — même situation que l'Hoplite (1,85) et
+   * le Mannequin (1,6), qui portent tous deux `seek: 0`. Le remonter ou le
+   * baisser ne déplacerait pas un duel ; ça ne changerait que la ligne
+   * « Vitesse » de sa fiche à l'écran.
    */
-  movement: { speed: 700, turnRate: 2.8, seek: 0.62 },
+  movement: { speed: 700, turnRate: 2.8, seek: 0 },
 
   /**
    * **Une arme qui se voit et qui ne touche pas — demandé** (« tout ce qu'il y
@@ -412,19 +432,22 @@ export const COMET = fiche({
      * séparément puis remesurés ensemble (*deux leviers qui marchent ne
      * s'additionnent pas*).
      *
-     * **1,15 → 1,9 s avec la Fragmentation et le Rebond, et c'est un changement
-     * de personnage assumé.** Les deux pouvoirs l'avaient portée de 51 % à
-     * **79 %** ; il fallait reprendre 30 points. Les reprendre sur les nouveaux
-     * outils ne rendait presque rien (éclat à 1 et rebond rogné : 79 → 70 %),
-     * parce qu'ils n'ajoutent pas du **dégât**, ils ajoutent de l'**accès**.
-     * Les reprendre sur le contact, si.
+     * **Il est monté à 1,9 s puis revenu ici, et l'aller-retour est instructif.**
+     * La Fragmentation et le Rebond l'avaient portée de 51 % à **79 %** ; il
+     * fallait reprendre trente points, et les reprendre sur les nouveaux outils
+     * ne rendait presque rien (éclat à 1 et rebond rogné : 79 → 70 %) parce
+     * qu'ils n'ajoutent pas du **dégât** mais de l'**accès**. Le verrou allongé
+     * à 1,9 s l'avait ramenée à 46 %.
      *
-     * Le balayage final, éclat et salve tenus, 20 duels par paire :
-     * verrou 1,4 s → 66 %, **1,9 s → 46 %**. Elle frappe donc moins d'une fois
-     * toutes les deux secondes — c'est devenu un personnage de **passage** et
-     * plus de corps à corps continu, ce que le reste de la fiche disait déjà.
+     * Puis son pilotage est passé en **linéaire** (`seek: 0`), et elle est
+     * tombée à 28 % : un personnage qui ne vise plus n'a plus besoin d'être
+     * bridé au contact. Balayage, 16 duels par paire : verrou 1,4 s → 32 %,
+     * **1,15 s → 45 %**, 0,9 s → 43 % — ça **plafonne** en dessous, parce que
+     * sans visée les contacts sont trop rares pour qu'un verrou plus court
+     * serve. La valeur d'origine est donc redevenue la bonne, pour une raison
+     * qui n'a rien à voir avec celle du premier jour.
      */
-    cooldown: 1.9,
+    cooldown: 1.15,
     /**
      * **La marge, et c'est un piège déjà payé par LUNE.**
      *
@@ -570,7 +593,12 @@ export const COMET = fiche({
     nameRef: 'Shed',
     barLabel: 'SHED',
     barLabelFr: 'FRAGMENTATION',
-    barFill: '#540f8b',
+    /** **Exactement la jauge de l'ultime**, et c'est la règle du dépôt : le
+     *  Pistolero, le Ronin, l'Hoplite et le Shinobi peignent leurs deux rangées
+     *  de la même encre. Elle était seule à déroger — violet de corps en bas,
+     *  magenta en haut —, ce qui laissait croire à deux matières différentes là
+     *  où il n'y a qu'un personnage. */
+    barFill: '#cb2fad',
     barText: '#fbe6fb',
     /** Calé : **deux à trois salves** dans un duel de 30 s. 8 → 10 s à
      *  l'équilibrage final — c'est le levier qui dose la part du pouvoir dans
