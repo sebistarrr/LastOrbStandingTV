@@ -596,10 +596,15 @@ export const COMET = fiche({
    * horloge fixe, aucune visée — mais ce qu'il **fait au personnage** n'a rien à
    * voir, et c'est tout l'intérêt :
    *
-   *  • **il coûte de l'élan** (`cost`). C'est le seul pouvoir du dépôt qui se
-   *    paie dans la ressource de son porteur : elle échange de la vitesse et de
-   *    la puissance de choc contre de la portée. Sans ce prix, ce serait une
-   *    salve gratuite greffée sur un personnage de contact ;
+   *  • **il ne lui coûte rien — demandé** (« le pouvoir shed ne doit pas
+   *    impacter sa vitesse »). Il a porté un `cost: 0.2` pendant une version :
+   *    la salve retirait de l'élan, et le joueur voyait le nombre du HUD
+   *    reculer au moment où les éclats partaient. C'était un prix *pensé* comme
+   *    un prix de puissance, mais l'élan est **un seul nombre** qui fait vitesse
+   *    *et* dégâts (voir `rush`) — donc tirer la **ralentissait**, ce qui n'a
+   *    aucun sens pour une comète et se voyait à l'écran. Le séparer en deux
+   *    états aurait été la seule façon de ne facturer que les dégâts, et c'est
+   *    précisément ce que ce personnage refuse de faire ;
    *  • **il lui donne ce qu'elle n'avait pas : atteindre sans toucher.** Son
    *    banc le disait — elle s'effondre contre qui recule (3 victoires sur 16
    *    contre le Pistolero) parce que tout ce qu'elle produit demande d'aller au
@@ -634,13 +639,6 @@ export const COMET = fiche({
     /** Huit, un éclat tous les 45° : c'est le seuil de lecture d'un anneau,
      *  mesuré par le Golem qui est passé de 3 à 8 pour cette raison. */
     count: 8,
-    /**
-     * **Ce que la salve lui coûte en élan**, et c'est la clé du pouvoir. Elle
-     * tombe donc de vitesse *et* de puissance de choc en tirant — un joueur voit
-     * le nombre du HUD reculer au moment où les éclats partent. Calé au banc
-     * avec les deux autres leviers du personnage.
-     */
-    cost: 0.2,
     projectile: 'shard',
   },
 

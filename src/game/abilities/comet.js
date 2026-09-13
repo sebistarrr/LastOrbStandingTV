@@ -241,11 +241,12 @@ export const cometAbilities = {
    * **suit son sens de marche** — les deux éclats de l'avant partent devant
    * elle, ceux de l'arrière couvrent ce qu'elle vient de dépasser.
    *
-   * `cost` est ce qui rattache le pouvoir au personnage : elle échange de la
-   * vitesse et de la puissance de choc contre de la portée. Le plancher reste 1
-   * — la Fragmentation ne peut pas la faire descendre *sous* son élan de
-   * départ, sinon un pouvoir qui tombe pendant qu'elle est déjà à sec la
-   * clouerait au sol.
+   * **La salve ne touche pas à l'élan — demandé.** Elle a coûté 0,2 pendant une
+   * version ; comme l'élan est à la fois vitesse et dégâts, tirer la
+   * *ralentissait*, ce qui se voyait à l'écran et ne dit rien de juste sur une
+   * comète. Ne facturer que les dégâts aurait demandé de dédoubler le nombre,
+   * ce que tout le personnage refuse. Le pouvoir est donc gratuit, et c'est son
+   * **horloge** qui le borne.
    */
   castShed(f, game) {
     const sp = f.el.special;
@@ -254,8 +255,6 @@ export const cometAbilities = {
     for (let i = 0; i < sp.count; i++) {
       game.projectiles.spawn(f, sp.projectile, f.heading + (TAU * i) / sp.count, f.radius + 4);
     }
-    f.state.rush = Math.max(1, f.state.rush - sp.cost);
-    this.syncRush(f);
   },
 
   /* ------------------------------------------------------------------ */
