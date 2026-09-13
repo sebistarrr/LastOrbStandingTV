@@ -7,7 +7,8 @@ Mannequin (une cible d'entraînement qui ne frappe pas), la Comète (rien qui
 frappe : son élan est son arme) et **deux boss**, le Soleil et la Lune. Moteur écrit
 d'après les vidéos de référence.
 HTML + CSS + JS ES modules, Canvas 2D, **aucune dépendance, aucun build**.
-Publié sur GitHub Pages à chaque push sur `main` → <https://sebistarrr.github.io/test2/>
+Publié sur GitHub Pages à chaque push sur `main` → <https://sebistarrr.github.io/LastOrbStandingTV/>
+(dépôt renommé de `test2` ; la casse du chemin suit celle du dépôt).
 
 **Ce fichier est relu à chaque session : chaque ligne y est payée à chaque
 fois.** Il ne porte donc que **les règles** — carte, roster, invariants, index

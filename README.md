@@ -107,8 +107,14 @@ python3 -m http.server 8080
 
 Le dépôt est configuré en *Settings → Pages → Source = GitHub Actions* : chaque
 push sur `main` déclenche `.github/workflows/pages.yml`, qui publie la racine
-telle quelle (site en ligne : <https://sebistarrr.github.io/test2/>). Le workflow
-se lance aussi à la main depuis l'onglet *Actions*.
+telle quelle (site en ligne : <https://sebistarrr.github.io/LastOrbStandingTV/>).
+Le workflow se lance aussi à la main depuis l'onglet *Actions*.
+
+Le dépôt s'appelait `test2` et a été renommé `LastOrbStandingTV` : GitHub
+redirige l'ancienne adresse, donc un `git remote` non mis à jour continue de
+fonctionner — mais le **chemin de publication a changé**, et c'est lui qui
+compte pour tout ce qui sert des fichiers par URL (`app/vite.config.ts`, un lien
+en description de vidéo). Le segment suit la casse du dépôt.
 
 Pour un déploiement « depuis une branche » plutôt que par Actions, choisis la
 branche et le dossier `/ (root)` : le fichier `.nojekyll` (déjà présent)
