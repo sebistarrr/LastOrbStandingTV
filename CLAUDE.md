@@ -423,6 +423,10 @@ node tools/matrix.mjs                    # tous les affrontements × 3 seeds
 node tools/matrix.mjs > /tmp/a.txt && diff tools/matrix-reference.txt /tmp/a.txt
 node tools/probe.mjs outlaw              # durée, touches et coups/s sur tout
                                          # le roster
+node tools/shorts.mjs                    # programmation éditoriale : marge du
+                                         # vainqueur et affiches qui basculent,
+                                         # sur 8 graines — ne remplace pas la
+                                         # matrice, qui reste le seul relevé
 
 node tools/shot.mjs "?a=wind&b=outlaw&seed=5" /tmp/s 3,9,20
 FORCE=bladesman:ult node tools/shot.mjs "?a=bladesman&b=outlaw" /tmp/s 8
